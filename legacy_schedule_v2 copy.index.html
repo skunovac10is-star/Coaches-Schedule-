@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEGACY YTE — Weekly Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#cc2200;--red-dark:#a01a00;--red-light:#fff0eb;
+  --black:#0f0f0f;--white:#fff;
+  --gray-50:#f8f8f7;--gray-100:#f0efed;--gray-200:#e2e0dc;
+  --gray-300:#c8c5bf;--gray-500:#888480;--gray-700:#444240;
+  --r:8px;--rlg:12px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* HEADER */
+.site-header{background:var(--black);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100}
+.logo-row{display:flex;align-items:center;gap:10px}
+.logo-mark{width:30px;height:30px;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:17px}
+.logo-name{font-family:'Bebas Neue',sans-serif;color:#fff;font-size:16px;letter-spacing:2px}
+.header-week{font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase}
+
+/* TABS */
+.tabs{background:#fff;border-bottom:1px solid var(--gray-200);display:flex;padding:0 1.25rem;overflow-x:auto}
+.tab{padding:13px 18px;font-size:13px;font-weight:500;color:var(--gray-500);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tab.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* PANELS */
+.panel{display:none;padding:1.25rem;max-width:860px;margin:0 auto}
+.panel.active{display:block}
+
+/* ==================== SCHEDULE TAB ==================== */
+.day-tabs{display:flex;gap:5px;margin-bottom:1.25rem;flex-wrap:wrap}
+.dtab{padding:7px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--gray-200);color:var(--gray-500);background:#fff;transition:all .12s;flex-shrink:0}
+.dtab.active{background:var(--black);border-color:var(--black);color:#fff}
+
+.legend{display:flex;gap:14px;margin-bottom:1.25rem;flex-wrap:wrap}
+.leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-700)}
+.leg-bar{width:3px;height:16px;border-radius:2px}
+
+.timeline{display:flex;flex-direction:column;gap:6px}
+.t-row{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:stretch}
+.t-time{font-size:11px;color:var(--gray-500);font-weight:500;text-align:right;padding-top:10px;line-height:1.3;padding-right:2px}
+.t-block{background:#fff;border:1px solid var(--gray-200);border-radius:0 var(--rlg) var(--rlg) 0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-left-width:3px}
+.t-block.comp{border-left-color:var(--red)}
+.t-block.tt{border-left-color:#378ADD}
+.t-block.adult{border-left-color:#1D9E75}
+.t-block.munch{border-left-color:#BA7517}
+.t-block.other{border-left-color:#888}
+.t-name{font-size:13px;font-weight:500;color:var(--black);min-width:120px}
+.t-chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.chip{font-size:11px;padding:3px 8px;border-radius:8px;font-weight:500}
+.chip-pro{background:#E6F1FB;color:#0C447C}
+.chip-pt{background:#FAEEDA;color:#633806}
+.chip-jr{background:#EAF3DE;color:#27500A}
+
+/* ==================== AVAILABILITY TAB ==================== */
+.avail-intro{font-size:13px;color:var(--gray-700);margin-bottom:1.25rem;line-height:1.6;background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem}
+.avail-intro strong{color:var(--black)}
+.tap-hint{display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--red-light);color:var(--red);border-radius:6px;padding:3px 9px;font-weight:500;margin-top:6px}
+
+.day-avail{margin-bottom:1rem}
+.day-avail-header{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--black);margin-bottom:.6rem;display:flex;align-items:center;gap:8px}
+.day-avail-header .count{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--gray-500);letter-spacing:0}
+
+.group-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray-500);font-weight:500;margin-bottom:.4rem;margin-top:.75rem}
+.group-label:first-of-type{margin-top:0}
+
+.coach-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:.25rem}
+.coach-tap{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.coach-tap:hover{border-color:var(--red);background:var(--red-light)}
+.coach-tap.pro-card:hover{border-color:#378ADD;background:#E6F1FB}
+.coach-tap.pt-card:hover{border-color:#BA7517;background:#FAEEDA}
+.coach-tap.jr-card{border-style:dashed}
+.coach-tap.jr-card:hover{border-color:#1D9E75;background:#EAF3DE;border-style:dashed}
+.tap-indicator{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gray-500)}
+.coach-tap-name{font-size:13px;font-weight:500;color:var(--black);margin-bottom:2px;padding-right:18px}
+.coach-tap-level{font-size:11px;color:var(--gray-500)}
+
+/* CONTACT FLYOUT */
+.contact-flyout{display:none;background:var(--black);border-radius:var(--rlg);padding:1rem 1.25rem;margin-top:.5rem;margin-bottom:.25rem}
+.contact-flyout.open{display:block}
+.cf-name{font-size:15px;font-weight:500;color:#fff;margin-bottom:.6rem}
+.cf-level{font-size:11px;color:#aaa;margin-bottom:.75rem}
+.cf-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cf-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:var(--r);font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;flex:1;min-width:120px;justify-content:center}
+.cf-call{background:var(--red);color:#fff}
+.cf-call:hover{background:var(--red-dark)}
+.cf-text{background:#1a1a1a;color:#fff;border:1px solid #333}
+.cf-text:hover{background:#2a2a2a}
+.cf-email{background:#1a1a1a;color:#fff;border:1px solid #333}
+.cf-email:hover{background:#2a2a2a}
+.cf-no-contact{font-size:12px;color:#888;font-style:italic}
+.cf-close{font-size:11px;color:#666;cursor:pointer;margin-top:.6rem;display:block;text-align:center}
+.cf-close:hover{color:#aaa}
+
+/* ==================== FORM TAB ==================== */
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem}
+.sec-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--red);font-weight:500;margin-bottom:1rem}
+.field{margin-bottom:1rem}
+.field:last-child{margin-bottom:0}
+label.fl{display:block;font-size:13px;color:var(--gray-700);margin-bottom:5px;font-weight:500}
+.req{color:var(--red)}
+input[type=text],input[type=email],input[type=date],select,textarea{width:100%;border:1px solid var(--gray-200);border-radius:var(--r);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--black);background:#fff;outline:none;transition:border-color .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--red)}
+textarea{resize:vertical;min-height:64px;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:500px){.row2{grid-template-columns:1fr}}
+.pill-group{display:flex;flex-wrap:wrap;gap:8px}
+.pill{position:relative}
+.pill input{position:absolute;opacity:0;width:0;height:0}
+.pill label{display:block;border:1px solid var(--gray-200);border-radius:20px;padding:7px 14px;font-size:13px;color:var(--gray-500);cursor:pointer;transition:all .15s;margin:0;background:#fff}
+.pill input:checked+label{background:var(--red);border-color:var(--red);color:#fff;font-weight:500}
+.day-block{background:var(--gray-50);border-radius:var(--r);padding:1rem;margin-bottom:.75rem;border:1px solid var(--gray-200)}
+.day-header{font-size:13px;font-weight:500;color:var(--black);margin-bottom:.875rem;display:flex;align-items:center;gap:8px}
+.day-num{background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.sub-field{margin-bottom:.75rem}
+.sub-field:last-child{margin-bottom:0}
+.sub-label{font-size:12px;color:var(--gray-700);margin-bottom:5px;font-weight:500}
+.add-day-btn{width:100%;border:1px dashed var(--gray-300);border-radius:var(--r);padding:10px;background:transparent;color:var(--gray-500);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;margin-top:.5rem}
+.add-day-btn:hover{border-color:var(--red);color:var(--red)}
+.remove-btn{margin-left:auto;font-size:11px;color:var(--gray-500);cursor:pointer;padding:2px 8px;border:1px solid var(--gray-200);border-radius:4px;background:#fff}
+.cbox{display:none;margin-top:.75rem;padding:.875rem;background:#fff;border-radius:var(--r);border:1px solid var(--gray-200)}
+.cbox.on{display:block}
+.hint{font-size:12px;color:var(--gray-500);margin-top:4px;line-height:1.4}
+.warn{font-size:12px;color:#7a2000;background:var(--red-light);border-radius:var(--r);padding:8px 12px;margin-top:8px;line-height:1.4;border:1px solid #f5c4b3}
+.avail-mini-panel{border-radius:var(--r);overflow:hidden;border:1px solid var(--gray-200);margin-top:.75rem}
+.amp-header{background:var(--black);color:#fff;padding:7px 12px;font-size:11px;font-weight:500;letter-spacing:.5px}
+.amp-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--gray-100);gap:8px;flex-wrap:wrap}
+.amp-row:last-child{border-bottom:none}
+.amp-name{font-size:13px;font-weight:500;color:var(--black)}
+.amp-meta{font-size:11px;color:var(--gray-500)}
+.amp-btns{display:flex;gap:6px;flex-shrink:0}
+.amp-btn{font-size:11px;padding:4px 10px;border-radius:5px;text-decoration:none;font-weight:500}
+.amp-call{background:var(--red-light);color:var(--red)}
+.amp-email{background:#E6F1FB;color:#0C447C}
+.no-avail{font-size:13px;color:var(--gray-500);padding:10px 12px;font-style:italic}
+.btn-submit{background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}
+.btn-submit:hover{background:var(--red-dark)}
+.btn-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+.policy{font-size:12px;color:var(--gray-500);line-height:1.5}
+.success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo-row">
+    <div class="logo-mark">L</div>
+    <div><div class="logo-name">LEGACY YTE</div></div>
+  </div>
+  <div class="header-week">Session 3 — Week 5</div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('schedule')">Weekly schedule</div>
+  <div class="tab" onclick="switchTab('coverage')">Who's available</div>
+  <div class="tab" onclick="switchTab('request')">Request time off</div>
+</div>
+
+<!-- ===== SCHEDULE TAB ===== -->
+<div class="panel active" id="tab-schedule">
+  <div class="day-tabs" id="sched-day-tabs"></div>
+  <div class="legend">
+    <div class="leg"><div class="leg-bar" style="background:var(--red)"></div>Competitive</div>
+    <div class="leg"><div class="leg-bar" style="background:#378ADD"></div>TT programs</div>
+    <div class="leg"><div class="leg-bar" style="background:#1D9E75"></div>Adult clinics</div>
+    <div class="leg"><div class="leg-bar" style="background:#BA7517"></div>Munchkins</div>
+    <div class="leg"><div class="leg-bar" style="background:#888"></div>Other</div>
+  </div>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<!-- ===== AVAILABILITY TAB ===== -->
+<div class="panel" id="tab-coverage">
+  <div class="avail-intro">
+    <strong>Who's not scheduled</strong> — these coaches are free each day and should be your first call for coverage.<br>
+    <span class="tap-hint">Tap any name to get their contact info</span>
+  </div>
+  <div id="avail-list"></div>
+</div>
+
+<!-- ===== REQUEST TAB ===== -->
+<div class="panel" id="tab-request">
+  <div class="card">
+    <div class="sec-label">Your info</div>
+    <div class="row2">
+      <div class="field">
+        <label class="fl">Your name <span class="req">*</span></label>
+        <select id="req-name" onchange="fillEmail()">
+          <option value="">Select your name...</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="fl">Email</label>
+        <input type="email" id="req-email" placeholder="auto-filled" readonly style="background:var(--gray-50);color:var(--gray-500)">
+      </div>
+    </div>
+    <div class="field">
+      <label class="fl">Request type <span class="req">*</span></label>
+      <div class="pill-group">
+        <div class="pill"><input type="radio" name="rtype" id="t1"><label for="t1">Vacation</label></div>
+        <div class="pill"><input type="radio" name="rtype" id="t2"><label for="t2">Sick day</label></div>
+        <div class="pill"><input type="radio" name="rtype" id="t3"><label for="t3">Coverage only</label></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec-label">Private lessons</div>
+    <div class="field">
+      <label class="fl">Do you have private lessons during this time? <span class="req">*</span></label>
+      <div class="pill-group">
+        <div class="pill"><input type="radio" name="hasprivate" id="pv1" onchange="togglePrivate('yes')"><label for="pv1">Yes</label></div>
+        <div class="pill"><input type="radio" name="hasprivate" id="pv2" onchange="togglePrivate('no')"><label for="pv2">No</label></div>
+      </div>
+    </div>
+    <div class="cbox" id="private-box">
+      <div class="sub-field">
+        <div class="sub-label">Did you cancel your privates? <span class="req">*</span></div>
+        <div class="pill-group">
+          <div class="pill"><input type="radio" name="cancelled" id="pc1" onchange="toggleFD()"><label for="pc1">Yes, all cancelled</label></div>
+          <div class="pill"><input type="radio" name="cancelled" id="pc2" onchange="toggleFD()"><label for="pc2">No, I need front desk help</label></div>
+        </div>
+      </div>
+      <div class="cbox" id="fd-box">
+        <div class="sub-label">List clients and times for front desk to cancel</div>
+        <textarea placeholder="e.g. John Smith — Monday 5pm, Sarah Lee — Tuesday 6pm..."></textarea>
+        <div class="hint">Front desk will contact clients through Club Automation</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec-label">Day-by-day coverage</div>
+    <div class="hint" style="font-size:13px;color:var(--gray-700);margin-bottom:1rem;line-height:1.6">Add one block per day. Pick a date and available coaches appear automatically.</div>
+    <div id="days-container">
+      <div class="day-block" id="day-1">
+        <div class="day-header"><div class="day-num">1</div><span>Day 1</span></div>
+        <div class="sub-field">
+          <div class="sub-label">Date <span class="req">*</span></div>
+          <input type="date" onchange="updateDayPanel(1,this.value)">
+        </div>
+        <div class="sub-field">
+          <div class="sub-label">Sessions needing coverage <span class="req">*</span></div>
+          <textarea placeholder="e.g. 10am beginner clinic, 4pm TT Comp..."></textarea>
+        </div>
+        <div class="sub-field">
+          <div class="sub-label">Coverage secured? <span class="req">*</span></div>
+          <div class="pill-group">
+            <div class="pill"><input type="radio" name="cov1" id="cy1" onchange="toggleDayCov(1,'yes')"><label for="cy1">Yes, confirmed</label></div>
+            <div class="pill"><input type="radio" name="cov1" id="cn1" onchange="toggleDayCov(1,'no')"><label for="cn1">No, still looking</label></div>
+          </div>
+        </div>
+        <div class="cbox" id="covyes-1">
+          <div class="sub-label">Who is covering which sessions?</div>
+          <textarea placeholder="e.g. Gabe Knowles covering 10am beginner..."></textarea>
+        </div>
+        <div class="cbox" id="covno-1">
+          <div class="sub-label">Available coaches to contact:</div>
+          <div id="amp-1" class="avail-mini-panel"><div class="no-avail">Select a date above</div></div>
+          <div class="sub-label" style="margin-top:.75rem">Who have you already tried?</div>
+          <textarea placeholder="Names and how you reached out..."></textarea>
+          <div class="warn">Taking the day without confirmed coverage is subject to LEGACY's coverage policy.</div>
+        </div>
+      </div>
+    </div>
+    <button class="add-day-btn" onclick="addDay()">+ Add another day</button>
+  </div>
+
+  <div class="card">
+    <div class="sec-label">Additional notes</div>
+    <textarea placeholder="Anything else Kat or front desk should know..."></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" onclick="submitForm()">Submit request</button>
+    <div class="policy">Submissions notify Kat Sorokko and front desk. Vacation requires 2 weeks notice.</div>
+  </div>
+  <div class="success-msg" id="success-msg">Request submitted. Kat and the front desk have been notified.</div>
+</div>
+
+<script>
+const DAYS_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+const ALL_COACHES = [
+  {id:'aleix',name:'Aleix Calvo-Alvarez',abbr:'Aleix C',phone:'305-336-1088',email:'acalvo@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'jeremie',name:'Jeremie Casabon',abbr:'Jeremie C',phone:'267-606-8262',email:'Jcasabon123@gmail.com',type:'pro',level:'Full coverage'},
+  {id:'stevie',name:'Stevie Dandridge',abbr:'Stevie D',phone:'267-975-1954',email:'sdandridge@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'nick',name:'Nick Fulcher',abbr:'Nick F',phone:'210-925-2935',email:'nfulcher@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'gabe',name:'Gabe Knowles',abbr:'Gabe K',phone:'610-417-0843',email:'gknowles@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'laurence',name:'Laurence Primus',abbr:'Laurence P',phone:'646-852-2283',email:'lprimus@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'david',name:'David Schoshinski',abbr:'David S',phone:'703-915-0201',email:'dschoshinski@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'andrew',name:'Andrew Weiss',abbr:'Andrew W',phone:'856-558-8061',email:'aweiss@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'kein',name:'Kein Wilson',abbr:'Kein W',phone:'215-936-7540',email:'kwilson@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'kris',name:'Kris Wilson',abbr:'Kris W',phone:'297-310-9271',email:'kristianw@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'shevi',name:'Shevi A',abbr:'Shevi A',phone:'',email:'',type:'pro',level:'Full coverage'},
+  {id:'anna',name:'Anna Mamalat',abbr:'Anna M',phone:'215-900-9699',email:'amamalat@legacyyte.org',type:'pt',level:'Any clinic'},
+  {id:'ahmed',name:'Ahmed Aboseada',abbr:'Ahmed A',phone:'610-256-2650',email:'ahmedaboseada561@gmail.com',type:'pt',level:'Any clinic'},
+  {id:'bella',name:'Bella Nichilo',abbr:'Bella N',phone:'610-291-4359',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'max',name:'Max Olsen',abbr:'Max O',phone:'610-420-7972',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'jinay',name:'Jinay Sheth',abbr:'Jinay S',phone:'215-410-4473',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'levi',name:'Levi Santos',abbr:'Levi S',phone:'267-410-0665',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'dean',name:'Dean Smith',abbr:'Dean S',phone:'215-688-8141',email:'deahensmith@yahoo.com',type:'jr',level:'L2 — Munchkins, CC, Adults'},
+  {id:'amy',name:'Amy Georgescu',abbr:'Amy G',phone:'484-999-1779',email:'',type:'jr',level:'L2 — Munchkins, CC, Adults'},
+  {id:'ben',name:'Ben B',abbr:'Ben B',phone:'',email:'',type:'pro',level:'Full coverage'},
+];
+
+const SCHEDULE = {
+  Monday:[
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','David S']},
+    {time:'12–1pm',name:'Adult Beginner',type:'adult',coaches:['David S']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',coaches:['Nick F']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Kris W','Gabe K','Aleix C','Kein W','Andrew W','Stevie D','Jeremie C']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',coaches:['Stevie D','Kris W','Shevi A','Gabe K','Kein W']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',coaches:['Jeremie C','Nick F','Aleix C']},
+    {time:'8:30–10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Shevi A','Gabe K']},
+    {time:'8:30–10pm',name:'Adult Adv Beginner',type:'adult',coaches:['Laurence P']},
+  ],
+  Tuesday:[
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P']},
+    {time:'5–7pm',name:'TT1',type:'tt',coaches:['Andrew W','Gabe K','Kris W','Jeremie C','Ben B','Stevie D','Aleix C']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',coaches:['Kein W','Kris W','Anna M','Gabe K','Stevie D']},
+    {time:'7–8:30pm',name:'TT Orange 2 Green',type:'tt',coaches:['Nick F','Jeremie C','Aleix C']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Gabe K','Kris W']},
+  ],
+  Wednesday:[
+    {time:'12–1:30pm',name:'Adult Adv Beginner',type:'adult',coaches:['Laurence P','David S']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Andrew W','Anna M','Stevie D','Jeremie C','Nick F','Laurence P','Aleix C','Gabe K']},
+    {time:'5–7pm',name:'TT1',type:'tt',coaches:['Andrew W','Gabe K','Ben B','Anna M']},
+    {time:'6–7pm',name:'Munchkins',type:'munch',coaches:['Laurence P','Anna M']},
+    {time:'7–9pm',name:'TT1',type:'tt',coaches:['Andrew W','Gabe K','Stevie D','Shevi A']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Kein W','Laurence P']},
+  ],
+  Thursday:[
+    {time:'4–5pm',name:'Munchkins',type:'munch',coaches:['Anna M','Kein W','Laurence P']},
+    {time:'5–7pm',name:'TT1',type:'tt',coaches:['Andrew W','Jeremie C','Kris W','Aleix C','Gabe K','Ben B']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',coaches:['Kein W','Kris W','Max O','Shevi A','Gabe K','David S']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Kein W','Laurence P']},
+  ],
+  Friday:[
+    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',coaches:['Andrew W','Aleix C','Max O','Stevie D','Kein W','Nick F','Bella N','Kris W']},
+    {time:'5:30–6:30pm',name:'Munchkins',type:'munch',coaches:['Laurence P','Kein W']},
+    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Shevi A','Bella N','Aleix C','Kein W','Ahmed A','Kris W']},
+  ],
+  Saturday:[
+    {time:'7:30–9am',name:'Team United Clinic',type:'other',coaches:['Ahmed A','Shevi A']},
+    {time:'8:30–10am',name:'Adult 2.5-3.0 & 3.5+',type:'adult',coaches:['Laurence P','Shevi A']},
+    {time:'10–11am',name:'Munchkins',type:'munch',coaches:['Ahmed A','Gabe K','Nick F','Anna M']},
+    {time:'11am–12:30pm',name:'Comp Clinic',type:'comp',coaches:['Kein W','Kris W','Shevi A','Nick F','Bella N','Anna M']},
+    {time:'1:30–3:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Andrew W','Shevi A','Kris W','Nick F']},
+    {time:'2:30–4pm',name:'TT Green 2 Y',type:'tt',coaches:['Nick F']},
+  ],
+  Sunday:[
+    {time:'7:30–9am',name:'Team United Clinic',type:'other',coaches:['Ahmed A','Shevi A']},
+    {time:'11am–12pm',name:'Munchkins',type:'munch',coaches:['Laurence P','Kein W','Nick F']},
+    {time:'12–1:30pm',name:'Comp Clinic',type:'comp',coaches:['Kein W','Nick F','Stevie D','Jinay S','Bella N','Anna M']},
+    {time:'2:30–4:30pm',name:'TT1',type:'tt',coaches:['Jeremie C','Shevi A','Stevie D','Gabe K','Aleix C']},
+    {time:'5:30–7pm',name:'Adults',type:'adult',coaches:['Laurence P','Jinay S','Kein W','Gabe K']},
+  ]
+};
+
+function getScheduledAbbrs(dayName){
+  const d = SCHEDULE[dayName]; if(!d) return new Set();
+  const s = new Set(); d.forEach(sess=>sess.coaches.forEach(c=>s.add(c))); return s;
+}
+
+function getAvailable(dayName){
+  const sched = getScheduledAbbrs(dayName);
+  return ALL_COACHES.filter(c=>!sched.has(c.abbr));
+}
+
+function chipCls(abbr){
+  const c = ALL_COACHES.find(x=>x.abbr===abbr);
+  if(!c) return 'chip-pro';
+  return c.type==='pro'?'chip-pro':c.type==='pt'?'chip-pt':'chip-jr';
+}
+
+// ---- SCHEDULE ----
+function renderSchedule(day){
+  const tl = document.getElementById('timeline');
+  tl.innerHTML='';
+  (SCHEDULE[day]||[]).forEach(s=>{
+    const row=document.createElement('div');
+    row.className='t-row';
+    const chips=s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div><div class="t-chips">${chips}</div></div>`;
+    tl.appendChild(row);
+  });
+}
+
+function buildSchedTabs(){
+  const cont=document.getElementById('sched-day-tabs');
+  DAYS_ORDER.forEach((d,i)=>{
+    const t=document.createElement('div');
+    t.className='dtab'+(i===0?' active':'');
+    t.textContent=d;
+    t.onclick=()=>{
+      document.querySelectorAll('#sched-day-tabs .dtab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      renderSchedule(d);
+    };
+    cont.appendChild(t);
+  });
+}
+
+// ---- AVAILABILITY ----
+let openFlyout = null;
+
+function buildAvailability(){
+  const list=document.getElementById('avail-list');
+  list.innerHTML='';
+  DAYS_ORDER.forEach(day=>{
+    const avail=getAvailable(day);
+    const pros=avail.filter(c=>c.type==='pro');
+    const pts=avail.filter(c=>c.type==='pt');
+    const jrs=avail.filter(c=>c.type==='jr');
+
+    const wrap=document.createElement('div');
+    wrap.className='day-avail';
+    wrap.innerHTML=`<div class="day-avail-header">${day} <span class="count">${avail.length} available</span></div>`;
+
+    function addGroup(coaches, label, cardClass){
+      if(!coaches.length) return;
+      const gl=document.createElement('div');
+      gl.className='group-label'; gl.textContent=label;
+      wrap.appendChild(gl);
+      const grid=document.createElement('div');
+      grid.className='coach-cards';
+      coaches.forEach(c=>{
+        const flyId=`fly-${day.toLowerCase()}-${c.id}`;
+        const card=document.createElement('div');
+        card.className=`coach-tap ${cardClass}`;
+        card.innerHTML=`<div class="tap-indicator">+</div><div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${c.level}</div>`;
+        card.onclick=()=>toggleFlyout(flyId,c,card);
+        grid.appendChild(card);
+
+        const fly=document.createElement('div');
+        fly.className='contact-flyout';
+        fly.id=flyId;
+        const hasPhone=c.phone&&c.phone.trim();
+        const hasEmail=c.email&&c.email.trim();
+        fly.innerHTML=`<div class="cf-name">${c.name}</div>
+          <div class="cf-level">${c.level}</div>
+          <div class="cf-actions">
+            ${hasPhone?`<a href="tel:${c.phone}" class="cf-btn cf-call">Call ${c.phone}</a>`:''}
+            ${hasPhone?`<a href="sms:${c.phone}" class="cf-btn cf-text">Text</a>`:''}
+            ${hasEmail?`<a href="mailto:${c.email}" class="cf-btn cf-email">Email</a>`:''}
+            ${!hasPhone&&!hasEmail?`<span class="cf-no-contact">No contact info on file — ask Kat</span>`:''}
+          </div>
+          <span class="cf-close" onclick="closeFlyout('${flyId}')">close</span>`;
+        grid.appendChild(fly);
+      });
+      wrap.appendChild(grid);
+    }
+
+    addGroup(pros,'Pro coaches — contact first','pro-card');
+    addGroup(pts,'Part-time coaches','pt-card');
+    addGroup(jrs,'Junior coaches','jr-card');
+
+    const sep=document.createElement('div');
+    sep.style.cssText='height:1px;background:var(--gray-200);margin:1.25rem 0';
+    wrap.appendChild(sep);
+    list.appendChild(wrap);
+  });
+}
+
+function toggleFlyout(flyId, coach, card){
+  const fly=document.getElementById(flyId);
+  if(openFlyout && openFlyout!==flyId){
+    const prev=document.getElementById(openFlyout);
+    if(prev){prev.classList.remove('open');}
+    document.querySelectorAll('.coach-tap').forEach(c=>{c.querySelector('.tap-indicator').textContent='+';});
+  }
+  const isOpen=fly.classList.contains('open');
+  fly.classList.toggle('open');
+  const ind=card.querySelector('.tap-indicator');
+  ind.textContent=isOpen?'+':'×';
+  openFlyout=isOpen?null:flyId;
+}
+
+function closeFlyout(flyId){
+  const fly=document.getElementById(flyId);
+  if(fly){fly.classList.remove('open');}
+  document.querySelectorAll('.coach-tap').forEach(c=>{const i=c.querySelector('.tap-indicator');if(i)i.textContent='+';});
+  openFlyout=null;
+}
+
+// ---- FORM ----
+function buildCoachDropdown(){
+  const sel=document.getElementById('req-name');
+  ALL_COACHES.filter(c=>c.type==='pro'||c.type==='pt').forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c.id; o.textContent=c.name; sel.appendChild(o);
+  });
+}
+
+function fillEmail(){
+  const id=document.getElementById('req-name').value;
+  const c=ALL_COACHES.find(x=>x.id===id);
+  document.getElementById('req-email').value=c?(c.email||''):'';
+}
+
+function getDayName(dateStr){
+  if(!dateStr) return null;
+  const d=new Date(dateStr+'T12:00:00');
+  const idx=d.getDay();
+  return DAYS_ORDER[idx===0?6:idx-1];
+}
+
+function updateDayPanel(n,dateStr){
+  const day=getDayName(dateStr);
+  const cont=document.getElementById(`amp-${n}`);
+  if(!day||!SCHEDULE[day]){cont.innerHTML='<div class="no-avail">Date not in schedule</div>';return;}
+  const avail=getAvailable(day);
+  if(!avail.length){cont.innerHTML='<div class="no-avail">All coaches scheduled this day</div>';return;}
+  const pros=avail.filter(c=>c.type==='pro');
+  const pts=avail.filter(c=>c.type==='pt');
+  const jrs=avail.filter(c=>c.type==='jr');
+  let h=`<div class="amp-header">Available on ${day} — call first</div>`;
+  function grp(list,label){
+    if(!list.length) return;
+    h+=`<div style="padding:4px 12px 2px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);font-weight:500;background:var(--gray-50)">${label}</div>`;
+    list.forEach(c=>{
+      const hp=c.phone&&c.phone.trim();
+      const he=c.email&&c.email.trim();
+      h+=`<div class="amp-row"><div><div class="amp-name">${c.name}</div><div class="amp-meta">${c.phone||'No phone on file'} · ${c.level}</div></div><div class="amp-btns">${hp?`<a href="tel:${c.phone}" class="amp-btn amp-call">Call</a>`:''} ${he?`<a href="mailto:${c.email}" class="amp-btn amp-email">Email</a>`:''}</div></div>`;
+    });
+  }
+  grp(pros,'Pro coaches');
+  grp(pts,'Part-time');
+  grp(jrs,'Junior coaches');
+  cont.innerHTML=h;
+}
+
+let dayCount=1;
+function addDay(){
+  dayCount++;
+  const n=dayCount;
+  const div=document.createElement('div');
+  div.className='day-block'; div.id=`day-${n}`;
+  div.innerHTML=`<div class="day-header"><div class="day-num">${n}</div><span>Day ${n}</span><button class="remove-btn" onclick="document.getElementById('day-${n}').remove()">Remove</button></div>
+    <div class="sub-field"><div class="sub-label">Date <span class="req">*</span></div><input type="date" onchange="updateDayPanel(${n},this.value)"></div>
+    <div class="sub-field"><div class="sub-label">Sessions needing coverage <span class="req">*</span></div><textarea placeholder="e.g. 10am beginner clinic, 4pm TT Comp..."></textarea></div>
+    <div class="sub-field"><div class="sub-label">Coverage secured? <span class="req">*</span></div>
+    <div class="pill-group"><div class="pill"><input type="radio" name="cov${n}" id="cy${n}" onchange="toggleDayCov(${n},'yes')"><label for="cy${n}">Yes, confirmed</label></div><div class="pill"><input type="radio" name="cov${n}" id="cn${n}" onchange="toggleDayCov(${n},'no')"><label for="cn${n}">No, still looking</label></div></div></div>
+    <div class="cbox" id="covyes-${n}"><div class="sub-label">Who is covering which sessions?</div><textarea placeholder="e.g. Gabe Knowles covering 10am..."></textarea></div>
+    <div class="cbox" id="covno-${n}"><div class="sub-label">Available coaches to contact:</div><div id="amp-${n}" class="avail-mini-panel"><div class="no-avail">Select a date above</div></div><div class="sub-label" style="margin-top:.75rem">Who have you already tried?</div><textarea placeholder="Names and how you reached out..."></textarea><div class="warn">Taking the day without confirmed coverage is subject to LEGACY's coverage policy.</div></div>`;
+  document.getElementById('days-container').appendChild(div);
+}
+
+function toggleDayCov(n,val){
+  document.getElementById(`covyes-${n}`).classList.toggle('on',val==='yes');
+  document.getElementById(`covno-${n}`).classList.toggle('on',val==='no');
+}
+function togglePrivate(val){document.getElementById('private-box').classList.toggle('on',val==='yes');}
+function toggleFD(){document.getElementById('fd-box').classList.toggle('on',document.getElementById('pc2').checked);}
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelector(`[onclick="switchTab('${name}')"]`).classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+}
+function submitForm(){
+  document.getElementById('success-msg').style.display='block';
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+buildSchedTabs();
+renderSchedule('Monday');
+buildAvailability();
+buildCoachDropdown();
+</script>
+</body>
+</html>
