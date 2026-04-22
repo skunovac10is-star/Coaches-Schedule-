@@ -15,6 +15,18 @@
   --r:8px;--rlg:12px;
 }
 body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;-webkit-font-smoothing:antialiased}
+body.locked > *:not(#gate){display:none !important}
+#gate{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;padding:1.5rem}
+#gate.hidden{display:none}
+.gate-box{background:#1a1a1a;border-radius:12px;padding:2rem;max-width:360px;width:100%;text-align:center;border:1px solid #333}
+.gate-logo{width:48px;height:48px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:26px;margin:0 auto 1rem}
+.gate-title{font-family:'Bebas Neue',sans-serif;color:#fff;font-size:22px;letter-spacing:2px;margin-bottom:.35rem}
+.gate-sub{color:#aaa;font-size:13px;margin-bottom:1.5rem}
+#gate-input{width:100%;border:1px solid #333;background:#0f0f0f;border-radius:8px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:15px;color:#fff;outline:none;margin-bottom:.75rem;text-align:center;letter-spacing:2px}
+#gate-input:focus{border-color:var(--red)}
+#gate-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:11px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
+#gate-btn:hover{background:var(--red-dark)}
+#gate-err{color:#ff6b5a;font-size:12px;margin-top:.6rem;min-height:16px}
 
 /* HEADER */
 .site-header{background:var(--black);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100}
@@ -145,7 +157,49 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 .success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
 </style>
 </head>
-<body>
+<body class="locked">
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">L</div>
+    <div class="gate-title">LEGACY YTE</div>
+    <div class="gate-sub">Enter password to view schedule</div>
+    <input type="password" id="gate-input" autocomplete="off" placeholder="Password">
+    <button id="gate-btn" onclick="tryUnlock()">Unlock</button>
+    <div id="gate-err"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const HASH = 'f959ac10dabbe17aabef122bdb1ae6cd0d5befa264a4799f5f69e6844759dfc9';
+  const KEY = 'legacy_unlocked_v1';
+  async function sha256(s){
+    const buf = new TextEncoder().encode(s);
+    const h = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function unlock(){
+    document.body.classList.remove('locked');
+    document.getElementById('gate').classList.add('hidden');
+  }
+  if(sessionStorage.getItem(KEY)==='1'){ unlock(); return; }
+  window.tryUnlock = async function(){
+    const v = document.getElementById('gate-input').value;
+    const err = document.getElementById('gate-err');
+    err.textContent = '';
+    if(!v){ err.textContent='Enter a password'; return; }
+    const h = await sha256(v);
+    if(h===HASH){ sessionStorage.setItem(KEY,'1'); unlock(); }
+    else{ err.textContent='Incorrect password'; }
+  };
+  document.addEventListener('DOMContentLoaded', function(){
+    const i = document.getElementById('gate-input');
+    if(i){ i.focus(); i.addEventListener('keydown', e=>{ if(e.key==='Enter') window.tryUnlock(); }); }
+  });
+})();
+</script>
 
 <header class="site-header">
   <div class="logo-row">
