@@ -211,6 +211,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 
 <div class="tabs">
   <div class="tab active" onclick="switchTab('schedule')">Weekly schedule</div>
+  <div class="tab" onclick="switchTab('mine')">My schedule</div>
   <div class="tab" onclick="switchTab('coverage')">Who's available</div>
   <div class="tab" onclick="switchTab('request')">Request time off</div>
 </div>
@@ -226,6 +227,23 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
     <div class="leg"><div class="leg-bar" style="background:#888"></div>Other</div>
   </div>
   <div class="timeline" id="timeline"></div>
+</div>
+
+<!-- ===== MY SCHEDULE TAB ===== -->
+<div class="panel" id="tab-mine">
+  <div id="mine-picker" style="display:none">
+    <div class="avail-intro">
+      <strong>Pick your name</strong> to see just your week. We'll remember it on this device.
+    </div>
+    <div id="mine-picker-list"></div>
+  </div>
+  <div id="mine-view" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+      <div class="day-avail-header" id="mine-name" style="margin:0"></div>
+      <a href="#" onclick="clearMine();return false" style="font-size:12px;color:var(--gray-500);text-decoration:none;border:1px solid var(--gray-200);padding:5px 10px;border-radius:6px;background:#fff">Switch coach</a>
+    </div>
+    <div id="mine-list"></div>
+  </div>
 </div>
 
 <!-- ===== AVAILABILITY TAB ===== -->
@@ -624,10 +642,92 @@ function submitForm(){
   window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 
+// ---- MY SCHEDULE ----
+const MINE_KEY = 'legacy_my_coach';
+
+function renderMinePicker(){
+  const list=document.getElementById('mine-picker-list');
+  list.innerHTML='';
+  function grp(label, coaches, cls){
+    if(!coaches.length) return;
+    const gl=document.createElement('div');
+    gl.className='group-label'; gl.textContent=label;
+    list.appendChild(gl);
+    const grid=document.createElement('div');
+    grid.className='coach-cards';
+    coaches.forEach(c=>{
+      const card=document.createElement('div');
+      card.className=`coach-tap ${cls}`;
+      card.innerHTML=`<div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${c.level}</div>`;
+      card.onclick=()=>setMine(c.id);
+      grid.appendChild(card);
+    });
+    list.appendChild(grid);
+  }
+  grp('Pro coaches', ALL_COACHES.filter(c=>c.type==='pro'), 'pro-card');
+  grp('Part-time coaches', ALL_COACHES.filter(c=>c.type==='pt'), 'pt-card');
+  grp('Junior coaches', ALL_COACHES.filter(c=>c.type==='jr'), 'jr-card');
+}
+
+function setMine(id){
+  localStorage.setItem(MINE_KEY, id);
+  showMine();
+}
+
+function clearMine(){
+  localStorage.removeItem(MINE_KEY);
+  showMine();
+}
+
+function showMine(){
+  const id=localStorage.getItem(MINE_KEY);
+  const coach=id?ALL_COACHES.find(c=>c.id===id):null;
+  const picker=document.getElementById('mine-picker');
+  const view=document.getElementById('mine-view');
+  if(!coach){
+    picker.style.display='block';
+    view.style.display='none';
+    renderMinePicker();
+    return;
+  }
+  picker.style.display='none';
+  view.style.display='block';
+  document.getElementById('mine-name').innerHTML=`${coach.name} <span class="count">${coach.level}</span>`;
+  const list=document.getElementById('mine-list');
+  list.innerHTML='';
+  let totalSessions=0;
+  DAYS_ORDER.forEach(day=>{
+    const sessions=(SCHEDULE[day]||[]).filter(s=>s.coaches.some(c=>c===coach.abbr || c.startsWith(coach.abbr+' (')));
+    if(!sessions.length) return;
+    totalSessions+=sessions.length;
+    const wrap=document.createElement('div');
+    wrap.className='day-avail';
+    wrap.innerHTML=`<div class="day-avail-header">${day} <span class="count">${sessions.length} session${sessions.length>1?'s':''}</span></div>`;
+    const tl=document.createElement('div');
+    tl.className='timeline';
+    sessions.forEach(s=>{
+      const row=document.createElement('div');
+      row.className='t-row';
+      const myChip=s.coaches.find(c=>c===coach.abbr || c.startsWith(coach.abbr+' ('));
+      const noteMatch=myChip&&myChip.match(/\((.+)\)/);
+      const note=noteMatch?` <span style="font-size:11px;color:var(--red);font-weight:500">· ${noteMatch[1]}</span>`:'';
+      const others=s.coaches.filter(c=>c!==myChip).map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+      row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}${note}</div><div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
+      tl.appendChild(row);
+    });
+    wrap.appendChild(tl);
+    list.appendChild(wrap);
+  });
+  if(totalSessions===0){
+    list.innerHTML='<div class="avail-intro" style="text-align:center">No sessions scheduled this week.</div>';
+  }
+}
+
 buildSchedTabs();
 renderSchedule('Monday');
 buildAvailability();
 buildCoachDropdown();
+showMine();
 </script>
 </body>
 </html>
