@@ -35,7 +35,7 @@
 | andrew | Andrew Weiss | Andrew W | 856-558-8061 | aweiss@legacyyte.org |
 | kein | Kein Wilson | Kein W | 215-936-7540 | kwilson@legacyyte.org |
 | kris | Kris Wilson | Kris W | 297-310-9271 | kristianw@legacyyte.org |
-| shevi | Shevi A | Shevi A | — | — |
+| shevi | Shevi A | Shevi A | 334-282-3063 | — |
 | ben | Ben Biswas | Ben B | 339-223-5795 | — |
 
 ### Part-Time Coaches (Any clinic)
