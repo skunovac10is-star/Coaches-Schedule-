@@ -2,19 +2,63 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
 <title>LEGACY YTE — Weekly Schedule</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#19171D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LEGACY">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23611F69'/><text x='90' y='128' font-family='Arial Black,sans-serif' font-size='120' font-weight='900' fill='white' text-anchor='middle'>L</text></svg>">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23611F69'/><text x='32' y='46' font-family='Arial Black,sans-serif' font-size='42' font-weight='900' fill='white' text-anchor='middle'>L</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --red:#cc2200;--red-dark:#a01a00;--red-light:#fff0eb;
-  --black:#0f0f0f;--white:#fff;
-  --gray-50:#f8f8f7;--gray-100:#f0efed;--gray-200:#e2e0dc;
-  --gray-300:#c8c5bf;--gray-500:#888480;--gray-700:#444240;
-  --r:8px;--rlg:12px;
+  --red:#611F69;--red-dark:#4A154B;--red-light:#F4EDF5;
+  --black:#1D1C1D;--white:#fff;
+  --gray-50:#F8F8F8;--gray-100:#F3F3F3;--gray-200:#E8E8E8;
+  --gray-300:#D1D1D1;--gray-500:#696969;--gray-700:#454245;
+  --accent-2:#1264A3;--success:#2BAC76;
+  --sidebar:#19171D;--sidebar-hover:#27242C;--sidebar-active:#1164A3;
+  --r:6px;--rlg:8px;
 }
-body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;-webkit-font-smoothing:antialiased}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:none}
+button,.coach-tap,.dtab,.tab,.pill label,.cf-btn,.amp-btn,.btn-submit,.add-day-btn,.tabbar-item{-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none}
+button:active,.coach-tap:active,.dtab:active,.pill label:active,.cf-btn:active,.btn-submit:active,.tabbar-item:active{transform:scale(.96);transition:transform .08s}
+@media (hover:none){ .coach-tap:hover,.t-block:hover{transform:none !important;box-shadow:0 1px 2px rgba(10,10,10,.04) !important} }
+
+/* Bottom tab bar — mobile only */
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--gray-200);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:150;justify-content:space-around}
+.tabbar-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;color:var(--gray-500);cursor:pointer;font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;min-height:52px;border-radius:10px;transition:color .15s}
+.tabbar-item.active{color:var(--red)}
+.tabbar-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1}
+.tabbar-label{font-size:10px;letter-spacing:.3px}
+
+@media (max-width:640px){
+  .tabs{display:none}
+  .tabbar{display:flex}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .panel{padding:1rem 1rem 1.5rem}
+  .site-header{height:60px;padding:0 1.1rem;padding-top:env(safe-area-inset-top)}
+  .site-header{height:calc(60px + env(safe-area-inset-top))}
+  .logo-name{font-size:18px}
+  .header-week{display:none}
+  .day-avail-header{font-size:22px}
+  .t-time{font-size:10px}
+  .t-name{font-size:13px}
+  .coach-cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .chip{font-size:10px;padding:4px 9px}
+  .tab{padding:14px 14px;font-size:12px}
+  .cf-btn{min-height:44px}
+  .btn-submit{width:100%;padding:15px;font-size:15px}
+  input[type=text],input[type=email],input[type=date],select,textarea{font-size:16px;padding:12px 14px}
+  .pill label{padding:10px 16px;font-size:14px}
+  .dtab{padding:10px 16px;font-size:13px}
+  .day-tabs{overflow-x:auto;flex-wrap:nowrap;margin-left:-1rem;margin-right:-1rem;padding:0 1rem 4px;scrollbar-width:none}
+  .day-tabs::-webkit-scrollbar{display:none}
+}
 body.locked > *:not(#gate){display:none !important}
 #gate{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;padding:1.5rem}
 #gate.hidden{display:none}
@@ -22,49 +66,80 @@ body.locked > *:not(#gate){display:none !important}
 .gate-logo{width:48px;height:48px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:26px;margin:0 auto 1rem}
 .gate-title{font-family:'Bebas Neue',sans-serif;color:#fff;font-size:22px;letter-spacing:2px;margin-bottom:.35rem}
 .gate-sub{color:#aaa;font-size:13px;margin-bottom:1.5rem}
-#gate-input{width:100%;border:1px solid #333;background:#0f0f0f;border-radius:8px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:15px;color:#fff;outline:none;margin-bottom:.75rem;text-align:center;letter-spacing:2px}
+#gate-input{width:100%;border:1px solid #333;background:#0f0f0f;border-radius:8px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:15px;color:#fff;outline:none;margin-bottom:.75rem;text-align:center;letter-spacing:2px}
 #gate-input:focus{border-color:var(--red)}
-#gate-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:11px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer}
-#gate-btn:hover{background:var(--red-dark)}
+#gate-btn{width:100%;background:#007A5A;color:#fff;border:none;border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(0,122,90,.25);letter-spacing:.3px}
+#gate-btn:hover{filter:brightness(1.05)}
 #gate-err{color:#ff6b5a;font-size:12px;margin-top:.6rem;min-height:16px}
 
 /* HEADER */
-.site-header{background:var(--black);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100}
+.site-header{background:var(--sidebar);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.08)}
 .logo-row{display:flex;align-items:center;gap:10px}
-.logo-mark{width:30px;height:30px;background:var(--red);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:17px}
-.logo-name{font-family:'Bebas Neue',sans-serif;color:#fff;font-size:16px;letter-spacing:2px}
-.header-week{font-size:11px;color:#888;letter-spacing:1px;text-transform:uppercase}
+.logo-mark{width:32px;height:32px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:18px}
+.logo-name{font-family:'Inter',sans-serif;color:#fff;font-size:15px;font-weight:700;letter-spacing:.3px}
+.header-week{font-size:12px;color:rgba(255,255,255,.6);font-weight:500}
 
 /* TABS */
-.tabs{background:#fff;border-bottom:1px solid var(--gray-200);display:flex;padding:0 1.25rem;overflow-x:auto}
-.tab{padding:13px 18px;font-size:13px;font-weight:500;color:var(--gray-500);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;flex-shrink:0}
-.tab.active{color:var(--red);border-bottom-color:var(--red)}
+.tabs{background:var(--sidebar);display:flex;flex-direction:column;align-items:stretch;padding:14px 10px;gap:2px;position:fixed;left:0;top:58px;bottom:0;width:240px;z-index:90;border-right:1px solid rgba(255,255,255,.06);overflow-y:auto}
+.tabs::before{content:"Navigation";display:block;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.45);padding:4px 12px 10px}
+.tab{display:flex;align-items:center;gap:10px;padding:8px 12px;font-size:14px;font-weight:500;color:rgba(255,255,255,.78);cursor:pointer;border-radius:6px;transition:all .1s;white-space:nowrap;background:transparent;letter-spacing:.1px}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab.active{color:#fff;background:var(--sidebar-active);font-weight:600}
+.tab::before{font-size:15px;line-height:1;width:20px;text-align:center;flex-shrink:0}
+.tab[data-icon="schedule"]::before{content:"#"}
+.tab[data-icon="mine"]::before{content:"★"}
+.tab[data-icon="coverage"]::before{content:"◉"}
+.tab[data-icon="covlog"]::before{content:"✓"}
+.tab[data-icon="request"]::before{content:"✈"}
+body{padding-left:240px;padding-top:58px}
+
+@media (max-width:900px){
+  body{padding-left:0}
+  .tabs{display:none}
+}
 
 /* PANELS */
 .panel{display:none;padding:1.25rem;max-width:860px;margin:0 auto}
-.panel.active{display:block}
+.panel.active{display:block;animation:panelIn .25s cubic-bezier(.25,.8,.25,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* ==================== SCHEDULE TAB ==================== */
 .day-tabs{display:flex;gap:5px;margin-bottom:1.25rem;flex-wrap:wrap}
-.dtab{padding:7px 15px;border-radius:20px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--gray-200);color:var(--gray-500);background:#fff;transition:all .12s;flex-shrink:0}
-.dtab.active{background:var(--black);border-color:var(--black);color:#fff}
+.dtab{padding:9px 18px;border-radius:22px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-200);color:var(--gray-700);background:#fff;transition:all .12s;flex-shrink:0;letter-spacing:.2px}
+.dtab:hover{border-color:var(--black);color:var(--black)}
+.dtab.active{background:var(--black);border-color:var(--black);color:#fff;box-shadow:0 4px 12px rgba(10,10,10,.15)}
 
-.legend{display:flex;gap:14px;margin-bottom:1.25rem;flex-wrap:wrap}
+.legend{display:flex;gap:14px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
 .leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-700)}
+.leg-key{padding-left:14px;border-left:1px solid var(--gray-200);color:var(--gray-500);font-weight:500}
+.leg-key .leg-ic{display:inline-flex;align-items:center;justify-content:center;width:20px;height:12px}
+.leg-key .leg-ic.ppl{font-size:12px;width:auto}
+.leg-key .leg-ic svg{width:20px;height:12px}
 .leg-bar{width:3px;height:16px;border-radius:2px}
 
 .timeline{display:flex;flex-direction:column;gap:6px}
 .t-row{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:stretch}
 .t-time{font-size:11px;color:var(--gray-500);font-weight:500;text-align:right;padding-top:10px;line-height:1.3;padding-right:2px}
-.t-block{background:#fff;border:1px solid var(--gray-200);border-radius:0 var(--rlg) var(--rlg) 0;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-left-width:3px}
+.t-block{background:#fff;border:1px solid var(--gray-200);border-radius:0 var(--rlg) var(--rlg) 0;padding:14px 16px;display:flex;align-items:center;gap:10px;border-left-width:4px;box-shadow:0 1px 2px rgba(10,10,10,.04);transition:transform .12s, box-shadow .12s}
+.t-block:hover{transform:translateX(2px);box-shadow:0 4px 12px rgba(10,10,10,.06)}
 .t-block.comp{border-left-color:var(--red)}
 .t-block.tt{border-left-color:#378ADD}
 .t-block.adult{border-left-color:#1D9E75}
 .t-block.munch{border-left-color:#BA7517}
 .t-block.other{border-left-color:#888}
-.t-name{font-size:13px;font-weight:500;color:var(--black);min-width:120px}
-.t-chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
-.chip{font-size:11px;padding:3px 8px;border-radius:8px;font-weight:500}
+.t-name{font-size:13px;font-weight:500;color:var(--black);min-width:120px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.t-meta{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:4px}
+.meta-pill{display:inline-flex;align-items:center;gap:4px;background:var(--gray-100);color:var(--gray-700);font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.2px;white-space:nowrap}
+.meta-pill .mi{display:inline-flex;align-items:center;opacity:.9}
+.meta-pill .mi svg{width:12px;height:12px;display:block}
+.meta-pill .mi.ppl{font-size:11px;line-height:1}
+.meta-pill.coach.low{background:#FDE7EC;color:#A1173D}
+.meta-pill.coach.solo{background:#F9D2DA;color:#801030}
+.meta-pill.courts{background:#EEF4FB;color:#0C447C}
+.meta-pill.short{background:#FFF5D6;color:#6B4B00}
+.t-chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;flex-shrink:0;max-width:60%;margin-left:auto}
+@media (max-width:640px){.t-meta{gap:4px}.meta-pill{font-size:10px;padding:2px 7px}.t-chips{max-width:100%}}
+.chip{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;letter-spacing:.2px}
 .chip-pro{background:#E6F1FB;color:#0C447C}
 .chip-pt{background:#FAEEDA;color:#633806}
 .chip-jr{background:#EAF3DE;color:#27500A}
@@ -75,14 +150,15 @@ body.locked > *:not(#gate){display:none !important}
 .tap-hint{display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--red-light);color:var(--red);border-radius:6px;padding:3px 9px;font-weight:500;margin-top:6px}
 
 .day-avail{margin-bottom:1rem}
-.day-avail-header{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--black);margin-bottom:.6rem;display:flex;align-items:center;gap:8px}
-.day-avail-header .count{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--gray-500);letter-spacing:0}
+.day-avail-header{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--black);margin-bottom:.8rem;display:flex;align-items:center;gap:10px}
+.day-avail-header .count{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--gray-500);letter-spacing:0}
 
 .group-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray-500);font-weight:500;margin-bottom:.4rem;margin-top:.75rem}
 .group-label:first-of-type{margin-top:0}
 
 .coach-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:.25rem}
-.coach-tap{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:10px 12px;cursor:pointer;transition:all .15s;position:relative}
+.coach-tap{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:14px 14px;cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.coach-tap:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,10,10,.08)}
 .coach-tap:hover{border-color:var(--red);background:var(--red-light)}
 .coach-tap.pro-card:hover{border-color:#378ADD;background:#E6F1FB}
 .coach-tap.pt-card:hover{border-color:#BA7517;background:#FAEEDA}
@@ -98,9 +174,9 @@ body.locked > *:not(#gate){display:none !important}
 .cf-name{font-size:15px;font-weight:500;color:#fff;margin-bottom:.6rem}
 .cf-level{font-size:11px;color:#aaa;margin-bottom:.75rem}
 .cf-actions{display:flex;gap:8px;flex-wrap:wrap}
-.cf-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:var(--r);font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;flex:1;min-width:120px;justify-content:center}
-.cf-call{background:var(--red);color:#fff}
-.cf-call:hover{background:var(--red-dark)}
+.cf-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:var(--r);font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;flex:1;min-width:120px;justify-content:center}
+.cf-call{background:#007A5A;color:#fff;box-shadow:0 4px 14px rgba(0,122,90,.3)}
+.cf-call:hover{filter:brightness(1.05)}
 .cf-text{background:#1a1a1a;color:#fff;border:1px solid #333}
 .cf-text:hover{background:#2a2a2a}
 .cf-email{background:#1a1a1a;color:#fff;border:1px solid #333}
@@ -109,14 +185,86 @@ body.locked > *:not(#gate){display:none !important}
 .cf-close{font-size:11px;color:#666;cursor:pointer;margin-top:.6rem;display:block;text-align:center}
 .cf-close:hover{color:#aaa}
 
+/* ==================== COVERAGE LOG TAB ==================== */
+.cov-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+.cov-title{font-size:20px;font-weight:700;color:var(--black);margin:0}
+.cov-sub{font-size:13px;color:var(--gray-500);margin:2px 0 0}
+.cov-progress{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:14px 16px;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.cov-progress-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.cov-progress-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray-500);font-weight:600}
+.cov-progress-week{font-size:13px;font-weight:700;color:var(--black)}
+.cov-bar{height:8px;background:var(--gray-100);border-radius:20px;overflow:hidden}
+.cov-bar-fill{height:100%;background:var(--success);border-radius:20px;transition:width .3s}
+.cov-meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--gray-500)}
+.cov-meta-row span{display:inline-flex;gap:4px}
+.cov-meta-row b{color:var(--black);font-weight:700}
+.cov-entry-form{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.cov-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.cov-form-grid{grid-template-columns:1fr}}
+.cov-form-grid.full{grid-template-columns:1fr}
+.cov-shift-type{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.cov-shift-btn{padding:8px 14px;border:1.5px solid var(--gray-200);border-radius:20px;background:#fff;font-size:12px;font-weight:600;color:var(--gray-700);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.cov-shift-btn.auto{border-style:dashed;color:var(--gray-500)}
+.cov-shift-btn.active.high{background:#E01E5A;border-color:#E01E5A;color:#fff;box-shadow:0 2px 8px rgba(224,30,90,.25)}
+.cov-shift-btn.active.std{background:var(--accent-2);border-color:var(--accent-2);color:#fff;box-shadow:0 2px 8px rgba(18,100,163,.2)}
+.cov-add-btn{background:var(--success);color:#fff;border:none;padding:12px 20px;border-radius:var(--rlg);font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;box-shadow:0 4px 12px rgba(0,122,90,.22);transition:transform .12s,box-shadow .12s}
+.cov-add-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,122,90,.3)}
+.cov-add-btn:disabled{background:var(--gray-300);cursor:not-allowed;box-shadow:none;transform:none}
+.cov-list{display:flex;flex-direction:column;gap:8px}
+.cov-list-empty{text-align:center;padding:30px;color:var(--gray-500);font-size:13px;background:#fff;border:1px dashed var(--gray-200);border-radius:var(--rlg)}
+.cov-entry{background:#fff;border:1px solid var(--gray-200);border-left-width:4px;border-radius:0 var(--rlg) var(--rlg) 0;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.cov-entry.high{border-left-color:#E01E5A}
+.cov-entry.std{border-left-color:var(--accent-2)}
+.cov-entry-date{font-size:11px;color:var(--gray-500);font-weight:600;min-width:60px;line-height:1.3}
+.cov-entry-main{flex:1;min-width:0}
+.cov-entry-line1{font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px}
+.cov-entry-line1 .arrow{color:var(--gray-300);margin:0 6px}
+.cov-entry-line2{font-size:11px;color:var(--gray-500);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cov-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase}
+.cov-badge.high{background:#FCECEF;color:#A1173D}
+.cov-badge.std{background:#EEF4FB;color:#0C447C}
+.cov-entry-del{background:transparent;border:none;color:var(--gray-300);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .15s,background .15s}
+.cov-entry-del:hover{color:#E01E5A;background:#FCECEF}
+.cov-report-btn{background:var(--black);color:#fff;border:none;padding:14px 20px;border-radius:var(--rlg);font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:1rem;box-shadow:0 4px 12px rgba(10,10,10,.15);display:flex;align-items:center;justify-content:center;gap:8px}
+.cov-report-btn:hover{background:#000}
+.cov-report{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-top:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.cov-report-title{font-size:18px;font-weight:700;color:var(--black);margin:0 0 4px}
+.cov-report-sub{font-size:12px;color:var(--gray-500);margin-bottom:1rem}
+.cov-table{width:100%;border-collapse:collapse;font-size:13px}
+.cov-table th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--gray-200);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);font-weight:700}
+.cov-table td{padding:12px 8px;border-bottom:1px solid var(--gray-100);vertical-align:middle}
+.cov-table tr:last-child td{border-bottom:none}
+.cov-table .num{text-align:center;font-weight:700;color:var(--black)}
+.cov-tier{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.2px}
+.cov-tier.t0{background:var(--gray-100);color:var(--gray-500)}
+.cov-tier.t1{background:#FFF3D9;color:#6B4B00}
+.cov-tier.t2{background:#E6F5EF;color:#00573F}
+.cov-reward{display:flex;gap:6px;flex-wrap:wrap}
+.cov-reward-btn{padding:6px 10px;border:1.5px solid var(--gray-200);border-radius:14px;background:#fff;font-size:11px;font-weight:600;color:var(--gray-700);cursor:pointer;transition:all .15s}
+.cov-reward-btn.active{background:var(--success);border-color:var(--success);color:#fff;box-shadow:0 2px 6px rgba(0,122,90,.25)}
+.cov-reward-btn.locked{opacity:.5;cursor:not-allowed}
+.cov-reward-text{font-size:12px;color:var(--gray-500);font-style:italic}
+.cov-export-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
+.cov-export-btn{padding:8px 14px;border:1px solid var(--gray-200);background:#fff;color:var(--gray-700);font-size:12px;font-weight:600;border-radius:var(--rlg);cursor:pointer}
+.cov-export-btn:hover{background:var(--gray-50)}
+.cov-mobile-card{display:none}
+@media(max-width:640px){
+  .cov-table{display:none}
+  .cov-mobile-card{display:flex;flex-direction:column;gap:10px}
+  .cov-mc{border:1px solid var(--gray-200);border-radius:var(--rlg);padding:12px}
+  .cov-mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .cov-mc-name{font-weight:700;font-size:14px;color:var(--black)}
+  .cov-mc-nums{font-size:12px;color:var(--gray-500);margin-bottom:8px}
+}
+
 /* ==================== FORM TAB ==================== */
-.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem}
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
 .sec-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--red);font-weight:500;margin-bottom:1rem}
 .field{margin-bottom:1rem}
 .field:last-child{margin-bottom:0}
 label.fl{display:block;font-size:13px;color:var(--gray-700);margin-bottom:5px;font-weight:500}
 .req{color:var(--red)}
-input[type=text],input[type=email],input[type=date],select,textarea{width:100%;border:1px solid var(--gray-200);border-radius:var(--r);padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--black);background:#fff;outline:none;transition:border-color .15s;-webkit-appearance:none}
+input[type=text],input[type=email],input[type=date],select,textarea{width:100%;border:1px solid var(--gray-200);border-radius:var(--r);padding:9px 12px;font-family:'Inter',sans-serif;font-size:14px;color:var(--black);background:#fff;outline:none;transition:border-color .15s;-webkit-appearance:none}
 input:focus,select:focus,textarea:focus{border-color:var(--red)}
 textarea{resize:vertical;min-height:64px;line-height:1.5}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -132,13 +280,14 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 .sub-field{margin-bottom:.75rem}
 .sub-field:last-child{margin-bottom:0}
 .sub-label{font-size:12px;color:var(--gray-700);margin-bottom:5px;font-weight:500}
-.add-day-btn{width:100%;border:1px dashed var(--gray-300);border-radius:var(--r);padding:10px;background:transparent;color:var(--gray-500);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;margin-top:.5rem}
+.add-day-btn{width:100%;border:1px dashed var(--gray-300);border-radius:var(--r);padding:10px;background:transparent;color:var(--gray-500);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;margin-top:.5rem}
 .add-day-btn:hover{border-color:var(--red);color:var(--red)}
 .remove-btn{margin-left:auto;font-size:11px;color:var(--gray-500);cursor:pointer;padding:2px 8px;border:1px solid var(--gray-200);border-radius:4px;background:#fff}
 .cbox{display:none;margin-top:.75rem;padding:.875rem;background:#fff;border-radius:var(--r);border:1px solid var(--gray-200)}
 .cbox.on{display:block}
 .hint{font-size:12px;color:var(--gray-500);margin-top:4px;line-height:1.4}
-.warn{font-size:12px;color:#7a2000;background:var(--red-light);border-radius:var(--r);padding:8px 12px;margin-top:8px;line-height:1.4;border:1px solid #f5c4b3}
+.warn{font-size:14px;font-weight:600;color:#fff;background:#E01E5A;border-radius:var(--rlg);padding:14px 16px 14px 48px;margin-top:12px;line-height:1.45;border:none;box-shadow:0 6px 18px rgba(224,30,90,.28);position:relative;letter-spacing:.1px}
+.warn::before{content:"⚠";position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:22px;line-height:1}
 .avail-mini-panel{border-radius:var(--r);overflow:hidden;border:1px solid var(--gray-200);margin-top:.75rem}
 .amp-header{background:var(--black);color:#fff;padding:7px 12px;font-size:11px;font-weight:500;letter-spacing:.5px}
 .amp-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--gray-100);gap:8px;flex-wrap:wrap}
@@ -150,8 +299,23 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 .amp-call{background:var(--red-light);color:var(--red)}
 .amp-email{background:#E6F1FB;color:#0C447C}
 .no-avail{font-size:13px;color:var(--gray-500);padding:10px 12px;font-style:italic}
-.btn-submit{background:var(--red);color:#fff;border:none;border-radius:var(--r);padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:background .15s}
-.btn-submit:hover{background:var(--red-dark)}
+.sessions-list{display:flex;flex-direction:column;gap:8px;margin-bottom:.5rem}
+.session-row{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r);padding:12px 14px;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.session-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+.session-title{font-size:14px;font-weight:600;color:var(--black);line-height:1.3}
+.session-remove{font-size:11px;color:var(--gray-500);background:transparent;border:1px solid var(--gray-200);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;flex-shrink:0}
+.session-remove:hover{color:var(--red);border-color:var(--red)}
+.session-cover{width:100%;font-size:14px}
+.cover-status{margin-top:8px;font-size:12px;font-weight:500;padding:6px 10px;border-radius:6px;display:inline-block}
+.cover-status.pending{background:#FCECEF;color:#A1173D}
+.cover-status.covered{background:#E6F5EF;color:#00573F}
+.session-picker{margin-top:.25rem}
+.session-picker select{width:100%;background:var(--red-light);border:1.5px dashed var(--red);color:var(--red);font-weight:600;cursor:pointer}
+.no-sessions{font-size:13px;color:var(--gray-500);font-style:italic;padding:8px 2px}
+.private-section{margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--gray-200)}
+.private-section .sub-label{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--red);font-weight:600}
+.btn-submit{background:#007A5A;color:#fff;border:none;border-radius:var(--r);padding:14px 28px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:filter .15s;box-shadow:0 6px 20px rgba(0,122,90,.25);letter-spacing:.2px}
+.btn-submit:hover{filter:brightness(1.05)}
 .btn-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}
 .policy{font-size:12px;color:var(--gray-500);line-height:1.5}
 .success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
@@ -210,21 +374,41 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 </header>
 
 <div class="tabs">
-  <div class="tab active" onclick="switchTab('schedule')">Weekly schedule</div>
-  <div class="tab" onclick="switchTab('mine')">My schedule</div>
-  <div class="tab" onclick="switchTab('coverage')">Who's available</div>
-  <div class="tab" onclick="switchTab('request')">Request time off</div>
+  <div class="tab active" data-icon="schedule" onclick="switchTab('schedule')">Weekly schedule</div>
+  <div class="tab" data-icon="mine" onclick="switchTab('mine')">My schedule</div>
+  <div class="tab" data-icon="coverage" onclick="switchTab('coverage')">Who's available</div>
+  <div class="tab" data-icon="covlog" onclick="switchTab('covlog')">Coverage log</div>
+  <div class="tab" data-icon="request" onclick="switchTab('request')">Request time off</div>
 </div>
+
+<!-- Bottom tab bar (mobile) -->
+<nav class="tabbar" id="tabbar">
+  <div class="tabbar-item active" data-tab="schedule" onclick="switchTab('schedule')">
+    <div class="tabbar-icon">📅</div><div class="tabbar-label">Schedule</div>
+  </div>
+  <div class="tabbar-item" data-tab="mine" onclick="switchTab('mine')">
+    <div class="tabbar-icon">⭐</div><div class="tabbar-label">Mine</div>
+  </div>
+  <div class="tabbar-item" data-tab="coverage" onclick="switchTab('coverage')">
+    <div class="tabbar-icon">👥</div><div class="tabbar-label">Coverage</div>
+  </div>
+  <div class="tabbar-item" data-tab="covlog" onclick="switchTab('covlog')">
+    <div class="tabbar-icon">📋</div><div class="tabbar-label">Log</div>
+  </div>
+  <div class="tabbar-item" data-tab="request" onclick="switchTab('request')">
+    <div class="tabbar-icon">🏝️</div><div class="tabbar-label">Time off</div>
+  </div>
+</nav>
 
 <!-- ===== SCHEDULE TAB ===== -->
 <div class="panel active" id="tab-schedule">
   <div class="day-tabs" id="sched-day-tabs"></div>
   <div class="legend">
-    <div class="leg"><div class="leg-bar" style="background:var(--red)"></div>Competitive</div>
-    <div class="leg"><div class="leg-bar" style="background:#378ADD"></div>TT programs</div>
-    <div class="leg"><div class="leg-bar" style="background:#1D9E75"></div>Adult clinics</div>
-    <div class="leg"><div class="leg-bar" style="background:#BA7517"></div>Munchkins</div>
-    <div class="leg"><div class="leg-bar" style="background:#888"></div>Other</div>
+    <div class="leg leg-key" style="padding-left:0;border-left:none"><span class="leg-ic"><svg viewBox="0 0 20 12" fill="none" stroke="#0C447C" stroke-width="1.4"><rect x="1" y="1" width="18" height="10" rx="1"/><line x1="10" y1="1" x2="10" y2="11"/><line x1="1" y1="6" x2="19" y2="6" stroke-dasharray="1.2 1.2"/></svg></span>Courts</div>
+    <div class="leg leg-key"><span class="leg-ic ppl">👥</span>Coaches staffed</div>
+    <div class="leg leg-key"><span class="chip chip-pro">Full-time Pro</span></div>
+    <div class="leg leg-key"><span class="chip chip-pt">Part-time Pro</span></div>
+    <div class="leg leg-key"><span class="chip chip-jr">Jr Pro</span></div>
   </div>
   <div class="timeline" id="timeline"></div>
 </div>
@@ -255,6 +439,87 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   <div id="avail-list"></div>
 </div>
 
+<!-- ===== COVERAGE LOG TAB ===== -->
+<div class="panel" id="tab-covlog">
+  <div class="cov-header">
+    <div>
+      <h2 class="cov-title">Coverage log</h2>
+      <p class="cov-sub">Track every time a coach covers a shift for someone else. Rewards auto-calculate at session end.</p>
+    </div>
+    <button class="cov-export-btn" onclick="covSettings()" style="font-size:12px">⚙ Session settings</button>
+  </div>
+
+  <div class="cov-progress">
+    <div class="cov-progress-top">
+      <div class="cov-progress-label">Session progress</div>
+      <div class="cov-progress-week" id="cov-week-text">Week — of 13</div>
+    </div>
+    <div class="cov-bar"><div class="cov-bar-fill" id="cov-bar-fill" style="width:0%"></div></div>
+    <div class="cov-meta-row">
+      <span>Started <b id="cov-start-date">—</b></span>
+      <span>·</span>
+      <span>Ends <b id="cov-end-date">—</b></span>
+      <span>·</span>
+      <span><b id="cov-total-count">0</b> total coverages</span>
+      <span>·</span>
+      <span><b id="cov-high-count">0</b> high-demand</span>
+    </div>
+  </div>
+
+  <!-- Log entry form -->
+  <div class="cov-entry-form">
+    <div class="sec-label">Log a coverage</div>
+    <div class="cov-form-grid">
+      <div class="field">
+        <label class="fl">Date <span class="req">*</span></label>
+        <input type="date" id="cov-date" onchange="covRefreshSessions()">
+      </div>
+      <div class="field">
+        <label class="fl">Which session? <span class="req">*</span></label>
+        <select id="cov-session" onchange="covUpdateShiftType()">
+          <option value="">Pick a date first…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="fl">Originally scheduled <span class="req">*</span></label>
+        <select id="cov-requester">
+          <option value="">Select coach…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="fl">Covered by <span class="req">*</span></label>
+        <select id="cov-coverer">
+          <option value="">Select coach…</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:8px">
+      <label class="fl">Shift type</label>
+      <div class="cov-shift-type">
+        <button type="button" class="cov-shift-btn auto" id="cov-shift-auto" onclick="covSetShift('auto')">✨ Auto</button>
+        <button type="button" class="cov-shift-btn std" id="cov-shift-std" onclick="covSetShift('standard')">☀️ Standard daytime</button>
+        <button type="button" class="cov-shift-btn high" id="cov-shift-high" onclick="covSetShift('high-demand')">🔥 High-demand</button>
+      </div>
+      <div style="font-size:11px;color:var(--gray-500);margin-top:6px">High-demand = evenings (5pm+), weekends, or holidays</div>
+    </div>
+    <div class="field" style="margin-bottom:8px">
+      <label class="fl">Note (optional)</label>
+      <input type="text" id="cov-note" placeholder="e.g., last-minute swap, subbed for sick leave…">
+    </div>
+    <button class="cov-add-btn" onclick="covAddEntry()">+ Log coverage</button>
+  </div>
+
+  <!-- Recent log -->
+  <div class="sec-label" style="margin-top:1.5rem">Logged this session</div>
+  <div class="cov-list" id="cov-list"></div>
+
+  <!-- Run report -->
+  <button class="cov-report-btn" onclick="covRunReport()">📊 Run session-end report</button>
+
+  <!-- Report output -->
+  <div id="cov-report-container"></div>
+</div>
+
 <!-- ===== REQUEST TAB ===== -->
 <div class="panel" id="tab-request">
   <div class="card">
@@ -282,61 +547,44 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   </div>
 
   <div class="card">
-    <div class="sec-label">Private lessons</div>
-    <div class="field">
-      <label class="fl">Do you have private lessons during this time? <span class="req">*</span></label>
-      <div class="pill-group">
-        <div class="pill"><input type="radio" name="hasprivate" id="pv1" onchange="togglePrivate('yes')"><label for="pv1">Yes</label></div>
-        <div class="pill"><input type="radio" name="hasprivate" id="pv2" onchange="togglePrivate('no')"><label for="pv2">No</label></div>
-      </div>
-    </div>
-    <div class="cbox" id="private-box">
-      <div class="sub-field">
-        <div class="sub-label">Did you cancel your privates? <span class="req">*</span></div>
-        <div class="pill-group">
-          <div class="pill"><input type="radio" name="cancelled" id="pc1" onchange="toggleFD()"><label for="pc1">Yes, all cancelled</label></div>
-          <div class="pill"><input type="radio" name="cancelled" id="pc2" onchange="toggleFD()"><label for="pc2">No, I need front desk help</label></div>
-        </div>
-      </div>
-      <div class="cbox" id="fd-box">
-        <div class="sub-label">List clients and times for front desk to cancel</div>
-        <textarea placeholder="e.g. John Smith — Monday 5pm, Sarah Lee — Tuesday 6pm..."></textarea>
-        <div class="hint">Front desk will contact clients through Club Automation</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
     <div class="sec-label">Day-by-day coverage</div>
     <div class="hint" style="font-size:13px;color:var(--gray-700);margin-bottom:1rem;line-height:1.6">Add one block per day. Pick a date and available coaches appear automatically.</div>
     <div id="days-container">
-      <div class="day-block" id="day-1">
+      <div class="day-block" id="day-1" data-n="1">
         <div class="day-header"><div class="day-num">1</div><span>Day 1</span></div>
         <div class="sub-field">
           <div class="sub-label">Date <span class="req">*</span></div>
-          <input type="date" onchange="updateDayPanel(1,this.value)">
+          <input type="date" onchange="onDateChange(1,this.value)">
         </div>
-        <div class="sub-field">
-          <div class="sub-label">Sessions needing coverage <span class="req">*</span></div>
-          <textarea placeholder="e.g. 10am beginner clinic, 4pm TT Comp..."></textarea>
-        </div>
-        <div class="sub-field">
-          <div class="sub-label">Coverage secured? <span class="req">*</span></div>
-          <div class="pill-group">
-            <div class="pill"><input type="radio" name="cov1" id="cy1" onchange="toggleDayCov(1,'yes')"><label for="cy1">Yes, confirmed</label></div>
-            <div class="pill"><input type="radio" name="cov1" id="cn1" onchange="toggleDayCov(1,'no')"><label for="cn1">No, still looking</label></div>
+        <div class="sub-field" id="sessions-wrap-1">
+          <div class="sub-label">Sessions needing coverage</div>
+          <div id="sessions-list-1" class="sessions-list"></div>
+          <div id="session-picker-1" class="session-picker" style="display:none">
+            <select onchange="addSession(1,this.value);this.value=''">
+              <option value="">+ Add a session needing coverage...</option>
+            </select>
           </div>
+          <div class="no-sessions" id="no-sessions-1">Pick a date to see sessions.</div>
         </div>
-        <div class="cbox" id="covyes-1">
-          <div class="sub-label">Who is covering which sessions?</div>
-          <textarea placeholder="e.g. Gabe Knowles covering 10am beginner..."></textarea>
-        </div>
-        <div class="cbox" id="covno-1">
-          <div class="sub-label">Available coaches to contact:</div>
-          <div id="amp-1" class="avail-mini-panel"><div class="no-avail">Select a date above</div></div>
-          <div class="sub-label" style="margin-top:.75rem">Who have you already tried?</div>
-          <textarea placeholder="Names and how you reached out..."></textarea>
-          <div class="warn">Taking the day without confirmed coverage is subject to LEGACY's coverage policy.</div>
+        <div class="warn" id="warn-1" style="display:none">Any session without coverage is subject to LEGACY's coverage policy. Please keep trying to fill gaps.</div>
+        <div class="private-section">
+          <div class="sub-label">Private lessons this day?</div>
+          <div class="pill-group">
+            <div class="pill"><input type="radio" name="hp1" id="hp1y" onchange="togglePrivate(1,'yes')"><label for="hp1y">Yes</label></div>
+            <div class="pill"><input type="radio" name="hp1" id="hp1n" onchange="togglePrivate(1,'no')"><label for="hp1n">No</label></div>
+          </div>
+          <div class="cbox" id="private-box-1">
+            <div class="sub-label" style="margin-top:.75rem">Did you cancel them?</div>
+            <div class="pill-group">
+              <div class="pill"><input type="radio" name="pc1" id="pc1y" onchange="toggleFD(1)"><label for="pc1y">Yes, all cancelled</label></div>
+              <div class="pill"><input type="radio" name="pc1" id="pc1n" onchange="toggleFD(1)"><label for="pc1n">No — need front desk help</label></div>
+            </div>
+            <div class="cbox" id="fd-box-1">
+              <div class="sub-label">Clients & times for front desk to cancel</div>
+              <textarea placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
+              <div class="hint">Front desk will reach out via Club Automation</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -377,7 +625,7 @@ const ALL_COACHES = [
   {id:'jinay',name:'Jinay Sheth',abbr:'Jinay S',phone:'215-410-4473',email:'',type:'jr',level:'L3 — all but TT1'},
   {id:'levi',name:'Levi Santos',abbr:'Levi S',phone:'267-410-0665',email:'',type:'jr',level:'L3 — all but TT1'},
   {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'L3 — all but TT1'},
-  {id:'dean',name:'Dean Smith',abbr:'Dean S',phone:'215-688-8141',email:'deahensmith@yahoo.com',type:'jr',level:'L2 — Munchkins, CC, Adults'},
+  {id:'dean',name:'Dean Smith',abbr:'Dean S',phone:'215-688-8141',email:'deansmith@yahoo.com',type:'jr',level:'L2 — Munchkins, CC, Adults'},
   {id:'amy',name:'Amy Georgescu',abbr:'Amy G',phone:'484-999-1779',email:'',type:'jr',level:'L2 — Munchkins, CC, Adults'},
   {id:'ben',name:'Ben Biswas',abbr:'Ben B',phone:'339-223-5795',email:'',type:'pt',level:'Any clinic'},
 ];
@@ -452,6 +700,22 @@ function chipCls(abbr){
   return c.type==='pro'?'chip-pro':c.type==='pt'?'chip-pt':'chip-jr';
 }
 
+// ---- COURTS (default per type, override via s.courts) ----
+const DEFAULT_COURTS = {comp:8, tt:4, adult:2, munch:4, other:1};
+function courtsFor(s){ return (s.courts!=null) ? s.courts : (DEFAULT_COURTS[s.type]||1); }
+function metaHtml(s){
+  const ct = courtsFor(s);
+  const cn = s.coaches.length;
+  const short = cn < ct; // fewer coaches than courts = understaffed
+  const cnCls = cn===1?'solo':(cn===2?'low':'');
+  const courtsCls = short ? 'courts short' : 'courts';
+  const courtSvg = `<svg viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="18" height="10" rx="1"/><line x1="10" y1="1" x2="10" y2="11"/><line x1="1" y1="6" x2="19" y2="6" stroke-dasharray="1.2 1.2"/></svg>`;
+  return `<div class="t-meta">`
+    +`<span class="meta-pill ${courtsCls}" title="${ct} court${ct===1?'':'s'}"><span class="mi">${courtSvg}</span>${ct}</span>`
+    +`<span class="meta-pill coach ${cnCls}" title="${cn} coach${cn===1?'':'es'}"><span class="mi ppl">👥</span>${cn}</span>`
+    +`</div>`;
+}
+
 // ---- SCHEDULE ----
 function renderSchedule(day){
   const tl = document.getElementById('timeline');
@@ -460,7 +724,7 @@ function renderSchedule(day){
     const row=document.createElement('div');
     row.className='t-row';
     const chips=s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
-    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div><div class="t-chips">${chips}</div></div>`;
+    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
     tl.appendChild(row);
   });
 }
@@ -614,28 +878,140 @@ function addDay(){
   dayCount++;
   const n=dayCount;
   const div=document.createElement('div');
-  div.className='day-block'; div.id=`day-${n}`;
+  div.className='day-block'; div.id=`day-${n}`; div.dataset.n=n;
   div.innerHTML=`<div class="day-header"><div class="day-num">${n}</div><span>Day ${n}</span><button class="remove-btn" onclick="document.getElementById('day-${n}').remove()">Remove</button></div>
-    <div class="sub-field"><div class="sub-label">Date <span class="req">*</span></div><input type="date" onchange="updateDayPanel(${n},this.value)"></div>
-    <div class="sub-field"><div class="sub-label">Sessions needing coverage <span class="req">*</span></div><textarea placeholder="e.g. 10am beginner clinic, 4pm TT Comp..."></textarea></div>
-    <div class="sub-field"><div class="sub-label">Coverage secured? <span class="req">*</span></div>
-    <div class="pill-group"><div class="pill"><input type="radio" name="cov${n}" id="cy${n}" onchange="toggleDayCov(${n},'yes')"><label for="cy${n}">Yes, confirmed</label></div><div class="pill"><input type="radio" name="cov${n}" id="cn${n}" onchange="toggleDayCov(${n},'no')"><label for="cn${n}">No, still looking</label></div></div></div>
-    <div class="cbox" id="covyes-${n}"><div class="sub-label">Who is covering which sessions?</div><textarea placeholder="e.g. Gabe Knowles covering 10am..."></textarea></div>
-    <div class="cbox" id="covno-${n}"><div class="sub-label">Available coaches to contact:</div><div id="amp-${n}" class="avail-mini-panel"><div class="no-avail">Select a date above</div></div><div class="sub-label" style="margin-top:.75rem">Who have you already tried?</div><textarea placeholder="Names and how you reached out..."></textarea><div class="warn">Taking the day without confirmed coverage is subject to LEGACY's coverage policy.</div></div>`;
+    <div class="sub-field"><div class="sub-label">Date <span class="req">*</span></div><input type="date" onchange="onDateChange(${n},this.value)"></div>
+    <div class="sub-field" id="sessions-wrap-${n}">
+      <div class="sub-label">Sessions needing coverage</div>
+      <div id="sessions-list-${n}" class="sessions-list"></div>
+      <div id="session-picker-${n}" class="session-picker" style="display:none">
+        <select onchange="addSession(${n},this.value);this.value=''">
+          <option value="">+ Add a session needing coverage...</option>
+        </select>
+      </div>
+      <div class="no-sessions" id="no-sessions-${n}">Pick a date to see sessions.</div>
+    </div>
+    <div class="warn" id="warn-${n}" style="display:none">Any session without coverage is subject to LEGACY's coverage policy. Please keep trying to fill gaps.</div>
+    <div class="private-section">
+      <div class="sub-label">Private lessons this day?</div>
+      <div class="pill-group">
+        <div class="pill"><input type="radio" name="hp${n}" id="hp${n}y" onchange="togglePrivate(${n},'yes')"><label for="hp${n}y">Yes</label></div>
+        <div class="pill"><input type="radio" name="hp${n}" id="hp${n}n" onchange="togglePrivate(${n},'no')"><label for="hp${n}n">No</label></div>
+      </div>
+      <div class="cbox" id="private-box-${n}">
+        <div class="sub-label" style="margin-top:.75rem">Did you cancel them?</div>
+        <div class="pill-group">
+          <div class="pill"><input type="radio" name="pc${n}" id="pc${n}y" onchange="toggleFD(${n})"><label for="pc${n}y">Yes, all cancelled</label></div>
+          <div class="pill"><input type="radio" name="pc${n}" id="pc${n}n" onchange="toggleFD(${n})"><label for="pc${n}n">No — need front desk help</label></div>
+        </div>
+        <div class="cbox" id="fd-box-${n}">
+          <div class="sub-label">Clients & times for front desk to cancel</div>
+          <textarea placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
+          <div class="hint">Front desk will reach out via Club Automation</div>
+        </div>
+      </div>
+    </div>`;
   document.getElementById('days-container').appendChild(div);
 }
 
-function toggleDayCov(n,val){
-  document.getElementById(`covyes-${n}`).classList.toggle('on',val==='yes');
-  document.getElementById(`covno-${n}`).classList.toggle('on',val==='no');
+function onDateChange(n,dateStr){
+  const day=getDayName(dateStr);
+  const picker=document.getElementById(`session-picker-${n}`);
+  const noMsg=document.getElementById(`no-sessions-${n}`);
+  const list=document.getElementById(`sessions-list-${n}`);
+  const warn=document.getElementById(`warn-${n}`);
+  list.innerHTML='';
+  warn.style.display='none';
+  const dayBlock=document.getElementById(`day-${n}`);
+  dayBlock.dataset.date=dateStr;
+  if(!day||!SCHEDULE[day]){
+    picker.style.display='none';
+    noMsg.textContent='No sessions scheduled on that date.';
+    noMsg.style.display='block';
+    return;
+  }
+  const sel=picker.querySelector('select');
+  sel.innerHTML='<option value="">+ Add a session needing coverage...</option>';
+  SCHEDULE[day].forEach((s,idx)=>{
+    const opt=document.createElement('option');
+    opt.value=idx;
+    opt.textContent=`${s.time} · ${s.name}`;
+    sel.appendChild(opt);
+  });
+  picker.style.display='block';
+  noMsg.style.display='none';
 }
-function togglePrivate(val){document.getElementById('private-box').classList.toggle('on',val==='yes');}
-function toggleFD(){document.getElementById('fd-box').classList.toggle('on',document.getElementById('pc2').checked);}
+
+function addSession(n,sessionIdx){
+  if(sessionIdx===''||sessionIdx==null) return;
+  const dayBlock=document.getElementById(`day-${n}`);
+  const dateStr=dayBlock.dataset.date;
+  const day=getDayName(dateStr);
+  if(!day) return;
+  const session=SCHEDULE[day][parseInt(sessionIdx)];
+  if(!session) return;
+  const list=document.getElementById(`sessions-list-${n}`);
+  const avail=getAvailable(day);
+  const pros=avail.filter(c=>c.type==='pro');
+  const pts=avail.filter(c=>c.type==='pt');
+  const jrs=avail.filter(c=>c.type==='jr');
+  let opts='<option value="">🔍 Still looking for coverage...</option>';
+  function group(list,label){
+    if(!list.length) return '';
+    let s=`<optgroup label="${label}">`;
+    list.forEach(c=>{ s+=`<option value="${c.abbr}">${c.name}${c.phone?` · ${c.phone}`:''}</option>`; });
+    return s+'</optgroup>';
+  }
+  opts+=group(pros,'Pro coaches (contact first)');
+  opts+=group(pts,'Part-time coaches');
+  opts+=group(jrs,'Junior coaches');
+  const row=document.createElement('div');
+  row.className='session-row';
+  row.innerHTML=`
+    <div class="session-meta">
+      <div class="session-title">${session.time} · ${session.name}</div>
+      <button type="button" class="session-remove" onclick="removeSession(${n},this)">Remove</button>
+    </div>
+    <select class="session-cover" onchange="updateCoverStatus(${n},this)">${opts}</select>
+    <div class="cover-status pending">Still looking — please keep trying</div>
+  `;
+  list.appendChild(row);
+  document.getElementById(`warn-${n}`).style.display='block';
+}
+
+function removeSession(n,btn){
+  btn.closest('.session-row').remove();
+  const list=document.getElementById(`sessions-list-${n}`);
+  if(!list.children.length){ document.getElementById(`warn-${n}`).style.display='none'; }
+}
+
+function updateCoverStatus(n,sel){
+  const row=sel.closest('.session-row');
+  const status=row.querySelector('.cover-status');
+  if(sel.value){
+    const txt=sel.options[sel.selectedIndex].text;
+    status.className='cover-status covered';
+    status.textContent=`✓ Covered by ${txt.split(' · ')[0]}`;
+  }else{
+    status.className='cover-status pending';
+    status.textContent='Still looking — please keep trying';
+  }
+  // Refresh warn state: any uncovered session keeps warning visible
+  const list=document.getElementById(`sessions-list-${n}`);
+  const anyPending=[...list.querySelectorAll('.session-cover')].some(s=>!s.value);
+  document.getElementById(`warn-${n}`).style.display=anyPending?'block':'none';
+}
+function togglePrivate(n,val){document.getElementById(`private-box-${n}`).classList.toggle('on',val==='yes');}
+function toggleFD(n){document.getElementById(`fd-box-${n}`).classList.toggle('on',document.getElementById(`pc${n}n`).checked);}
 function switchTab(name){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tabbar-item').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelector(`[onclick="switchTab('${name}')"]`).classList.add('active');
+  document.querySelectorAll(`.tab[onclick="switchTab('${name}')"]`).forEach(el=>el.classList.add('active'));
+  const bb=document.querySelector(`.tabbar-item[data-tab="${name}"]`);
+  if(bb) bb.classList.add('active');
   document.getElementById(`tab-${name}`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 function submitForm(){
   document.getElementById('success-msg').style.display='block';
@@ -712,7 +1088,7 @@ function showMine(){
       const noteMatch=myChip&&myChip.match(/\((.+)\)/);
       const note=noteMatch?` <span style="font-size:11px;color:var(--red);font-weight:500">· ${noteMatch[1]}</span>`:'';
       const others=s.coaches.filter(c=>c!==myChip).map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
-      row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}${note}</div><div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
+      row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}${note}</div>${metaHtml(s)}<div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
       tl.appendChild(row);
     });
     wrap.appendChild(tl);
@@ -728,6 +1104,343 @@ renderSchedule('Monday');
 buildAvailability();
 buildCoachDropdown();
 showMine();
+
+/* ==================== COVERAGE LOG ==================== */
+const COV_LOG_KEY = 'legacy_coverage_log';
+const COV_CFG_KEY = 'legacy_coverage_config';
+const COV_RWD_KEY = 'legacy_coverage_rewards';
+const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+function covCfg(){
+  try{
+    const c = JSON.parse(localStorage.getItem(COV_CFG_KEY)||'{}');
+    if(!c.start){
+      // Default: 13-week window starting this week's Monday
+      const d = new Date(); d.setHours(0,0,0,0);
+      const dow = d.getDay(); const diff = (dow===0?-6:1-dow);
+      d.setDate(d.getDate()+diff);
+      c.start = d.toISOString().slice(0,10);
+    }
+    c.weeks = c.weeks || 13;
+    return c;
+  }catch(e){return {start:new Date().toISOString().slice(0,10), weeks:13};}
+}
+function covSaveCfg(c){ localStorage.setItem(COV_CFG_KEY, JSON.stringify(c)); }
+function covLoad(){ try{return JSON.parse(localStorage.getItem(COV_LOG_KEY)||'[]');}catch(e){return [];} }
+function covSave(arr){ localStorage.setItem(COV_LOG_KEY, JSON.stringify(arr)); }
+function covRewards(){ try{return JSON.parse(localStorage.getItem(COV_RWD_KEY)||'{}');}catch(e){return {};} }
+function covSaveRewards(r){ localStorage.setItem(COV_RWD_KEY, JSON.stringify(r)); }
+
+function covFormatDate(iso){
+  if(!iso) return '—';
+  const d = new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function covShortDate(iso){
+  if(!iso) return '';
+  const d = new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+}
+function covDayName(iso){
+  const d = new Date(iso+'T00:00:00');
+  return DAY_NAMES[d.getDay()];
+}
+function covIsWeekend(iso){
+  const d = new Date(iso+'T00:00:00');
+  const dow = d.getDay();
+  return dow===0 || dow===6;
+}
+function covIsEvening(timeStr){
+  if(!timeStr) return false;
+  // e.g., "7–8:30pm", "4–6pm", "9:30–11am"
+  const m = timeStr.match(/^(\d{1,2})(?::(\d{2}))?/);
+  if(!m) return false;
+  let h = parseInt(m[1],10);
+  const ampm = /pm/i.test(timeStr);
+  if(ampm && h!==12) h+=12;
+  if(!ampm && h===12) h=0;
+  return h >= 17;
+}
+function covAutoType(dateStr, timeStr){
+  if(covIsWeekend(dateStr)) return 'high-demand';
+  if(covIsEvening(timeStr)) return 'high-demand';
+  return 'standard';
+}
+
+let covShiftOverride = 'auto';
+
+function covRefreshSessions(){
+  const date = document.getElementById('cov-date').value;
+  const sel = document.getElementById('cov-session');
+  sel.innerHTML = '';
+  if(!date){ sel.innerHTML = '<option value="">Pick a date first…</option>'; return; }
+  const day = covDayName(date);
+  const sessions = SCHEDULE[day] || [];
+  if(!sessions.length){ sel.innerHTML = `<option value="">No sessions on ${day}</option>`; return; }
+  sel.innerHTML = '<option value="">Select session…</option>' +
+    sessions.map((s,i)=>`<option value="${i}">${s.time} — ${s.name}</option>`).join('');
+  covUpdateShiftType();
+}
+function covUpdateShiftType(){
+  const date = document.getElementById('cov-date').value;
+  const sIdx = document.getElementById('cov-session').value;
+  if(!date || sIdx===''){ covRenderShiftBtns(null); return; }
+  const day = covDayName(date);
+  const s = (SCHEDULE[day]||[])[parseInt(sIdx,10)];
+  const auto = covAutoType(date, s ? s.time : '');
+  covRenderShiftBtns(auto);
+}
+function covRenderShiftBtns(autoType){
+  document.querySelectorAll('.cov-shift-btn').forEach(b=>b.classList.remove('active'));
+  const autoBtn = document.getElementById('cov-shift-auto');
+  if(covShiftOverride === 'auto'){
+    autoBtn.classList.add('active', autoType==='high-demand'?'high':'std');
+    autoBtn.textContent = autoType==='high-demand' ? '✨ Auto: 🔥 High-demand' : autoType==='standard' ? '✨ Auto: ☀️ Standard' : '✨ Auto';
+  }else{
+    autoBtn.textContent = '✨ Auto';
+    document.getElementById(covShiftOverride==='high-demand'?'cov-shift-high':'cov-shift-std').classList.add('active');
+  }
+}
+function covSetShift(mode){ covShiftOverride = mode; covUpdateShiftType(); }
+
+function covPopulateCoaches(){
+  const opts = '<option value="">Select coach…</option>' +
+    ALL_COACHES.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  document.getElementById('cov-requester').innerHTML = opts;
+  document.getElementById('cov-coverer').innerHTML = opts;
+}
+
+function covAddEntry(){
+  const date = document.getElementById('cov-date').value;
+  const sIdx = document.getElementById('cov-session').value;
+  const reqId = document.getElementById('cov-requester').value;
+  const covId = document.getElementById('cov-coverer').value;
+  const note = document.getElementById('cov-note').value.trim();
+  if(!date || sIdx==='' || !reqId || !covId){ alert('Fill in date, session, who was scheduled, and who covered.'); return; }
+  if(reqId === covId){ alert('Requester and coverer must be different coaches.'); return; }
+  const day = covDayName(date);
+  const s = (SCHEDULE[day]||[])[parseInt(sIdx,10)];
+  if(!s){ alert('Invalid session.'); return; }
+  const autoType = covAutoType(date, s.time);
+  const shiftType = covShiftOverride==='auto' ? autoType : covShiftOverride;
+  const entry = {
+    id: 'c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+    date, day, sessionName: s.name, sessionTime: s.time, sessionType: s.type,
+    requesterId: reqId, coverId: covId, shiftType, note, createdAt: new Date().toISOString()
+  };
+  const arr = covLoad(); arr.push(entry); covSave(arr);
+  // Reset form
+  document.getElementById('cov-note').value = '';
+  covShiftOverride = 'auto';
+  covRenderList(); covRenderProgress();
+}
+
+function covDelete(id){
+  if(!confirm('Delete this coverage entry?')) return;
+  covSave(covLoad().filter(e=>e.id!==id));
+  covRenderList(); covRenderProgress();
+}
+
+function covCoachName(id){ const c = ALL_COACHES.find(x=>x.id===id); return c ? c.abbr : '?'; }
+
+function covRenderList(){
+  const list = document.getElementById('cov-list');
+  const arr = covLoad().slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if(!arr.length){ list.innerHTML = '<div class="cov-list-empty">No coverages logged yet this session. Log your first one above.</div>'; return; }
+  list.innerHTML = arr.map(e=>{
+    const badge = e.shiftType==='high-demand'
+      ? '<span class="cov-badge high">🔥 High-demand</span>'
+      : '<span class="cov-badge std">☀️ Standard</span>';
+    return `<div class="cov-entry ${e.shiftType==='high-demand'?'high':'std'}">
+      <div class="cov-entry-date">${covShortDate(e.date)}<br><span style="color:var(--gray-300);font-weight:400">${e.day.slice(0,3)}</span></div>
+      <div class="cov-entry-main">
+        <div class="cov-entry-line1">${covCoachName(e.coverId)} <span class="arrow">covered for</span> ${covCoachName(e.requesterId)}</div>
+        <div class="cov-entry-line2">${badge}<span>· ${e.sessionTime} ${e.sessionName}</span>${e.note?`<span>· <i>${e.note}</i></span>`:''}</div>
+      </div>
+      <button class="cov-entry-del" onclick="covDelete('${e.id}')" title="Delete">×</button>
+    </div>`;
+  }).join('');
+}
+
+function covRenderProgress(){
+  const cfg = covCfg();
+  const arr = covLoad();
+  const start = new Date(cfg.start+'T00:00:00');
+  const end = new Date(start); end.setDate(end.getDate() + cfg.weeks*7 - 1);
+  const now = new Date(); now.setHours(0,0,0,0);
+  const daysIn = Math.max(0, Math.floor((now - start)/(1000*60*60*24)));
+  const totalDays = cfg.weeks * 7;
+  const pct = Math.min(100, Math.max(0, (daysIn/totalDays)*100));
+  const week = Math.max(1, Math.min(cfg.weeks, Math.floor(daysIn/7)+1));
+  document.getElementById('cov-bar-fill').style.width = pct+'%';
+  document.getElementById('cov-week-text').textContent = `Week ${week} of ${cfg.weeks}`;
+  document.getElementById('cov-start-date').textContent = covFormatDate(cfg.start);
+  document.getElementById('cov-end-date').textContent = covFormatDate(end.toISOString().slice(0,10));
+  document.getElementById('cov-total-count').textContent = arr.length;
+  document.getElementById('cov-high-count').textContent = arr.filter(e=>e.shiftType==='high-demand').length;
+}
+
+function covSettings(){
+  const cfg = covCfg();
+  const newStart = prompt('Session start date (YYYY-MM-DD):', cfg.start);
+  if(!newStart) return;
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(newStart)){ alert('Invalid date format. Use YYYY-MM-DD.'); return; }
+  cfg.start = newStart;
+  const newWeeks = prompt('Number of weeks in session:', cfg.weeks);
+  if(newWeeks && !isNaN(parseInt(newWeeks,10))) cfg.weeks = parseInt(newWeeks,10);
+  covSaveCfg(cfg);
+  covRenderProgress();
+}
+
+/* ---- Session-end report & rewards ---- */
+function covTier(count){
+  if(count === 0) return 0;
+  if(count <= 2) return 1;
+  return 2;
+}
+function covTierLabel(tier){
+  if(tier===0) return 'No reward';
+  if(tier===1) return '$25 Amazon gift card';
+  return 'Bonus or PTO';
+}
+function covTierCls(tier){ return 't'+tier; }
+
+function covRunReport(){
+  const arr = covLoad();
+  const rewards = covRewards();
+  // Count per coverer
+  const counts = {};
+  arr.forEach(e=>{
+    if(!counts[e.coverId]) counts[e.coverId] = {total:0, high:0, std:0};
+    counts[e.coverId].total++;
+    if(e.shiftType==='high-demand') counts[e.coverId].high++;
+    else counts[e.coverId].std++;
+  });
+  // Include any coach with 0 too (optional — keep report focused on those who covered)
+  const rows = Object.entries(counts)
+    .map(([id,c])=>({id, ...c, coach: ALL_COACHES.find(x=>x.id===id)}))
+    .filter(r=>r.coach)
+    .sort((a,b)=>b.total - a.total || b.high - a.high);
+
+  const cfg = covCfg();
+  const start = new Date(cfg.start+'T00:00:00');
+  const end = new Date(start); end.setDate(end.getDate() + cfg.weeks*7 - 1);
+
+  let body;
+  if(!rows.length){
+    body = '<div class="cov-list-empty">No coverages logged this session yet.</div>';
+  } else {
+    const tbl = `<table class="cov-table">
+      <thead><tr>
+        <th>Coach</th><th class="num">Total</th><th class="num">High-demand</th><th class="num">Standard</th><th>Tier</th><th>Reward</th>
+      </tr></thead>
+      <tbody>${rows.map(r=>covReportRow(r,rewards)).join('')}</tbody>
+    </table>`;
+    const mobile = `<div class="cov-mobile-card">${rows.map(r=>covReportMobileCard(r,rewards)).join('')}</div>`;
+    body = tbl + mobile;
+  }
+
+  document.getElementById('cov-report-container').innerHTML = `
+    <div class="cov-report">
+      <h3 class="cov-report-title">Session-end coverage report</h3>
+      <div class="cov-report-sub">${covFormatDate(cfg.start)} → ${covFormatDate(end.toISOString().slice(0,10))} · ${cfg.weeks}-week session</div>
+      ${body}
+      <div class="cov-export-row">
+        <button class="cov-export-btn" onclick="covPrintReport()">🖨 Print / Save as PDF</button>
+        <button class="cov-export-btn" onclick="covExportCSV()">📥 Export CSV</button>
+        <button class="cov-export-btn" onclick="covClearSession()" style="color:#A1173D;border-color:#FCECEF">🗑 Archive &amp; start new session</button>
+      </div>
+    </div>`;
+  document.getElementById('cov-report-container').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function covReportRow(r, rewards){
+  const tier = covTier(r.total);
+  const reward = rewards[r.id] || (tier===0?'none':tier===1?'amazon':'');
+  const rewardCell = tier===0
+    ? '<span class="cov-reward-text">—</span>'
+    : tier===1
+      ? '<span class="cov-reward-text">$25 Amazon gift card (auto)</span>'
+      : `<div class="cov-reward">
+          <button class="cov-reward-btn ${reward==='bonus'?'active':''}" onclick="covSetReward('${r.id}','bonus')">💵 $150–200 bonus</button>
+          <button class="cov-reward-btn ${reward==='pto'?'active':''}" onclick="covSetReward('${r.id}','pto')">🏖 5 hrs PTO</button>
+        </div>`;
+  return `<tr>
+    <td><b>${r.coach.name}</b><br><span style="font-size:11px;color:var(--gray-500)">${r.coach.abbr}</span></td>
+    <td class="num">${r.total}</td>
+    <td class="num">${r.high}</td>
+    <td class="num">${r.std}</td>
+    <td><span class="cov-tier ${covTierCls(tier)}">${covTierLabel(tier)}</span></td>
+    <td>${rewardCell}</td>
+  </tr>`;
+}
+
+function covReportMobileCard(r, rewards){
+  const tier = covTier(r.total);
+  const reward = rewards[r.id] || (tier===0?'none':tier===1?'amazon':'');
+  const rewardBlock = tier===0
+    ? '<span class="cov-reward-text">No reward this session</span>'
+    : tier===1
+      ? '<span class="cov-reward-text">$25 Amazon gift card</span>'
+      : `<div class="cov-reward">
+          <button class="cov-reward-btn ${reward==='bonus'?'active':''}" onclick="covSetReward('${r.id}','bonus')">💵 $150–200 bonus</button>
+          <button class="cov-reward-btn ${reward==='pto'?'active':''}" onclick="covSetReward('${r.id}','pto')">🏖 5 hrs PTO</button>
+        </div>`;
+  return `<div class="cov-mc">
+    <div class="cov-mc-top">
+      <div class="cov-mc-name">${r.coach.name}</div>
+      <span class="cov-tier ${covTierCls(tier)}">${covTierLabel(tier)}</span>
+    </div>
+    <div class="cov-mc-nums"><b>${r.total}</b> total · <b>${r.high}</b> high-demand · <b>${r.std}</b> standard</div>
+    ${rewardBlock}
+  </div>`;
+}
+
+function covSetReward(coachId, reward){
+  const r = covRewards(); r[coachId] = reward; covSaveRewards(r);
+  covRunReport();
+}
+
+function covPrintReport(){ window.print(); }
+
+function covExportCSV(){
+  const arr = covLoad();
+  if(!arr.length){ alert('No data to export.'); return; }
+  const header = ['Date','Day','Time','Session','Type','Covered for','Covered by','Shift type','Note'];
+  const rows = arr.map(e=>[
+    e.date, e.day, e.sessionTime, e.sessionName, e.sessionType,
+    covCoachName(e.requesterId), covCoachName(e.coverId), e.shiftType, (e.note||'').replace(/"/g,'""')
+  ]);
+  const csv = [header, ...rows].map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `legacy-coverage-${covCfg().start}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function covClearSession(){
+  if(!confirm('Archive this session and start fresh? Current log + rewards will be erased from this device. Export CSV first if you need a record.')) return;
+  localStorage.removeItem(COV_LOG_KEY);
+  localStorage.removeItem(COV_RWD_KEY);
+  // Advance start date by session length
+  const cfg = covCfg();
+  const s = new Date(cfg.start+'T00:00:00');
+  s.setDate(s.getDate() + cfg.weeks*7);
+  cfg.start = s.toISOString().slice(0,10);
+  covSaveCfg(cfg);
+  document.getElementById('cov-report-container').innerHTML = '';
+  covRenderList(); covRenderProgress();
+}
+
+/* init */
+covPopulateCoaches();
+covRenderList();
+covRenderProgress();
+// Default date to today
+document.getElementById('cov-date').value = new Date().toISOString().slice(0,10);
+covRefreshSessions();
 </script>
 </body>
 </html>
