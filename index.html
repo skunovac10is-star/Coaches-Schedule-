@@ -581,7 +581,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
             </div>
             <div class="cbox" id="fd-box-1">
               <div class="sub-label">Clients & times for front desk to cancel</div>
-              <textarea placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
+              <textarea class="fd-textarea" placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
               <div class="hint">Front desk will reach out via Club Automation</div>
             </div>
           </div>
@@ -593,7 +593,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 
   <div class="card">
     <div class="sec-label">Additional notes</div>
-    <textarea placeholder="Anything else Kat or front desk should know..."></textarea>
+    <textarea id="req-notes" placeholder="Anything else Kat or front desk should know..."></textarea>
   </div>
 
   <div class="btn-row">
@@ -906,7 +906,7 @@ function addDay(){
         </div>
         <div class="cbox" id="fd-box-${n}">
           <div class="sub-label">Clients & times for front desk to cancel</div>
-          <textarea placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
+          <textarea class="fd-textarea" placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
           <div class="hint">Front desk will reach out via Club Automation</div>
         </div>
       </div>
@@ -1013,9 +1013,70 @@ function switchTab(name){
   document.getElementById(`tab-${name}`).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function submitForm(){
-  document.getElementById('success-msg').style.display='block';
-  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+// Replace YOUR_FORM_ID with the form ID from formspree.io (e.g. xqkrzwvb)
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+function gatherRequest(){
+  const nameSel=document.getElementById('req-name');
+  const name=nameSel.value ? nameSel.options[nameSel.selectedIndex].text : '';
+  const email=document.getElementById('req-email').value||'';
+  let rtype='';
+  if(document.getElementById('t1').checked) rtype='Vacation';
+  else if(document.getElementById('t2').checked) rtype='Sick day';
+  else if(document.getElementById('t3').checked) rtype='Coverage only';
+  const notes=document.getElementById('req-notes').value||'';
+  const days=[...document.querySelectorAll('.day-block')].map(db=>{
+    const n=db.dataset.n;
+    const date=db.dataset.date||'';
+    const sessions=[...db.querySelectorAll('.session-row')].map(row=>{
+      const title=row.querySelector('.session-title').textContent;
+      const sel=row.querySelector('.session-cover');
+      const cover=sel.value ? sel.options[sel.selectedIndex].text : '';
+      return {session:title, coveredBy:cover||'still looking'};
+    });
+    const hadPrivates=document.getElementById(`hp${n}y`)?.checked ? 'yes'
+      : document.getElementById(`hp${n}n`)?.checked ? 'no' : '';
+    const cancelled=document.getElementById(`pc${n}y`)?.checked ? 'all cancelled'
+      : document.getElementById(`pc${n}n`)?.checked ? 'needs front desk' : '';
+    const fdNotes=db.querySelector('.fd-textarea')?.value||'';
+    return {date, sessions, privates:{hadPrivates, cancelled, fdNotes}};
+  });
+  return {name, email, requestType:rtype, days, notes, submittedAt:new Date().toISOString()};
+}
+
+function validateRequest(d){
+  if(!d.name) return 'Please pick your name.';
+  if(!d.requestType) return 'Please pick a request type.';
+  if(!d.days.length||!d.days[0].date) return 'Please add at least one date.';
+  return null;
+}
+
+async function submitForm(){
+  const btn=document.querySelector('.btn-submit');
+  const data=gatherRequest();
+  const err=validateRequest(data);
+  if(err){ alert(err); return; }
+  btn.disabled=true;
+  const orig=btn.textContent;
+  btn.textContent='Submitting...';
+  try{
+    if(FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')){
+      console.warn('Formspree endpoint not configured — logging payload only', data);
+    } else {
+      const res=await fetch(FORMSPREE_ENDPOINT,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify(data)
+      });
+      if(!res.ok) throw new Error(`Formspree returned ${res.status}`);
+    }
+    document.getElementById('success-msg').style.display='block';
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  }catch(e){
+    alert('Submission failed: '+e.message+'\nPlease text Kat directly.');
+    btn.disabled=false;
+    btn.textContent=orig;
+  }
 }
 
 // ---- MY SCHEDULE ----
