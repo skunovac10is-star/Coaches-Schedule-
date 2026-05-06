@@ -1013,8 +1013,8 @@ function switchTab(name){
   document.getElementById(`tab-${name}`).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-// Replace YOUR_FORM_ID with the form ID from formspree.io (e.g. xqkrzwvb)
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+// Formspree endpoint — receives time-off requests, forwards to recipient email
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzlqzvp';
 
 function gatherRequest(){
   const nameSel=document.getElementById('req-name');
