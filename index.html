@@ -1051,6 +1051,45 @@ function validateRequest(d){
   return null;
 }
 
+function fmtDateLong(iso){
+  if(!iso) return 'Date TBD';
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+function fmtDateShort(iso){
+  if(!iso) return '';
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+}
+function buildCoverageBody(d){
+  const lines=[];
+  d.days.forEach((day,i)=>{
+    if(i>0) lines.push('');
+    lines.push(fmtDateLong(day.date).toUpperCase());
+    lines.push('─'.repeat(38));
+    if(day.sessions && day.sessions.length){
+      day.sessions.forEach(s=>{
+        lines.push(`• ${s.session}`);
+        lines.push(`    Covered by: ${s.coveredBy}`);
+      });
+    } else {
+      lines.push('(no sessions listed)');
+    }
+    const p=day.privates||{};
+    if(p.hadPrivates==='yes'){
+      const status = p.cancelled==='all cancelled' ? 'All privates cancelled'
+        : p.cancelled==='needs front desk' ? 'Front desk to reschedule' : 'pending';
+      lines.push('');
+      lines.push(`Private lessons: ${status}`);
+      if(p.fdNotes) lines.push(`Note for front desk: ${p.fdNotes}`);
+    } else if(p.hadPrivates==='no'){
+      lines.push('');
+      lines.push('Private lessons: none this day');
+    }
+  });
+  return lines.join('\n');
+}
+
 async function submitForm(){
   const btn=document.querySelector('.btn-submit');
   const data=gatherRequest();
@@ -1063,10 +1102,20 @@ async function submitForm(){
     if(FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')){
       console.warn('Formspree endpoint not configured — logging payload only', data);
     } else {
+      const firstDate=data.days[0]?.date||'';
+      const subject=`Time off — ${data.name} — ${data.requestType}${firstDate?' — '+fmtDateShort(firstDate):''}`;
+      const fd=new FormData();
+      fd.append('Coach', data.name);
+      fd.append('Email', data.email);
+      fd.append('Request type', data.requestType);
+      fd.append('Coverage details', buildCoverageBody(data));
+      if(data.notes) fd.append('Notes', data.notes);
+      fd.append('_subject', subject);
+      if(data.email) fd.append('_replyto', data.email);
       const res=await fetch(FORMSPREE_ENDPOINT,{
         method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify(data)
+        headers:{'Accept':'application/json'},
+        body:fd
       });
       if(!res.ok) throw new Error(`Formspree returned ${res.status}`);
     }
