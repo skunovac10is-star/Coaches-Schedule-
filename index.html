@@ -89,7 +89,6 @@ body.locked > *:not(#gate){display:none !important}
 .tab[data-icon="schedule"]::before{content:"#"}
 .tab[data-icon="mine"]::before{content:"★"}
 .tab[data-icon="coverage"]::before{content:"◉"}
-.tab[data-icon="covlog"]::before{content:"✓"}
 .tab[data-icon="request"]::before{content:"✈"}
 body{padding-left:240px;padding-top:58px}
 
@@ -185,77 +184,6 @@ body{padding-left:240px;padding-top:58px}
 .cf-close{font-size:11px;color:#666;cursor:pointer;margin-top:.6rem;display:block;text-align:center}
 .cf-close:hover{color:#aaa}
 
-/* ==================== COVERAGE LOG TAB ==================== */
-.cov-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
-.cov-title{font-size:20px;font-weight:700;color:var(--black);margin:0}
-.cov-sub{font-size:13px;color:var(--gray-500);margin:2px 0 0}
-.cov-progress{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:14px 16px;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
-.cov-progress-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
-.cov-progress-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray-500);font-weight:600}
-.cov-progress-week{font-size:13px;font-weight:700;color:var(--black)}
-.cov-bar{height:8px;background:var(--gray-100);border-radius:20px;overflow:hidden}
-.cov-bar-fill{height:100%;background:var(--success);border-radius:20px;transition:width .3s}
-.cov-meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--gray-500)}
-.cov-meta-row span{display:inline-flex;gap:4px}
-.cov-meta-row b{color:var(--black);font-weight:700}
-.cov-entry-form{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
-.cov-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:640px){.cov-form-grid{grid-template-columns:1fr}}
-.cov-form-grid.full{grid-template-columns:1fr}
-.cov-shift-type{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
-.cov-shift-btn{padding:8px 14px;border:1.5px solid var(--gray-200);border-radius:20px;background:#fff;font-size:12px;font-weight:600;color:var(--gray-700);cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
-.cov-shift-btn.auto{border-style:dashed;color:var(--gray-500)}
-.cov-shift-btn.active.high{background:#E01E5A;border-color:#E01E5A;color:#fff;box-shadow:0 2px 8px rgba(224,30,90,.25)}
-.cov-shift-btn.active.std{background:var(--accent-2);border-color:var(--accent-2);color:#fff;box-shadow:0 2px 8px rgba(18,100,163,.2)}
-.cov-add-btn{background:var(--success);color:#fff;border:none;padding:12px 20px;border-radius:var(--rlg);font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:8px;box-shadow:0 4px 12px rgba(0,122,90,.22);transition:transform .12s,box-shadow .12s}
-.cov-add-btn:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,122,90,.3)}
-.cov-add-btn:disabled{background:var(--gray-300);cursor:not-allowed;box-shadow:none;transform:none}
-.cov-list{display:flex;flex-direction:column;gap:8px}
-.cov-list-empty{text-align:center;padding:30px;color:var(--gray-500);font-size:13px;background:#fff;border:1px dashed var(--gray-200);border-radius:var(--rlg)}
-.cov-entry{background:#fff;border:1px solid var(--gray-200);border-left-width:4px;border-radius:0 var(--rlg) var(--rlg) 0;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 2px rgba(10,10,10,.03)}
-.cov-entry.high{border-left-color:#E01E5A}
-.cov-entry.std{border-left-color:var(--accent-2)}
-.cov-entry-date{font-size:11px;color:var(--gray-500);font-weight:600;min-width:60px;line-height:1.3}
-.cov-entry-main{flex:1;min-width:0}
-.cov-entry-line1{font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px}
-.cov-entry-line1 .arrow{color:var(--gray-300);margin:0 6px}
-.cov-entry-line2{font-size:11px;color:var(--gray-500);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.cov-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase}
-.cov-badge.high{background:#FCECEF;color:#A1173D}
-.cov-badge.std{background:#EEF4FB;color:#0C447C}
-.cov-entry-del{background:transparent;border:none;color:var(--gray-300);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:color .15s,background .15s}
-.cov-entry-del:hover{color:#E01E5A;background:#FCECEF}
-.cov-report-btn{background:var(--black);color:#fff;border:none;padding:14px 20px;border-radius:var(--rlg);font-size:14px;font-weight:700;cursor:pointer;width:100%;margin-top:1rem;box-shadow:0 4px 12px rgba(10,10,10,.15);display:flex;align-items:center;justify-content:center;gap:8px}
-.cov-report-btn:hover{background:#000}
-.cov-report{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-top:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
-.cov-report-title{font-size:18px;font-weight:700;color:var(--black);margin:0 0 4px}
-.cov-report-sub{font-size:12px;color:var(--gray-500);margin-bottom:1rem}
-.cov-table{width:100%;border-collapse:collapse;font-size:13px}
-.cov-table th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--gray-200);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);font-weight:700}
-.cov-table td{padding:12px 8px;border-bottom:1px solid var(--gray-100);vertical-align:middle}
-.cov-table tr:last-child td{border-bottom:none}
-.cov-table .num{text-align:center;font-weight:700;color:var(--black)}
-.cov-tier{display:inline-block;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.2px}
-.cov-tier.t0{background:var(--gray-100);color:var(--gray-500)}
-.cov-tier.t1{background:#FFF3D9;color:#6B4B00}
-.cov-tier.t2{background:#E6F5EF;color:#00573F}
-.cov-reward{display:flex;gap:6px;flex-wrap:wrap}
-.cov-reward-btn{padding:6px 10px;border:1.5px solid var(--gray-200);border-radius:14px;background:#fff;font-size:11px;font-weight:600;color:var(--gray-700);cursor:pointer;transition:all .15s}
-.cov-reward-btn.active{background:var(--success);border-color:var(--success);color:#fff;box-shadow:0 2px 6px rgba(0,122,90,.25)}
-.cov-reward-btn.locked{opacity:.5;cursor:not-allowed}
-.cov-reward-text{font-size:12px;color:var(--gray-500);font-style:italic}
-.cov-export-row{display:flex;gap:8px;margin-top:1rem;flex-wrap:wrap}
-.cov-export-btn{padding:8px 14px;border:1px solid var(--gray-200);background:#fff;color:var(--gray-700);font-size:12px;font-weight:600;border-radius:var(--rlg);cursor:pointer}
-.cov-export-btn:hover{background:var(--gray-50)}
-.cov-mobile-card{display:none}
-@media(max-width:640px){
-  .cov-table{display:none}
-  .cov-mobile-card{display:flex;flex-direction:column;gap:10px}
-  .cov-mc{border:1px solid var(--gray-200);border-radius:var(--rlg);padding:12px}
-  .cov-mc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-  .cov-mc-name{font-weight:700;font-size:14px;color:var(--black)}
-  .cov-mc-nums{font-size:12px;color:var(--gray-500);margin-bottom:8px}
-}
 
 /* ==================== FORM TAB ==================== */
 .card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
@@ -377,7 +305,6 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   <div class="tab active" data-icon="schedule" onclick="switchTab('schedule')">Weekly schedule</div>
   <div class="tab" data-icon="mine" onclick="switchTab('mine')">My schedule</div>
   <div class="tab" data-icon="coverage" onclick="switchTab('coverage')">Who's available</div>
-  <div class="tab" data-icon="covlog" onclick="switchTab('covlog')">Coverage log</div>
   <div class="tab" data-icon="request" onclick="switchTab('request')">Request time off</div>
 </div>
 
@@ -391,9 +318,6 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   </div>
   <div class="tabbar-item" data-tab="coverage" onclick="switchTab('coverage')">
     <div class="tabbar-icon">👥</div><div class="tabbar-label">Coverage</div>
-  </div>
-  <div class="tabbar-item" data-tab="covlog" onclick="switchTab('covlog')">
-    <div class="tabbar-icon">📋</div><div class="tabbar-label">Log</div>
   </div>
   <div class="tabbar-item" data-tab="request" onclick="switchTab('request')">
     <div class="tabbar-icon">🏝️</div><div class="tabbar-label">Time off</div>
@@ -439,88 +363,6 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   <div id="avail-list"></div>
 </div>
 
-<!-- ===== COVERAGE LOG TAB ===== -->
-<div class="panel" id="tab-covlog">
-  <div class="cov-header">
-    <div>
-      <h2 class="cov-title">Coverage log</h2>
-      <p class="cov-sub">Track every time a coach covers a shift for someone else. Rewards auto-calculate at session end.</p>
-    </div>
-    <button class="cov-export-btn" onclick="covSettings()" style="font-size:12px">⚙ Session settings</button>
-  </div>
-
-  <div class="cov-progress">
-    <div class="cov-progress-top">
-      <div class="cov-progress-label">Session progress</div>
-      <div class="cov-progress-week" id="cov-week-text">Week — of 13</div>
-    </div>
-    <div class="cov-bar"><div class="cov-bar-fill" id="cov-bar-fill" style="width:0%"></div></div>
-    <div class="cov-meta-row">
-      <span>Started <b id="cov-start-date">—</b></span>
-      <span>·</span>
-      <span>Ends <b id="cov-end-date">—</b></span>
-      <span>·</span>
-      <span><b id="cov-total-count">0</b> total coverages</span>
-      <span>·</span>
-      <span><b id="cov-high-count">0</b> high-demand</span>
-    </div>
-  </div>
-
-  <!-- Log entry form -->
-  <div class="cov-entry-form">
-    <div class="sec-label">Log a coverage</div>
-    <div class="cov-form-grid">
-      <div class="field">
-        <label class="fl">Date <span class="req">*</span></label>
-        <input type="date" id="cov-date" onchange="covRefreshSessions()">
-      </div>
-      <div class="field">
-        <label class="fl">Which session? <span class="req">*</span></label>
-        <select id="cov-session" onchange="covUpdateShiftType()">
-          <option value="">Pick a date first…</option>
-        </select>
-      </div>
-      <div class="field">
-        <label class="fl">Originally scheduled <span class="req">*</span></label>
-        <select id="cov-requester">
-          <option value="">Select coach…</option>
-        </select>
-      </div>
-      <div class="field">
-        <label class="fl">Covered by <span class="req">*</span></label>
-        <select id="cov-coverer">
-          <option value="">Select coach…</option>
-        </select>
-      </div>
-    </div>
-    <div class="field" style="margin-bottom:8px">
-      <label class="fl">Shift type</label>
-      <div class="cov-shift-type">
-        <button type="button" class="cov-shift-btn auto" id="cov-shift-auto" onclick="covSetShift('auto')">✨ Auto</button>
-        <button type="button" class="cov-shift-btn std" id="cov-shift-std" onclick="covSetShift('standard')">☀️ Standard daytime</button>
-        <button type="button" class="cov-shift-btn high" id="cov-shift-high" onclick="covSetShift('high-demand')">🔥 High-demand</button>
-      </div>
-      <div style="font-size:11px;color:var(--gray-500);margin-top:6px">High-demand = evenings (5pm+), weekends, or holidays</div>
-    </div>
-    <div class="field" style="margin-bottom:8px">
-      <label class="fl">Note (optional)</label>
-      <input type="text" id="cov-note" placeholder="e.g., last-minute swap, subbed for sick leave…">
-    </div>
-    <button class="cov-add-btn" onclick="covAddEntry()">+ Log coverage</button>
-  </div>
-
-  <!-- Recent log -->
-  <div class="sec-label" style="margin-top:1.5rem">Logged this session</div>
-  <div class="cov-list" id="cov-list"></div>
-
-  <!-- Run report -->
-  <button class="cov-report-btn" onclick="covRunReport()">📊 Run session-end report</button>
-
-  <!-- Report output -->
-  <div id="cov-report-container"></div>
-</div>
-
-<!-- ===== REQUEST TAB ===== -->
 <div class="panel" id="tab-request">
   <div class="card">
     <div class="sec-label">Your info</div>
@@ -600,7 +442,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
     <button class="btn-submit" onclick="submitForm()">Submit request</button>
     <div class="policy">Submissions notify Kat Sorokko and front desk. Vacation requires 2 weeks notice.</div>
   </div>
-  <div class="success-msg" id="success-msg">Request submitted. Kat and the front desk have been notified.</div>
+  <div class="success-msg" id="success-msg">Request submitted. Sanjin, Kat and the front desk have been notified.</div>
 </div>
 
 <script>
@@ -962,9 +804,13 @@ function addSession(n,sessionIdx){
     list.forEach(c=>{ s+=`<option value="${c.abbr}">${c.name}${c.phone?` · ${c.phone}`:''}</option>`; });
     return s+'</optgroup>';
   }
+  // Eligibility rules — Jr Pros are not allowed to cover TT1
+  const sessionName=(session.name||'').toUpperCase();
+  const jrIneligible = sessionName === 'TT1' || sessionName.includes('TT1');
+  const eligibleJrs = jrIneligible ? [] : jrs;
   opts+=group(pros,'Pro coaches (contact first)');
   opts+=group(pts,'Part-time coaches');
-  opts+=group(jrs,'Junior coaches');
+  opts+=group(eligibleJrs, jrIneligible ? 'Junior coaches (not eligible for TT1)' : 'Junior coaches');
   const row=document.createElement('div');
   row.className='session-row';
   row.innerHTML=`
@@ -1214,343 +1060,6 @@ renderSchedule('Monday');
 buildAvailability();
 buildCoachDropdown();
 showMine();
-
-/* ==================== COVERAGE LOG ==================== */
-const COV_LOG_KEY = 'legacy_coverage_log';
-const COV_CFG_KEY = 'legacy_coverage_config';
-const COV_RWD_KEY = 'legacy_coverage_rewards';
-const DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-
-function covCfg(){
-  try{
-    const c = JSON.parse(localStorage.getItem(COV_CFG_KEY)||'{}');
-    if(!c.start){
-      // Default: 13-week window starting this week's Monday
-      const d = new Date(); d.setHours(0,0,0,0);
-      const dow = d.getDay(); const diff = (dow===0?-6:1-dow);
-      d.setDate(d.getDate()+diff);
-      c.start = d.toISOString().slice(0,10);
-    }
-    c.weeks = c.weeks || 13;
-    return c;
-  }catch(e){return {start:new Date().toISOString().slice(0,10), weeks:13};}
-}
-function covSaveCfg(c){ localStorage.setItem(COV_CFG_KEY, JSON.stringify(c)); }
-function covLoad(){ try{return JSON.parse(localStorage.getItem(COV_LOG_KEY)||'[]');}catch(e){return [];} }
-function covSave(arr){ localStorage.setItem(COV_LOG_KEY, JSON.stringify(arr)); }
-function covRewards(){ try{return JSON.parse(localStorage.getItem(COV_RWD_KEY)||'{}');}catch(e){return {};} }
-function covSaveRewards(r){ localStorage.setItem(COV_RWD_KEY, JSON.stringify(r)); }
-
-function covFormatDate(iso){
-  if(!iso) return '—';
-  const d = new Date(iso+'T00:00:00');
-  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-}
-function covShortDate(iso){
-  if(!iso) return '';
-  const d = new Date(iso+'T00:00:00');
-  return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-}
-function covDayName(iso){
-  const d = new Date(iso+'T00:00:00');
-  return DAY_NAMES[d.getDay()];
-}
-function covIsWeekend(iso){
-  const d = new Date(iso+'T00:00:00');
-  const dow = d.getDay();
-  return dow===0 || dow===6;
-}
-function covIsEvening(timeStr){
-  if(!timeStr) return false;
-  // e.g., "7–8:30pm", "4–6pm", "9:30–11am"
-  const m = timeStr.match(/^(\d{1,2})(?::(\d{2}))?/);
-  if(!m) return false;
-  let h = parseInt(m[1],10);
-  const ampm = /pm/i.test(timeStr);
-  if(ampm && h!==12) h+=12;
-  if(!ampm && h===12) h=0;
-  return h >= 17;
-}
-function covAutoType(dateStr, timeStr){
-  if(covIsWeekend(dateStr)) return 'high-demand';
-  if(covIsEvening(timeStr)) return 'high-demand';
-  return 'standard';
-}
-
-let covShiftOverride = 'auto';
-
-function covRefreshSessions(){
-  const date = document.getElementById('cov-date').value;
-  const sel = document.getElementById('cov-session');
-  sel.innerHTML = '';
-  if(!date){ sel.innerHTML = '<option value="">Pick a date first…</option>'; return; }
-  const day = covDayName(date);
-  const sessions = SCHEDULE[day] || [];
-  if(!sessions.length){ sel.innerHTML = `<option value="">No sessions on ${day}</option>`; return; }
-  sel.innerHTML = '<option value="">Select session…</option>' +
-    sessions.map((s,i)=>`<option value="${i}">${s.time} — ${s.name}</option>`).join('');
-  covUpdateShiftType();
-}
-function covUpdateShiftType(){
-  const date = document.getElementById('cov-date').value;
-  const sIdx = document.getElementById('cov-session').value;
-  if(!date || sIdx===''){ covRenderShiftBtns(null); return; }
-  const day = covDayName(date);
-  const s = (SCHEDULE[day]||[])[parseInt(sIdx,10)];
-  const auto = covAutoType(date, s ? s.time : '');
-  covRenderShiftBtns(auto);
-}
-function covRenderShiftBtns(autoType){
-  document.querySelectorAll('.cov-shift-btn').forEach(b=>b.classList.remove('active'));
-  const autoBtn = document.getElementById('cov-shift-auto');
-  if(covShiftOverride === 'auto'){
-    autoBtn.classList.add('active', autoType==='high-demand'?'high':'std');
-    autoBtn.textContent = autoType==='high-demand' ? '✨ Auto: 🔥 High-demand' : autoType==='standard' ? '✨ Auto: ☀️ Standard' : '✨ Auto';
-  }else{
-    autoBtn.textContent = '✨ Auto';
-    document.getElementById(covShiftOverride==='high-demand'?'cov-shift-high':'cov-shift-std').classList.add('active');
-  }
-}
-function covSetShift(mode){ covShiftOverride = mode; covUpdateShiftType(); }
-
-function covPopulateCoaches(){
-  const opts = '<option value="">Select coach…</option>' +
-    ALL_COACHES.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
-  document.getElementById('cov-requester').innerHTML = opts;
-  document.getElementById('cov-coverer').innerHTML = opts;
-}
-
-function covAddEntry(){
-  const date = document.getElementById('cov-date').value;
-  const sIdx = document.getElementById('cov-session').value;
-  const reqId = document.getElementById('cov-requester').value;
-  const covId = document.getElementById('cov-coverer').value;
-  const note = document.getElementById('cov-note').value.trim();
-  if(!date || sIdx==='' || !reqId || !covId){ alert('Fill in date, session, who was scheduled, and who covered.'); return; }
-  if(reqId === covId){ alert('Requester and coverer must be different coaches.'); return; }
-  const day = covDayName(date);
-  const s = (SCHEDULE[day]||[])[parseInt(sIdx,10)];
-  if(!s){ alert('Invalid session.'); return; }
-  const autoType = covAutoType(date, s.time);
-  const shiftType = covShiftOverride==='auto' ? autoType : covShiftOverride;
-  const entry = {
-    id: 'c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
-    date, day, sessionName: s.name, sessionTime: s.time, sessionType: s.type,
-    requesterId: reqId, coverId: covId, shiftType, note, createdAt: new Date().toISOString()
-  };
-  const arr = covLoad(); arr.push(entry); covSave(arr);
-  // Reset form
-  document.getElementById('cov-note').value = '';
-  covShiftOverride = 'auto';
-  covRenderList(); covRenderProgress();
-}
-
-function covDelete(id){
-  if(!confirm('Delete this coverage entry?')) return;
-  covSave(covLoad().filter(e=>e.id!==id));
-  covRenderList(); covRenderProgress();
-}
-
-function covCoachName(id){ const c = ALL_COACHES.find(x=>x.id===id); return c ? c.abbr : '?'; }
-
-function covRenderList(){
-  const list = document.getElementById('cov-list');
-  const arr = covLoad().slice().sort((a,b)=>b.date.localeCompare(a.date));
-  if(!arr.length){ list.innerHTML = '<div class="cov-list-empty">No coverages logged yet this session. Log your first one above.</div>'; return; }
-  list.innerHTML = arr.map(e=>{
-    const badge = e.shiftType==='high-demand'
-      ? '<span class="cov-badge high">🔥 High-demand</span>'
-      : '<span class="cov-badge std">☀️ Standard</span>';
-    return `<div class="cov-entry ${e.shiftType==='high-demand'?'high':'std'}">
-      <div class="cov-entry-date">${covShortDate(e.date)}<br><span style="color:var(--gray-300);font-weight:400">${e.day.slice(0,3)}</span></div>
-      <div class="cov-entry-main">
-        <div class="cov-entry-line1">${covCoachName(e.coverId)} <span class="arrow">covered for</span> ${covCoachName(e.requesterId)}</div>
-        <div class="cov-entry-line2">${badge}<span>· ${e.sessionTime} ${e.sessionName}</span>${e.note?`<span>· <i>${e.note}</i></span>`:''}</div>
-      </div>
-      <button class="cov-entry-del" onclick="covDelete('${e.id}')" title="Delete">×</button>
-    </div>`;
-  }).join('');
-}
-
-function covRenderProgress(){
-  const cfg = covCfg();
-  const arr = covLoad();
-  const start = new Date(cfg.start+'T00:00:00');
-  const end = new Date(start); end.setDate(end.getDate() + cfg.weeks*7 - 1);
-  const now = new Date(); now.setHours(0,0,0,0);
-  const daysIn = Math.max(0, Math.floor((now - start)/(1000*60*60*24)));
-  const totalDays = cfg.weeks * 7;
-  const pct = Math.min(100, Math.max(0, (daysIn/totalDays)*100));
-  const week = Math.max(1, Math.min(cfg.weeks, Math.floor(daysIn/7)+1));
-  document.getElementById('cov-bar-fill').style.width = pct+'%';
-  document.getElementById('cov-week-text').textContent = `Week ${week} of ${cfg.weeks}`;
-  document.getElementById('cov-start-date').textContent = covFormatDate(cfg.start);
-  document.getElementById('cov-end-date').textContent = covFormatDate(end.toISOString().slice(0,10));
-  document.getElementById('cov-total-count').textContent = arr.length;
-  document.getElementById('cov-high-count').textContent = arr.filter(e=>e.shiftType==='high-demand').length;
-}
-
-function covSettings(){
-  const cfg = covCfg();
-  const newStart = prompt('Session start date (YYYY-MM-DD):', cfg.start);
-  if(!newStart) return;
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(newStart)){ alert('Invalid date format. Use YYYY-MM-DD.'); return; }
-  cfg.start = newStart;
-  const newWeeks = prompt('Number of weeks in session:', cfg.weeks);
-  if(newWeeks && !isNaN(parseInt(newWeeks,10))) cfg.weeks = parseInt(newWeeks,10);
-  covSaveCfg(cfg);
-  covRenderProgress();
-}
-
-/* ---- Session-end report & rewards ---- */
-function covTier(count){
-  if(count === 0) return 0;
-  if(count <= 2) return 1;
-  return 2;
-}
-function covTierLabel(tier){
-  if(tier===0) return 'No reward';
-  if(tier===1) return '$25 Amazon gift card';
-  return 'Bonus or PTO';
-}
-function covTierCls(tier){ return 't'+tier; }
-
-function covRunReport(){
-  const arr = covLoad();
-  const rewards = covRewards();
-  // Count per coverer
-  const counts = {};
-  arr.forEach(e=>{
-    if(!counts[e.coverId]) counts[e.coverId] = {total:0, high:0, std:0};
-    counts[e.coverId].total++;
-    if(e.shiftType==='high-demand') counts[e.coverId].high++;
-    else counts[e.coverId].std++;
-  });
-  // Include any coach with 0 too (optional — keep report focused on those who covered)
-  const rows = Object.entries(counts)
-    .map(([id,c])=>({id, ...c, coach: ALL_COACHES.find(x=>x.id===id)}))
-    .filter(r=>r.coach)
-    .sort((a,b)=>b.total - a.total || b.high - a.high);
-
-  const cfg = covCfg();
-  const start = new Date(cfg.start+'T00:00:00');
-  const end = new Date(start); end.setDate(end.getDate() + cfg.weeks*7 - 1);
-
-  let body;
-  if(!rows.length){
-    body = '<div class="cov-list-empty">No coverages logged this session yet.</div>';
-  } else {
-    const tbl = `<table class="cov-table">
-      <thead><tr>
-        <th>Coach</th><th class="num">Total</th><th class="num">High-demand</th><th class="num">Standard</th><th>Tier</th><th>Reward</th>
-      </tr></thead>
-      <tbody>${rows.map(r=>covReportRow(r,rewards)).join('')}</tbody>
-    </table>`;
-    const mobile = `<div class="cov-mobile-card">${rows.map(r=>covReportMobileCard(r,rewards)).join('')}</div>`;
-    body = tbl + mobile;
-  }
-
-  document.getElementById('cov-report-container').innerHTML = `
-    <div class="cov-report">
-      <h3 class="cov-report-title">Session-end coverage report</h3>
-      <div class="cov-report-sub">${covFormatDate(cfg.start)} → ${covFormatDate(end.toISOString().slice(0,10))} · ${cfg.weeks}-week session</div>
-      ${body}
-      <div class="cov-export-row">
-        <button class="cov-export-btn" onclick="covPrintReport()">🖨 Print / Save as PDF</button>
-        <button class="cov-export-btn" onclick="covExportCSV()">📥 Export CSV</button>
-        <button class="cov-export-btn" onclick="covClearSession()" style="color:#A1173D;border-color:#FCECEF">🗑 Archive &amp; start new session</button>
-      </div>
-    </div>`;
-  document.getElementById('cov-report-container').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-function covReportRow(r, rewards){
-  const tier = covTier(r.total);
-  const reward = rewards[r.id] || (tier===0?'none':tier===1?'amazon':'');
-  const rewardCell = tier===0
-    ? '<span class="cov-reward-text">—</span>'
-    : tier===1
-      ? '<span class="cov-reward-text">$25 Amazon gift card (auto)</span>'
-      : `<div class="cov-reward">
-          <button class="cov-reward-btn ${reward==='bonus'?'active':''}" onclick="covSetReward('${r.id}','bonus')">💵 $150–200 bonus</button>
-          <button class="cov-reward-btn ${reward==='pto'?'active':''}" onclick="covSetReward('${r.id}','pto')">🏖 5 hrs PTO</button>
-        </div>`;
-  return `<tr>
-    <td><b>${r.coach.name}</b><br><span style="font-size:11px;color:var(--gray-500)">${r.coach.abbr}</span></td>
-    <td class="num">${r.total}</td>
-    <td class="num">${r.high}</td>
-    <td class="num">${r.std}</td>
-    <td><span class="cov-tier ${covTierCls(tier)}">${covTierLabel(tier)}</span></td>
-    <td>${rewardCell}</td>
-  </tr>`;
-}
-
-function covReportMobileCard(r, rewards){
-  const tier = covTier(r.total);
-  const reward = rewards[r.id] || (tier===0?'none':tier===1?'amazon':'');
-  const rewardBlock = tier===0
-    ? '<span class="cov-reward-text">No reward this session</span>'
-    : tier===1
-      ? '<span class="cov-reward-text">$25 Amazon gift card</span>'
-      : `<div class="cov-reward">
-          <button class="cov-reward-btn ${reward==='bonus'?'active':''}" onclick="covSetReward('${r.id}','bonus')">💵 $150–200 bonus</button>
-          <button class="cov-reward-btn ${reward==='pto'?'active':''}" onclick="covSetReward('${r.id}','pto')">🏖 5 hrs PTO</button>
-        </div>`;
-  return `<div class="cov-mc">
-    <div class="cov-mc-top">
-      <div class="cov-mc-name">${r.coach.name}</div>
-      <span class="cov-tier ${covTierCls(tier)}">${covTierLabel(tier)}</span>
-    </div>
-    <div class="cov-mc-nums"><b>${r.total}</b> total · <b>${r.high}</b> high-demand · <b>${r.std}</b> standard</div>
-    ${rewardBlock}
-  </div>`;
-}
-
-function covSetReward(coachId, reward){
-  const r = covRewards(); r[coachId] = reward; covSaveRewards(r);
-  covRunReport();
-}
-
-function covPrintReport(){ window.print(); }
-
-function covExportCSV(){
-  const arr = covLoad();
-  if(!arr.length){ alert('No data to export.'); return; }
-  const header = ['Date','Day','Time','Session','Type','Covered for','Covered by','Shift type','Note'];
-  const rows = arr.map(e=>[
-    e.date, e.day, e.sessionTime, e.sessionName, e.sessionType,
-    covCoachName(e.requesterId), covCoachName(e.coverId), e.shiftType, (e.note||'').replace(/"/g,'""')
-  ]);
-  const csv = [header, ...rows].map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
-  const blob = new Blob([csv], {type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `legacy-coverage-${covCfg().start}.csv`;
-  document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function covClearSession(){
-  if(!confirm('Archive this session and start fresh? Current log + rewards will be erased from this device. Export CSV first if you need a record.')) return;
-  localStorage.removeItem(COV_LOG_KEY);
-  localStorage.removeItem(COV_RWD_KEY);
-  // Advance start date by session length
-  const cfg = covCfg();
-  const s = new Date(cfg.start+'T00:00:00');
-  s.setDate(s.getDate() + cfg.weeks*7);
-  cfg.start = s.toISOString().slice(0,10);
-  covSaveCfg(cfg);
-  document.getElementById('cov-report-container').innerHTML = '';
-  covRenderList(); covRenderProgress();
-}
-
-/* init */
-covPopulateCoaches();
-covRenderList();
-covRenderProgress();
-// Default date to today
-document.getElementById('cov-date').value = new Date().toISOString().slice(0,10);
-covRefreshSessions();
 </script>
 </body>
 </html>
