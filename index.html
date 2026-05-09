@@ -469,15 +469,14 @@ const ALL_COACHES = [
   {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'L3 — all but TT1'},
   {id:'dean',name:'Dean Smith',abbr:'Dean S',phone:'215-688-8141',email:'deansmith@yahoo.com',type:'jr',level:'L2 — Munchkins, CC, Adults'},
   {id:'amy',name:'Amy Georgescu',abbr:'Amy G',phone:'484-999-1779',email:'',type:'jr',level:'L2 — Munchkins, CC, Adults'},
-  {id:'ben',name:'Ben Biswas',abbr:'Ben B',phone:'339-223-5795',email:'',type:'pt',level:'Any clinic'},
   {id:'sean',name:'Sean T',abbr:'Sean T',phone:'',email:'',type:'pt',level:'Any clinic'},
 ];
 
 const SCHEDULE = {
   Monday:[
-    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P']},
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
     {time:'12–1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
-    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',coaches:['Nick F']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Nick F']},
     {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Gabe K','Stevie D','Aleix C','Jeremie C','Kein W']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Shevi A','Kris W','Max O','Gabe K']},
     {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Jeremie C','Aleix C','Nick F']},
@@ -485,7 +484,7 @@ const SCHEDULE = {
     {time:'8:30–10pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['Laurence P']},
   ],
   Tuesday:[
-    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P']},
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Laurence P']},
     {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Anna M','Gabe K','Aleix C','Kris W','Jeremie C','Stevie D']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Anna M','Laurence P','Gabe K']},
     {time:'7–8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Nick F','Jeremie C','Aleix C']},
@@ -494,12 +493,12 @@ const SCHEDULE = {
   Wednesday:[
     {time:'12–1:30pm',name:'Adult Adv Beginner',type:'adult',coaches:['Laurence P','David S']},
     {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Andrew W','Ahmed A','Stevie D','Jeremie C','Nick F','Laurence P','Aleix C','Gabe K']},
-    {time:'6–7pm',name:'Munchkins',type:'munch',coaches:['Laurence P','Anna M','Nick F','David S','Ahmed A','Amy G','Shevi A','Bella N']},
-    {time:'7–9pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Gabe K','Stevie D','Nick F','Jeremie C','Anna M','Ahmed A']},
+    {time:'6–7pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Anna M','Nick F','David S','Ahmed A','Amy G','Shevi A','Bella N']},
+    {time:'7–9pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Gabe K','Stevie D','Shevi A','Nick F','Jeremie C','Anna M','Ahmed A']},
   ],
   Thursday:[
-    {time:'4–5pm',name:'Munchkins',type:'munch',coaches:['Laurence P','Kein W','Nathan D','David S']},
-    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Jeremie C','Gabe K','Kris W','Ben B','Aleix C','Anna M (2/3)']},
+    {time:'4–5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Kein W','Nathan D','David S']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Jeremie C','Gabe K','Kris W','Aleix C','Anna M (2/3)']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Laurence P','Anna M','Max O','Shevi A','Kris W','Jeremie C']},
     {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Andrew W','Aleix C']},
     {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Kein W','Laurence P']},
@@ -524,8 +523,8 @@ const SCHEDULE = {
     {time:'2:30–4pm',name:'TT Green 2 Y',type:'tt',courts:1,coaches:['Nick F','Sean T']},
     {time:'2:30–4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Jeremie C','Shevi A','Stevie D','Gabe K','Aleix C']},
     {time:'5:30–7pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Jinay S']},
-    {time:'5:30–7pm',name:'Adult Beginner',type:'adult',coaches:['Kein W']},
-    {time:'5:30–7pm',name:'Adult Adv Beginner',type:'adult',coaches:['Gabe K']},
+    {time:'5:30–7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W']},
+    {time:'5:30–7pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['Gabe K']},
   ]
 };
 
