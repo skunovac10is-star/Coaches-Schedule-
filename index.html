@@ -390,7 +390,12 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 <!-- ===== AVAILABILITY TAB ===== -->
 <div class="panel" id="tab-coverage">
   <div class="avail-intro">
-    <strong>Who's not scheduled</strong> — these coaches are free each day and should be your first call for coverage.<br>
+    <strong>Finding Your Coverage</strong><br>
+    If you can't make a clinic, it's on you to find another coach to cover. That's the standard at Legacy.<br><br>
+    Families build their week around court time. When a clinic is short-staffed, the experience drops, families notice, and your fellow pros are left scrambling to fill the gap.<br><br>
+    We work like a doubles team. Leave your half open with no plan and someone else has to sprint to cover. Plan it out, line up the sub, and hand off what the players are working on so the transition is seamless.<br><br>
+    Coaches who handle their coverage are the ones who earn the bigger clinics and private sessions. That's how we protect the player experience and the Legacy name.<br><br>
+    The list below shows who isn't scheduled each day. Some Jr Pros may be in school, but most should be available with enough notice. The more you cover for others, the more they'll cover for you.<br>
     <span class="tap-hint">Tap any name to get their contact info</span>
   </div>
   <div id="avail-list"></div>
@@ -537,10 +542,10 @@ const SCHEDULE = {
     {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Kein W','Laurence P']},
   ],
   Friday:[
-    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',coaches:['Aleix C','Stevie D','Nathan D','Kein W','Sean T','Kris W']},
-    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',coaches:['Nick F','Andrew W']},
+    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Aleix C','Stevie D','Nathan D','Kein W','Sean T','Kris W']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Nick F','Andrew W']},
     {time:'5:30–6:30pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Kein W','Nick F','Sean T','Nathan D']},
-    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Andrew W','Nathan D','Nick F','Aleix C','Kein W','Max O 7–8:30']},
+    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Andrew W','Nathan D','Nick F','Aleix C','Kein W','Sean T','Max O 7–8:30']},
   ],
   Saturday:[
     {time:'8:30–10am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Ahmed A']},
