@@ -104,9 +104,28 @@ body{padding-left:240px;padding-top:58px}
 
 /* ==================== SCHEDULE TAB ==================== */
 .day-tabs{display:flex;gap:5px;margin-bottom:1.25rem;flex-wrap:wrap}
-.dtab{padding:9px 18px;border-radius:22px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--gray-200);color:var(--gray-700);background:#fff;transition:all .12s;flex-shrink:0;letter-spacing:.2px}
+.dtab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;border-radius:14px;cursor:pointer;border:1.5px solid var(--gray-200);color:var(--gray-700);background:#fff;transition:all .12s;flex-shrink:0;line-height:1.1;min-width:60px}
+.dtab .dt-name{font-size:10px;letter-spacing:.7px;text-transform:uppercase;font-weight:700;opacity:.65}
+.dtab .dt-date{font-size:18px;font-weight:700;line-height:1}
 .dtab:hover{border-color:var(--black);color:var(--black)}
 .dtab.active{background:var(--black);border-color:var(--black);color:#fff;box-shadow:0 4px 12px rgba(10,10,10,.15)}
+.dtab.active .dt-name{opacity:.8}
+.sidebar-legend{margin-top:auto;padding:14px 6px 10px;border-top:1px solid rgba(255,255,255,.08)}
+.sl-title{color:rgba(255,255,255,.45);font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;margin:0 8px 8px}
+.sl-section{margin-bottom:10px}
+.sl-section:last-child{margin-bottom:0}
+.sl-row{display:flex;align-items:center;gap:9px;padding:5px 8px;color:rgba(255,255,255,.82);font-size:12px;line-height:1}
+.sl-ic{display:inline-flex;align-items:center;justify-content:center;width:18px;flex-shrink:0;color:#9CCDFF}
+.sl-ic svg{width:14px;height:14px}
+.sl-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-left:4px}
+.sl-dot.over{background:#A266DC}
+.sl-dot.perfect{background:#3FB664}
+.sl-dot.short1{background:#E0863A}
+.sl-dot.short2{background:#D04545}
+.sl-chip{font-size:10px;padding:2px 8px;border-radius:9px;font-weight:700;flex-shrink:0;letter-spacing:.2px}
+.sl-chip.pro{background:#DDEBFA;color:#0C447C}
+.sl-chip.pt{background:#FAEEDA;color:#7A4A0C}
+.sl-chip.jr{background:#E5F0D8;color:#1F6B2A}
 
 .legend{display:flex;gap:14px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
 .leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-700)}
@@ -300,7 +319,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
     <div class="logo-mark">L</div>
     <div><div class="logo-name">LEGACY YTE</div></div>
   </div>
-  <div class="header-week">Session 3 — Week 5</div>
+  <div class="header-week" id="header-week">Session 3 — Week 9</div>
 </header>
 
 <div class="tabs">
@@ -308,6 +327,25 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   <div class="tab" data-icon="mine" onclick="switchTab('mine')">My schedule</div>
   <div class="tab" data-icon="coverage" onclick="switchTab('coverage')">Who's available</div>
   <div class="tab" data-icon="request" onclick="switchTab('request')">Request time off</div>
+
+  <div class="sidebar-legend">
+    <div class="sl-title">Legend</div>
+    <div class="sl-section">
+      <div class="sl-row"><span class="sl-ic"><svg viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="18" height="10" rx="1"/><line x1="10" y1="1" x2="10" y2="11"/><line x1="1" y1="6" x2="19" y2="6" stroke-dasharray="1.2 1.2"/></svg></span>Courts</div>
+      <div class="sl-row"><span class="sl-ic">👥</span>Coaches</div>
+    </div>
+    <div class="sl-section">
+      <div class="sl-row"><span class="sl-chip pro">Pro</span>Full-time</div>
+      <div class="sl-row"><span class="sl-chip pt">Pro</span>Part-time</div>
+      <div class="sl-row"><span class="sl-chip jr">Jr</span>Junior pro</div>
+    </div>
+    <div class="sl-section">
+      <div class="sl-row"><span class="sl-dot perfect"></span>Staffed</div>
+      <div class="sl-row"><span class="sl-dot over"></span>Overstaffed</div>
+      <div class="sl-row"><span class="sl-dot short1"></span>1 short</div>
+      <div class="sl-row"><span class="sl-dot short2"></span>2+ short</div>
+    </div>
+  </div>
 </div>
 
 <!-- Bottom tab bar (mobile) -->
@@ -573,12 +611,28 @@ function renderSchedule(day){
   });
 }
 
+// Week of May 18, 2026 (Mon) — Session 3 Week 9
+const WEEK_START = new Date(2026, 4, 18);
+const SESSION_NUM = 3, WEEK_NUM = 9;
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function dateForDay(i){ const d=new Date(WEEK_START); d.setDate(d.getDate()+i); return d; }
+function weekRangeText(){
+  const s=WEEK_START, e=dateForDay(6);
+  if(s.getMonth()===e.getMonth()) return `${MONTHS_SHORT[s.getMonth()]} ${s.getDate()}–${e.getDate()}, ${s.getFullYear()}`;
+  return `${MONTHS_SHORT[s.getMonth()]} ${s.getDate()} – ${MONTHS_SHORT[e.getMonth()]} ${e.getDate()}, ${s.getFullYear()}`;
+}
+function setHeaderWeek(){
+  const el=document.getElementById('header-week');
+  if(el) el.innerHTML=`Session ${SESSION_NUM} — Week ${WEEK_NUM} <span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
+}
+
 function buildSchedTabs(){
   const cont=document.getElementById('sched-day-tabs');
   DAYS_ORDER.forEach((d,i)=>{
     const t=document.createElement('div');
     t.className='dtab'+(i===0?' active':'');
-    t.textContent=d;
+    const dt=dateForDay(i);
+    t.innerHTML=`<span class="dt-name">${d.slice(0,3)}</span><span class="dt-date">${dt.getDate()}</span>`;
     t.onclick=()=>{
       document.querySelectorAll('#sched-day-tabs .dtab').forEach(x=>x.classList.remove('active'));
       t.classList.add('active');
@@ -586,6 +640,7 @@ function buildSchedTabs(){
     };
     cont.appendChild(t);
   });
+  setHeaderWeek();
 }
 
 // ---- AVAILABILITY ----
