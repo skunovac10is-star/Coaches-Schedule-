@@ -167,6 +167,18 @@ body{padding-left:240px;padding-top:58px}
 /* ==================== AVAILABILITY TAB ==================== */
 .avail-intro{font-size:13px;color:var(--gray-700);margin-bottom:1.25rem;line-height:1.6;background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem}
 .avail-intro strong{color:var(--black)}
+.cov-intro-card{background:#fff;border:1px solid var(--gray-200);border-left:3px solid #1164A3}
+.cov-intro-body{font-size:13px;color:var(--gray-700);line-height:1.65}
+.req-stepper{display:flex;align-items:flex-start;gap:0;background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.1rem 1.25rem;margin-bottom:1rem}
+.req-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;min-width:62px}
+.req-step .rs-dot{width:30px;height:30px;border-radius:50%;background:var(--gray-200);color:var(--gray-700);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;transition:all .2s}
+.req-step .rs-label{font-size:10.5px;font-weight:700;color:var(--gray-500);letter-spacing:.4px;text-transform:uppercase;text-align:center}
+.req-step.active .rs-dot{background:var(--black);color:#fff;box-shadow:0 0 0 4px rgba(10,10,10,.08)}
+.req-step.done .rs-dot{background:#3FB664;color:#fff}
+.req-step.active .rs-label,.req-step.done .rs-label{color:var(--black)}
+.req-line{flex:1;height:3px;background:var(--gray-200);border-radius:2px;margin:14px 6px 0;position:relative;overflow:hidden;min-width:14px}
+.req-line .rl-fill{height:100%;background:#3FB664;border-radius:2px;width:0;transition:width .35s}
+@media (max-width:640px){.req-stepper{padding:.9rem .6rem}.req-step{min-width:48px}.req-step .rs-label{font-size:9.5px}.req-line{margin:14px 3px 0}}
 .tap-hint{display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--red-light);color:var(--red);border-radius:6px;padding:3px 9px;font-weight:500;margin-top:6px}
 
 .day-avail{margin-bottom:1rem}
@@ -390,18 +402,33 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 <!-- ===== AVAILABILITY TAB ===== -->
 <div class="panel" id="tab-coverage">
   <div class="avail-intro">
-    <strong>Finding Your Coverage</strong><br>
-    If you can't make a clinic, it's on you to find another coach to cover. That's the standard at Legacy.<br><br>
-    Families build their week around court time. When a clinic is short-staffed, the experience drops, families notice, and your fellow pros are left scrambling to fill the gap.<br><br>
-    We work like a doubles team. Leave your half open with no plan and someone else has to sprint to cover. Plan it out, line up the sub, and hand off what the players are working on so the transition is seamless.<br><br>
-    Coaches who handle their coverage are the ones who earn the bigger clinics and private sessions. That's how we protect the player experience and the Legacy name.<br><br>
-    The list below shows who isn't scheduled each day. Some Jr Pros may be in school, but most should be available with enough notice. The more you cover for others, the more they'll cover for you.<br>
+    <strong>Who's not scheduled</strong> — these coaches are free each day and should be your first call for coverage.<br>
     <span class="tap-hint">Tap any name to get their contact info</span>
   </div>
   <div id="avail-list"></div>
 </div>
 
 <div class="panel" id="tab-request">
+  <div class="card cov-intro-card">
+    <div class="sec-label">Finding your coverage</div>
+    <div class="cov-intro-body">
+      If you can't make a clinic, it's on you to find another coach to cover. That's the standard at Legacy.<br><br>
+      Families build their week around court time. When a clinic is short-staffed, the experience drops, families notice, and your fellow pros are left scrambling to fill the gap.<br><br>
+      We work like a doubles team. Leave your half open with no plan and someone else has to sprint to cover. Plan it out, line up the sub, and hand off what the players are working on so the transition is seamless.<br><br>
+      Coaches who handle their coverage are the ones who earn the bigger clinics and private sessions. That's how we protect the player experience and the Legacy name.
+    </div>
+  </div>
+
+  <div class="req-stepper">
+    <div class="req-step" id="rs-1"><div class="rs-dot">1</div><div class="rs-label">Your info</div></div>
+    <div class="req-line"><div class="rl-fill" id="rl-1"></div></div>
+    <div class="req-step" id="rs-2"><div class="rs-dot">2</div><div class="rs-label">Coverage</div></div>
+    <div class="req-line"><div class="rl-fill" id="rl-2"></div></div>
+    <div class="req-step" id="rs-3"><div class="rs-dot">3</div><div class="rs-label">Notes</div></div>
+    <div class="req-line"><div class="rl-fill" id="rl-3"></div></div>
+    <div class="req-step" id="rs-4"><div class="rs-dot">✓</div><div class="rs-label">Submit</div></div>
+  </div>
+
   <div class="card">
     <div class="sec-label">Your info</div>
     <div class="row2">
@@ -743,6 +770,31 @@ function fillEmail(){
   const id=document.getElementById('req-name').value;
   const c=ALL_COACHES.find(x=>x.id===id);
   document.getElementById('req-email').value=c?(c.email||''):'';
+  updateStepper();
+}
+
+function updateStepper(){
+  const name=document.getElementById('req-name');
+  const rtype=document.querySelector('input[name="rtype"]:checked');
+  const step1Done=!!(name && name.value && rtype);
+  let step2Done=false;
+  document.querySelectorAll('.day-block input[type="date"]').forEach(d=>{ if(d.value) step2Done=true; });
+  const notes=document.getElementById('req-notes');
+  const step3Done=step1Done && step2Done && notes && notes.value.trim().length>0;
+  const step4Active=step1Done && step2Done;
+  const set=(id,done,active)=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.classList.toggle('done',!!done);
+    el.classList.toggle('active',!!active && !done);
+  };
+  set('rs-1', step1Done, !step1Done);
+  set('rs-2', step2Done, step1Done && !step2Done);
+  set('rs-3', step3Done, step1Done && step2Done && !step3Done);
+  set('rs-4', false, step4Active);
+  const fill=(id,done)=>{ const el=document.getElementById(id); if(el) el.style.width=done?'100%':'0'; };
+  fill('rl-1', step1Done);
+  fill('rl-2', step2Done);
+  fill('rl-3', step4Active);
 }
 
 function getDayName(dateStr){
@@ -819,6 +871,7 @@ function addDay(){
 }
 
 function onDateChange(n,dateStr){
+  updateStepper();
   const day=getDayName(dateStr);
   const picker=document.getElementById(`session-picker-${n}`);
   const noMsg=document.getElementById(`no-sessions-${n}`);
@@ -1122,6 +1175,9 @@ renderSchedule('Monday');
 buildAvailability();
 buildCoachDropdown();
 showMine();
+document.querySelectorAll('input[name="rtype"]').forEach(r=>r.addEventListener('change',updateStepper));
+const _notes=document.getElementById('req-notes'); if(_notes) _notes.addEventListener('input',updateStepper);
+updateStepper();
 </script>
 </body>
 </html>
