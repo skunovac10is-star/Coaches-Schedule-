@@ -790,11 +790,18 @@ function setHeaderWeek(){
   if(el) el.innerHTML=`Session ${SESSION_NUM} — Week ${WEEK_NUM}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
 }
 
+function todayDayName(){
+  // getDay(): Sun=0..Sat=6. DAYS_ORDER is Mon..Sun (index 0..6).
+  const i=new Date().getDay();
+  return DAYS_ORDER[i===0?6:i-1];
+}
+
 function buildSchedTabs(){
   const cont=document.getElementById('sched-day-tabs');
+  const todayName=todayDayName();
   DAYS_ORDER.forEach((d,i)=>{
     const t=document.createElement('div');
-    t.className='dtab'+(i===0?' active':'');
+    t.className='dtab'+(d===todayName?' active':'');
     const dt=dateForDay(i);
     t.innerHTML=`<span class="dt-name">${d.slice(0,3)}</span><span class="dt-date">${dt.getDate()}</span>`;
     t.onclick=()=>{
@@ -1305,7 +1312,7 @@ function showMine(){
 renderNews();
 renderTeamNotes();
 buildSchedTabs();
-renderSchedule('Monday');
+renderSchedule(todayDayName());
 buildAvailability();
 buildCoachDropdown();
 showMine();
