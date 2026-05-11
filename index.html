@@ -107,6 +107,16 @@ body{padding-left:240px;padding-top:58px}
 @keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* ==================== SCHEDULE TAB ==================== */
+.team-notes{background:#FFF7DB;border:1px solid #F0D97A;border-left:3px solid #C9A227;border-radius:var(--rlg);padding:.85rem 1rem;margin-bottom:1rem}
+.tn-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.tn-icon{font-size:14px}
+.tn-title{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#6B4B00}
+.tn-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px}
+.tn-list li{font-size:13px;color:#3a2a00;line-height:1.45;padding-left:14px;position:relative}
+.tn-list li::before{content:"•";position:absolute;left:2px;color:#C9A227;font-weight:700}
+.tn-who{font-weight:600;color:#1a1a1a}
+.tn-date{color:#6B4B00;font-weight:500}
+@media (max-width:640px){.team-notes{padding:.75rem .9rem}.tn-list li{font-size:12.5px}}
 .day-tabs{display:flex;gap:5px;margin-bottom:1.25rem;flex-wrap:wrap}
 .dtab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;border-radius:14px;cursor:pointer;border:1.5px solid var(--gray-200);color:var(--gray-700);background:#fff;transition:all .12s;flex-shrink:0;line-height:1.1;min-width:60px}
 .dtab .dt-name{font-size:10px;letter-spacing:.7px;text-transform:uppercase;font-weight:700;opacity:.65}
@@ -382,6 +392,10 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 
 <!-- ===== SCHEDULE TAB ===== -->
 <div class="panel active" id="tab-schedule">
+  <div class="team-notes" id="team-notes" style="display:none">
+    <div class="tn-head"><span class="tn-icon">📌</span><span class="tn-title">Team notes</span></div>
+    <ul class="tn-list" id="tn-list"></ul>
+  </div>
   <div class="day-tabs" id="sched-day-tabs"></div>
   <div class="timeline" id="timeline"></div>
 </div>
@@ -645,6 +659,33 @@ function renderSchedule(day){
     row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
     tl.appendChild(row);
   });
+}
+
+// ---- TEAM NOTES ---- (edit this list to update the banner)
+// note: { who:'Name', what:'on vacation' | 'away' | ..., start:'YYYY-MM-DD', end:'YYYY-MM-DD' }
+// Notes auto-hide after `end` passes.
+const TEAM_NOTES = [
+  {who:'Kat & Sanjin', what:'on vacation', start:'2026-05-14', end:'2026-05-18'},
+  {who:'Andrew W',     what:'on vacation', start:'2026-05-18', end:'2026-05-27'},
+  {who:'Aleix C',      what:'away',        start:'2026-06-01', end:'2026-06-13'},
+];
+
+function fmtNoteRange(s, e){
+  const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const sd=new Date(s+'T12:00:00'), ed=new Date(e+'T12:00:00');
+  if(sd.getMonth()===ed.getMonth()) return `${ms[sd.getMonth()]} ${sd.getDate()}–${ed.getDate()}`;
+  return `${ms[sd.getMonth()]} ${sd.getDate()} – ${ms[ed.getMonth()]} ${ed.getDate()}`;
+}
+function renderTeamNotes(){
+  const wrap=document.getElementById('team-notes');
+  const list=document.getElementById('tn-list');
+  if(!wrap||!list) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const active=TEAM_NOTES.filter(n=>new Date(n.end+'T23:59:59')>=today)
+    .sort((a,b)=>a.start.localeCompare(b.start));
+  if(!active.length){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  list.innerHTML=active.map(n=>`<li><span class="tn-who">${n.who}</span> ${n.what} <span class="tn-date">— ${fmtNoteRange(n.start,n.end)}</span></li>`).join('');
 }
 
 // Week of May 18, 2026 (Mon) — Session 3 Week 9
@@ -1174,6 +1215,7 @@ function showMine(){
   }
 }
 
+renderTeamNotes();
 buildSchedTabs();
 renderSchedule('Monday');
 buildAvailability();
