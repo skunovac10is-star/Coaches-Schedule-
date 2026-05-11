@@ -44,7 +44,8 @@ button:active,.coach-tap:active,.dtab:active,.pill label:active,.cf-btn:active,.
   .site-header{height:60px;padding:0 1.1rem;padding-top:env(safe-area-inset-top)}
   .site-header{height:calc(60px + env(safe-area-inset-top))}
   .logo-name{font-size:18px}
-  .header-week{display:none}
+  .header-week{font-size:10.5px;text-align:right;line-height:1.2;max-width:130px;white-space:normal}
+  .header-week span{display:block;font-size:9.5px}
   .day-avail-header{font-size:22px}
   .t-time{font-size:10px}
   .t-name{font-size:13px}
@@ -55,7 +56,10 @@ button:active,.coach-tap:active,.dtab:active,.pill label:active,.cf-btn:active,.
   .btn-submit{width:100%;padding:15px;font-size:15px}
   input[type=text],input[type=email],input[type=date],select,textarea{font-size:16px;padding:12px 14px}
   .pill label{padding:10px 16px;font-size:14px}
-  .dtab{padding:10px 16px;font-size:13px}
+  .dtab{padding:7px 12px;min-width:54px}
+  .dtab .dt-date{font-size:16px}
+  .cov-intro-card{padding:.9rem 1rem}
+  .cov-intro-body{font-size:12.5px;line-height:1.6}
   .day-tabs{overflow-x:auto;flex-wrap:nowrap;margin-left:-1rem;margin-right:-1rem;padding:0 1rem 4px;scrollbar-width:none}
   .day-tabs::-webkit-scrollbar{display:none}
 }
@@ -505,7 +509,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 
   <div class="btn-row">
     <button class="btn-submit" onclick="submitForm()">Submit request</button>
-    <div class="policy">Submissions notify Kat Sorokko and front desk. Vacation requires 2 weeks notice.</div>
+    <div class="policy">Submissions notify Kat Sorokoo and Sanjin Kunovac. Vacation requires 2 weeks notice.</div>
   </div>
   <div class="success-msg" id="success-msg">Request submitted. Sanjin, Kat and the front desk have been notified.</div>
 </div>
@@ -655,7 +659,7 @@ function weekRangeText(){
 }
 function setHeaderWeek(){
   const el=document.getElementById('header-week');
-  if(el) el.innerHTML=`Session ${SESSION_NUM} — Week ${WEEK_NUM} <span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
+  if(el) el.innerHTML=`Session ${SESSION_NUM} — Week ${WEEK_NUM}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
 }
 
 function buildSchedTabs(){
