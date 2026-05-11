@@ -775,8 +775,8 @@ function renderTeamNotes(){
   list.innerHTML=active.map(n=>`<li><span class="tn-who">${n.who}</span> ${n.what} <span class="tn-date">— ${fmtNoteRange(n.start,n.end)}</span></li>`).join('');
 }
 
-// Week of May 18, 2026 (Mon) — Session 3 Week 9
-const WEEK_START = new Date(2026, 4, 18);
+// Week of May 11, 2026 (Mon) — Session 3 Week 9
+const WEEK_START = new Date(2026, 4, 11);
 const SESSION_NUM = 3, WEEK_NUM = 9;
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function dateForDay(i){ const d=new Date(WEEK_START); d.setDate(d.getDate()+i); return d; }
