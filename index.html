@@ -295,6 +295,17 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 .policy{font-size:12px;color:var(--gray-500);line-height:1.5}
 .success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
 </style>
+
+<!-- OneSignal Web Push -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "c95f53b2-4df0-4ea8-9771-a4773201e7fd",
+    });
+  });
+</script>
 </head>
 <body class="locked">
 
