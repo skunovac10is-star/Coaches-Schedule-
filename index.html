@@ -31,8 +31,10 @@ button:active,.coach-tap:active,.dtab:active,.pill label:active,.cf-btn:active,.
 
 /* Bottom tab bar — mobile only */
 .tabbar{display:none;position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--gray-200);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:150;justify-content:space-around}
-.tabbar-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;color:var(--gray-500);cursor:pointer;font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;min-height:52px;border-radius:10px;transition:color .15s}
-.tabbar-item.active{color:var(--red)}
+.tabbar-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;color:var(--gray-500);cursor:pointer;font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;min-height:52px;border-radius:10px;transition:all .15s;margin:0 4px}
+.tabbar-item.active{color:#1164A3;background:rgba(17,100,163,.12);font-weight:800}
+.tabbar-item.active .tabbar-icon{transform:scale(1.08)}
+.tabbar-item.active .tabbar-label{font-weight:800}
 .tabbar-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1}
 .tabbar-label{font-size:10px;letter-spacing:.3px}
 
@@ -94,6 +96,7 @@ body.locked > *:not(#gate){display:none !important}
 .tab[data-icon="mine"]::before{content:"★"}
 .tab[data-icon="coverage"]::before{content:"◉"}
 .tab[data-icon="request"]::before{content:"✈"}
+.tab[data-icon="news"]::before{content:"📣"}
 body{padding-left:240px;padding-top:58px}
 
 @media (max-width:900px){
@@ -294,6 +297,24 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 .btn-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}
 .policy{font-size:12px;color:var(--gray-500);line-height:1.5}
 .success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
+.news-head{margin-bottom:1.25rem}
+.news-title{font-size:24px;font-weight:700;color:var(--black);letter-spacing:-.2px;margin-bottom:4px}
+.news-sub{font-size:13px;color:var(--gray-500)}
+.news-list{display:flex;flex-direction:column;gap:.75rem}
+.news-item{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem 1.1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.news-item.pinned{border-left:3px solid #C9A227;background:#FFFBEC}
+.news-item.alert{border-left:3px solid #D04545}
+.news-item.info{border-left:3px solid #1164A3}
+.news-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.news-date{font-size:11px;color:var(--gray-500);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.news-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;letter-spacing:.4px;text-transform:uppercase}
+.news-tag.pinned{background:#FFF1C2;color:#6B4B00}
+.news-tag.alert{background:#FAD7D7;color:#8A1313}
+.news-tag.info{background:#DDEBFA;color:#0C447C}
+.news-item-title{font-size:15px;font-weight:700;color:var(--black);margin-bottom:6px;line-height:1.3}
+.news-item-body{font-size:13.5px;color:var(--gray-700);line-height:1.55}
+.news-empty{text-align:center;padding:3rem 1rem;color:var(--gray-500);font-size:13px;background:#fff;border:1px dashed var(--gray-300);border-radius:var(--rlg)}
+@media (max-width:640px){.news-title{font-size:20px}.news-item{padding:.85rem .95rem}}
 </style>
 
 <!-- OneSignal Web Push -->
@@ -364,6 +385,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   <div class="tab" data-icon="mine" onclick="switchTab('mine')">My schedule</div>
   <div class="tab" data-icon="coverage" onclick="switchTab('coverage')">Who's available</div>
   <div class="tab" data-icon="request" onclick="switchTab('request')">Request time off</div>
+  <div class="tab" data-icon="news" onclick="switchTab('news')">What's new</div>
 
   <div class="sidebar-legend">
     <div class="sl-title">Legend</div>
@@ -398,6 +420,9 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   </div>
   <div class="tabbar-item" data-tab="request" onclick="switchTab('request')">
     <div class="tabbar-icon">🏝️</div><div class="tabbar-label">Time off</div>
+  </div>
+  <div class="tabbar-item" data-tab="news" onclick="switchTab('news')">
+    <div class="tabbar-icon">📣</div><div class="tabbar-label">News</div>
   </div>
 </nav>
 
@@ -539,6 +564,16 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   <div class="success-msg" id="success-msg">Request submitted. Sanjin, Kat and the front desk have been notified.</div>
 </div>
 
+<!-- ===== WHAT'S NEW TAB ===== -->
+<div class="panel" id="tab-news">
+  <div class="news-head">
+    <div class="news-title">What's new</div>
+    <div class="news-sub">Recent updates and announcements. Newest first.</div>
+  </div>
+  <div id="news-list" class="news-list"></div>
+  <div id="news-empty" class="news-empty" style="display:none">No updates yet. Check back soon.</div>
+</div>
+
 <script>
 const DAYS_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
@@ -670,6 +705,45 @@ function renderSchedule(day){
     row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
     tl.appendChild(row);
   });
+}
+
+// ---- WHAT'S NEW ---- (edit this list to add announcements)
+// type: 'pinned' (yellow, stays up top), 'alert' (red, urgent), 'info' (blue, general)
+// date: 'YYYY-MM-DD'
+const NEWS_ITEMS = [
+  {date:'2026-05-11', type:'info', title:'New: push notifications are live',
+   body:"You can now get push alerts from this app for urgent schedule changes, cancellations, and coverage needs. Make sure you tapped Allow when you opened the app. If you missed the prompt, check your phone Settings → Notifications → enable for LEGACY."},
+  {date:'2026-05-11', type:'info', title:'Schedule app launched',
+   body:"Welcome to the new Legacy coaches schedule app. Use it to see who's coaching, check who's free, request time off, and stay current on team updates. Text Sanjin with feedback."},
+];
+
+function fmtNewsDate(s){
+  const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=new Date(s+'T12:00:00');
+  return `${ms[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+function renderNews(){
+  const list=document.getElementById('news-list');
+  const empty=document.getElementById('news-empty');
+  if(!list) return;
+  if(!NEWS_ITEMS.length){ list.innerHTML=''; if(empty) empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  // Sort: pinned first, then newest date
+  const sorted=[...NEWS_ITEMS].sort((a,b)=>{
+    if((a.type==='pinned')!==(b.type==='pinned')) return a.type==='pinned'?-1:1;
+    return b.date.localeCompare(a.date);
+  });
+  list.innerHTML=sorted.map(n=>{
+    const tagLabel = n.type==='pinned'?'Pinned':n.type==='alert'?'Alert':'Update';
+    return `<div class="news-item ${n.type}">
+      <div class="news-meta">
+        <span class="news-tag ${n.type}">${tagLabel}</span>
+        <span class="news-date">${fmtNewsDate(n.date)}</span>
+      </div>
+      <div class="news-item-title">${n.title}</div>
+      <div class="news-item-body">${n.body}</div>
+    </div>`;
+  }).join('');
 }
 
 // ---- TEAM NOTES ---- (edit this list to update the banner)
@@ -1226,6 +1300,7 @@ function showMine(){
   }
 }
 
+renderNews();
 renderTeamNotes();
 buildSchedTabs();
 renderSchedule('Monday');
