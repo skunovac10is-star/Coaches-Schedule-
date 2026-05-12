@@ -44,8 +44,8 @@ button:active,.coach-tap:active,.dtab:active,.pill label:active,.cf-btn:active,.
   .tabbar{display:flex}
   body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
   .panel{padding:1rem 1rem 1.5rem}
-  .site-header{height:calc(58px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 1.1rem 0;box-sizing:border-box}
-  body{padding-top:calc(58px + env(safe-area-inset-top))}
+  .site-header{height:calc(58px + max(env(safe-area-inset-top), 50px));padding:max(env(safe-area-inset-top), 50px) 1.1rem 0;box-sizing:border-box}
+  body{padding-top:calc(58px + max(env(safe-area-inset-top), 50px))}
   .logo-name{font-size:18px}
   .header-week{font-size:10.5px;text-align:right;line-height:1.2;max-width:130px;white-space:normal}
   .header-week span{display:block;font-size:9.5px}
