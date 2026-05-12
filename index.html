@@ -10,6 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="LEGACY">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23611F69'/><text x='90' y='128' font-family='Arial Black,sans-serif' font-size='120' font-weight='900' fill='white' text-anchor='middle'>L</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23611F69'/><text x='32' y='46' font-family='Arial Black,sans-serif' font-size='42' font-weight='900' fill='white' text-anchor='middle'>L</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -112,13 +113,23 @@ body{padding-left:240px;padding-top:58px}
 @keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* ==================== SCHEDULE TAB ==================== */
-.push-banner{display:flex;align-items:center;gap:10px;background:#1164A3;color:#fff;border-radius:var(--rlg);padding:.7rem 1rem;margin-bottom:1rem;box-shadow:0 4px 14px rgba(17,100,163,.25)}
-.push-banner .pb-icon{font-size:18px;flex-shrink:0}
-.push-banner .pb-text{flex:1;font-size:13.5px;font-weight:600;line-height:1.3}
-.push-banner .pb-btn{background:#fff;color:#1164A3;border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0}
-.push-banner .pb-btn:hover{background:#E6F1FB}
-.push-banner .pb-x{background:transparent;color:rgba(255,255,255,.7);border:none;font-size:14px;cursor:pointer;padding:4px 8px;flex-shrink:0}
-@media (max-width:640px){.push-banner{padding:.6rem .8rem}.push-banner .pb-text{font-size:12.5px}}
+.notif-prefs{background:#fff;border:1px solid var(--gray-200);border-left:3px solid #1164A3;border-radius:var(--rlg);padding:1rem 1.1rem;margin-bottom:1.25rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.np-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:.85rem}
+.np-icon{font-size:20px;line-height:1}
+.np-title-block{flex:1;min-width:0}
+.np-title{font-size:15px;font-weight:700;color:var(--black);margin-bottom:2px}
+.np-sub{font-size:12.5px;color:var(--gray-500);line-height:1.4}
+.np-sub.subscribed{color:#1F6B3A;font-weight:600}
+.np-options{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.85rem}
+.np-opt{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--gray-700);line-height:1.45;cursor:pointer;padding:6px 4px;border-radius:6px}
+.np-opt:hover{background:var(--gray-50)}
+.np-opt input{margin-top:3px;width:16px;height:16px;cursor:pointer;flex-shrink:0;accent-color:#1164A3}
+.np-opt-text{flex:1}
+.np-opt-text b{color:var(--black);font-weight:700}
+.np-btn{width:100%;background:#1164A3;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;transition:filter .12s}
+.np-btn:hover{filter:brightness(1.05)}
+.np-btn.subscribed{background:#3FB664}
+.np-foot{font-size:11.5px;color:var(--gray-500);margin-top:.7rem;line-height:1.5}
 .admin-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#0F1014;color:#fff;border-radius:var(--rlg);padding:.75rem 1rem;margin-bottom:1rem}
 .admin-bar .ab-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-right:8px}
 .admin-bar .ab-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18);padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .12s}
@@ -484,12 +495,6 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 
 <!-- ===== SCHEDULE TAB ===== -->
 <div class="panel active" id="tab-schedule">
-  <div class="push-banner" id="push-banner" style="display:none">
-    <span class="pb-icon">🔔</span>
-    <span class="pb-text">Get a push alert for urgent schedule changes</span>
-    <button class="pb-btn" onclick="enablePush()">Enable</button>
-    <button class="pb-x" onclick="dismissPush()" aria-label="Dismiss">✕</button>
-  </div>
   <div class="admin-bar" id="admin-bar" style="display:none">
     <div class="ab-label">Admin tools</div>
     <button class="ab-btn" onclick="exportWeekJSON()">📥 Save snapshot (JSON)</button>
@@ -639,6 +644,23 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
     <div class="news-title">What's new</div>
     <div class="news-sub">Recent updates and announcements. Newest first.</div>
   </div>
+
+  <div class="notif-prefs" id="notif-prefs">
+    <div class="np-head">
+      <span class="np-icon">🔔</span>
+      <div class="np-title-block">
+        <div class="np-title">Push notifications</div>
+        <div class="np-sub" id="np-status">Choose what you want a phone alert for</div>
+      </div>
+    </div>
+    <div class="np-options">
+      <label class="np-opt"><input type="checkbox" id="np-alerts" data-tag="sub_alerts" checked> <span class="np-opt-text"><b>🚨 Alerts</b> — urgent, time-sensitive (Gabe out, clinic cancelled, etc.)</span></label>
+      <label class="np-opt"><input type="checkbox" id="np-calendar" data-tag="sub_calendar"> <span class="np-opt-text"><b>📅 Dates to remember</b> — upcoming events Sanjin posts</span></label>
+      <label class="np-opt"><input type="checkbox" id="np-general" data-tag="sub_general"> <span class="np-opt-text"><b>📰 All feeds</b> — every update, including small ones</span></label>
+    </div>
+    <button class="np-btn" id="np-btn" onclick="savePushPrefs()">Save & enable notifications</button>
+    <div class="np-foot" id="np-foot">If you don't see a permission prompt after tapping Save, make sure you opened the app from your Home Screen icon (not Safari). On iPhone, go to Settings → Notifications → LEGACY to enable.</div>
+  </div>
   <div class="news-tabs" id="news-tabs">
     <button class="ntab active" data-cat="alert">🚨 Alerts <span class="ntab-count" id="nt-c-alert">0</span></button>
     <button class="ntab" data-cat="all">📰 All feeds <span class="ntab-count" id="nt-c-all">0</span></button>
@@ -731,42 +753,72 @@ const SCHEDULE = {
   ]
 };
 
-// ---- PUSH NOTIFICATION OPT-IN ----
-async function checkPushBanner(){
-  const banner=document.getElementById('push-banner');
-  if(!banner) return;
-  if(localStorage.getItem('lyte_push_dismissed')==='1') return;
-  // Wait for OneSignal to be ready
-  try {
-    await new Promise(r=>{
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      window.OneSignalDeferred.push(()=>r());
-    });
-    const optedIn = window.OneSignal && OneSignal.User && OneSignal.User.PushSubscription
-      ? OneSignal.User.PushSubscription.optedIn : false;
-    if(!optedIn) banner.style.display='flex';
-  } catch(e) { console.log('[push] check error', e); }
+// ---- PUSH NOTIFICATION PREFS ----
+async function waitForOneSignal(){
+  return new Promise(r=>{
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(os=>r(os));
+  });
 }
-async function enablePush(){
+async function refreshPushUI(){
+  const status=document.getElementById('np-status');
+  const btn=document.getElementById('np-btn');
+  if(!status||!btn) return;
+  const os = await waitForOneSignal().catch(()=>null);
+  const optedIn = os && os.User && os.User.PushSubscription ? os.User.PushSubscription.optedIn : false;
+  if(optedIn){
+    status.textContent = "You're subscribed. Update what you want to be notified about below.";
+    status.classList.add('subscribed');
+    btn.textContent = 'Update preferences';
+    btn.classList.add('subscribed');
+    // Restore saved checkbox state
+    try {
+      const tags = await os.User.getTags();
+      ['sub_alerts','sub_calendar','sub_general'].forEach(t=>{
+        const cb = document.querySelector(`input[data-tag="${t}"]`);
+        if(cb) cb.checked = tags && tags[t]==='1';
+      });
+    } catch(e){ console.log('[push] getTags error', e); }
+  } else {
+    status.textContent = 'Choose what you want a phone alert for, then tap Save.';
+    status.classList.remove('subscribed');
+    btn.textContent = 'Save & enable notifications';
+    btn.classList.remove('subscribed');
+  }
+}
+async function savePushPrefs(){
+  const btn=document.getElementById('np-btn');
+  btn.disabled = true;
+  btn.textContent = 'Working…';
   try {
-    if(window.OneSignal && OneSignal.Notifications){
-      await OneSignal.Notifications.requestPermission();
+    const os = await waitForOneSignal();
+    // 1. Request permission (user-initiated tap satisfies iOS)
+    let permission = (os.Notifications && os.Notifications.permission) || Notification.permission;
+    if(permission !== 'granted'){
+      await os.Notifications.requestPermission();
+      permission = (os.Notifications && os.Notifications.permission) || Notification.permission;
     }
-    setTimeout(()=>{
-      const opted = window.OneSignal && OneSignal.User && OneSignal.User.PushSubscription
-        ? OneSignal.User.PushSubscription.optedIn : false;
-      if(opted){
-        document.getElementById('push-banner').style.display='none';
-        alert('You\'re subscribed. You\'ll get a push for urgent schedule changes.');
-      } else {
-        alert('If you didn\'t see a permission prompt, your browser may have blocked notifications. Open Settings → Notifications → LEGACY → turn them on.');
-      }
-    }, 1500);
-  } catch(e){ console.log('[push] enable error', e); }
-}
-function dismissPush(){
-  localStorage.setItem('lyte_push_dismissed','1');
-  document.getElementById('push-banner').style.display='none';
+    if(permission !== 'granted'){
+      alert("Notifications were blocked.\n\nOn iPhone: open Settings → Notifications → scroll to LEGACY → toggle ON.\nThen come back and tap Save again.");
+      await refreshPushUI(); btn.disabled=false; return;
+    }
+    // 2. Make sure we're opted-in on OneSignal's side
+    try { await os.User.PushSubscription.optIn(); } catch(e){}
+    // 3. Save tags reflecting preferences
+    const tags = {};
+    document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{
+      tags[cb.dataset.tag] = cb.checked ? '1' : '0';
+    });
+    await os.User.addTags(tags);
+    await refreshPushUI();
+    btn.disabled=false;
+    alert("You're subscribed. We'll send you a push for whatever you checked.");
+  } catch(e){
+    console.log('[push] save error', e);
+    btn.disabled=false;
+    btn.textContent='Save & enable notifications';
+    alert("Something went wrong. Make sure you opened the app from the Home Screen icon, not Safari. Then try again.");
+  }
 }
 
 // ---- ADMIN (Sanjin only) ----
@@ -1542,7 +1594,7 @@ function showMine(){
 }
 
 showAdminBar();
-checkPushBanner();
+refreshPushUI();
 wireNewsTabs();
 renderNews();
 renderTeamNotes();
