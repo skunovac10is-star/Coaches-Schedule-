@@ -598,8 +598,8 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   </div>
   <div class="news-tabs" id="news-tabs">
     <button class="ntab active" data-cat="alert">🚨 Alerts <span class="ntab-count" id="nt-c-alert">0</span></button>
-    <button class="ntab" data-cat="info">📰 General <span class="ntab-count" id="nt-c-info">0</span></button>
-    <button class="ntab" data-cat="calendar">📅 Dates <span class="ntab-count" id="nt-c-calendar">0</span></button>
+    <button class="ntab" data-cat="all">📰 All feeds <span class="ntab-count" id="nt-c-all">0</span></button>
+    <button class="ntab" data-cat="calendar">📅 Dates to remember <span class="ntab-count" id="nt-c-calendar">0</span></button>
   </div>
   <div id="news-list" class="news-list"></div>
   <div id="news-empty" class="news-empty" style="display:none">No updates in this category yet.</div>
@@ -819,23 +819,49 @@ function fmtNewsDate(s){
   const d=new Date(s+'T12:00:00');
   return `${ms[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }
+function thisWeekRange(){
+  const start=new Date(WEEK_START); start.setHours(0,0,0,0);
+  const end=new Date(WEEK_START); end.setDate(end.getDate()+6); end.setHours(23,59,59,999);
+  return {start,end};
+}
+function inThisWeek(dateStr){
+  const r=thisWeekRange();
+  const d=new Date(dateStr+'T12:00:00');
+  return d>=r.start && d<=r.end;
+}
+function newsForCategory(cat){
+  if(cat==='alert')   return NEWS_ITEMS.filter(n=>n.type==='alert' && inThisWeek(n.date));
+  if(cat==='calendar')return NEWS_ITEMS.filter(n=>n.type==='calendar');
+  /* all */           return [...NEWS_ITEMS];
+}
 function newsCounts(){
-  const c={alert:0,info:0,calendar:0};
-  NEWS_ITEMS.forEach(n=>{ if(c[n.type]!=null) c[n.type]++; });
-  return c;
+  return {
+    alert: newsForCategory('alert').length,
+    all: NEWS_ITEMS.length,
+    calendar: newsForCategory('calendar').length,
+  };
 }
 function renderNews(){
   const list=document.getElementById('news-list');
   const empty=document.getElementById('news-empty');
   if(!list) return;
-  // Update counts on the sub-tabs
   const c=newsCounts();
-  ['alert','info','calendar'].forEach(cat=>{
+  ['alert','all','calendar'].forEach(cat=>{
     const el=document.getElementById('nt-c-'+cat); if(el) el.textContent=c[cat];
   });
-  // Filter by active category
-  const items=NEWS_ITEMS.filter(n=>n.type===_activeNewsCat);
-  if(!items.length){ list.innerHTML=''; if(empty) empty.style.display='block'; return; }
+  const items=newsForCategory(_activeNewsCat);
+  if(!items.length){
+    list.innerHTML='';
+    if(empty){
+      empty.style.display='block';
+      empty.textContent = _activeNewsCat==='alert'
+        ? 'No alerts this week. All clear.'
+        : _activeNewsCat==='calendar'
+          ? 'No dates added yet. Sanjin will post them here as they come up.'
+          : 'No updates yet.';
+    }
+    return;
+  }
   if(empty) empty.style.display='none';
   // Calendar: sort by eventDate ascending (upcoming first). Others: newest post date first.
   const sorted=[...items].sort((a,b)=>{
