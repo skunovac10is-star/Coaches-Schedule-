@@ -110,6 +110,19 @@ body{padding-left:240px;padding-top:58px}
 @keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* ==================== SCHEDULE TAB ==================== */
+.admin-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#0F1014;color:#fff;border-radius:var(--rlg);padding:.75rem 1rem;margin-bottom:1rem}
+.admin-bar .ab-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-right:8px}
+.admin-bar .ab-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18);padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .12s}
+.admin-bar .ab-btn:hover{background:rgba(255,255,255,.18)}
+.admin-bar .ab-btn.ab-exit{margin-left:auto;background:transparent;color:rgba(255,255,255,.6);border-color:transparent}
+.admin-bar .ab-btn.ab-exit:hover{color:#fff}
+@media (max-width:640px){.admin-bar{padding:.6rem .7rem}.admin-bar .ab-btn{font-size:11.5px;padding:6px 10px}.admin-bar .ab-btn.ab-exit{margin-left:0}}
+@media print{
+  .site-header,.tabs,.tabbar,.day-tabs,.admin-bar,.team-notes{display:none !important}
+  body{padding:0;background:#fff}
+  .panel{padding:0;max-width:none}
+  .t-row{break-inside:avoid;page-break-inside:avoid}
+}
 .team-notes{background:#FFF7DB;border:1px solid #F0D97A;border-left:3px solid #C9A227;border-radius:var(--rlg);padding:.85rem 1rem;margin-bottom:1rem}
 .tn-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .tn-icon{font-size:14px}
@@ -428,6 +441,13 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 
 <!-- ===== SCHEDULE TAB ===== -->
 <div class="panel active" id="tab-schedule">
+  <div class="admin-bar" id="admin-bar" style="display:none">
+    <div class="ab-label">Admin tools</div>
+    <button class="ab-btn" onclick="exportWeekJSON()">📥 Save snapshot (JSON)</button>
+    <button class="ab-btn" onclick="printWeek()">🖨️ Print / Save PDF</button>
+    <button class="ab-btn" onclick="showResetHelp()">♻️ Reset to template</button>
+    <button class="ab-btn ab-exit" onclick="exitAdmin()">Exit admin</button>
+  </div>
   <div class="team-notes" id="team-notes" style="display:none">
     <div class="tn-head"><span class="tn-icon">📌</span><span class="tn-title">Team notes</span></div>
     <ul class="tn-list" id="tn-list"></ul>
@@ -657,6 +677,65 @@ const SCHEDULE = {
   ]
 };
 
+// ---- ADMIN (Sanjin only) ----
+// Activate with URL ?admin=Legacy2026 — persists in sessionStorage until tab is closed.
+const ADMIN_PASS = 'Legacy2026';
+function isAdmin(){
+  const url=new URLSearchParams(location.search);
+  if(url.get('admin')===ADMIN_PASS){ sessionStorage.setItem('lyte_admin','1'); }
+  return sessionStorage.getItem('lyte_admin')==='1';
+}
+function showAdminBar(){
+  if(!isAdmin()) return;
+  const bar=document.getElementById('admin-bar');
+  if(bar) bar.style.display='flex';
+}
+function exitAdmin(){
+  sessionStorage.removeItem('lyte_admin');
+  const bar=document.getElementById('admin-bar');
+  if(bar) bar.style.display='none';
+}
+function exportWeekJSON(){
+  const data={
+    session:SESSION_NUM, week:WEEK_NUM,
+    weekStart:WEEK_START.toISOString().slice(0,10),
+    weekRange:weekRangeText(),
+    teamNotes:TEAM_NOTES, schedule:SCHEDULE, exportedAt:new Date().toISOString()
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`legacy-week${WEEK_NUM}-${data.weekStart}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function printWeek(){
+  // Render all 7 days inline before printing, then restore
+  const tl=document.getElementById('timeline');
+  const original=tl.innerHTML;
+  let html='';
+  DAYS_ORDER.forEach((d,i)=>{
+    const dt=dateForDay(i);
+    html+=`<h2 style="font-family:Inter,sans-serif;margin:18px 0 8px;font-size:16px;border-bottom:2px solid #000;padding-bottom:4px">${d} — ${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}</h2>`;
+    (SCHEDULE[d]||[]).forEach(s=>{
+      const chips=s.coaches.join(', ');
+      const ct=(s.courts!=null)?s.courts:(DEFAULT_COURTS[s.type]||1);
+      html+=`<div style="margin:4px 0;font-size:12px;line-height:1.4"><b>${s.time}</b> &nbsp; ${s.name} <span style="color:#666">(${ct} courts, ${s.coaches.length} coaches)</span><br><span style="margin-left:1rem">${chips}</span></div>`;
+    });
+  });
+  // Header
+  const banner=`<div style="margin-bottom:12px"><h1 style="font-family:Inter,sans-serif;font-size:22px;margin:0">LEGACY YTE — Session ${SESSION_NUM} Week ${WEEK_NUM}</h1><div style="font-size:13px;color:#444">${weekRangeText()}</div></div>`;
+  tl.innerHTML=banner+html;
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{ tl.innerHTML=original; renderSchedule(todayDayName()); }, 500);
+  }, 100);
+}
+function showResetHelp(){
+  alert("To reset this week's schedule back to the recurring template (wipes any in-week coverage swaps), tell Sanjin's AI:\n\n\"Reset this week's schedule to the template\"\n\nThe AI will revert all 7 days to your standard recurring schedule and push the change. Takes ~30 seconds.");
+}
+
 function getScheduledAbbrs(dayName){
   const d = SCHEDULE[dayName]; if(!d) return new Set();
   const s = new Set(); d.forEach(sess=>sess.coaches.forEach(c=>s.add(c))); return s;
@@ -711,6 +790,8 @@ function renderSchedule(day){
 // type: 'pinned' (yellow, stays up top), 'alert' (red, urgent), 'info' (blue, general)
 // date: 'YYYY-MM-DD'
 const NEWS_ITEMS = [
+  {date:'2026-05-12', type:'alert', title:'Gabe K out today — coverage set',
+   body:"Heads up team: Gabe K is out today (Tue 5/12). Coverage: Anna M is covering Adult 3.5+, Bella N is covering Comp Clinic. The TT1 slot is unfilled — we won't need it tonight. Schedule is updated to reflect this."},
   {date:'2026-05-11', type:'pinned', title:'New "What\'s New" tab is live',
    body:"Team — after our meeting I took your feedback and added this section. From now on you can come here to see all updates and major announcements/changes in one place. We'll keep making improvements as we go!"},
   {date:'2026-05-11', type:'info', title:'New: push notifications are live',
@@ -1310,6 +1391,7 @@ function showMine(){
   }
 }
 
+showAdminBar();
 renderNews();
 renderTeamNotes();
 buildSchedTabs();
