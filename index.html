@@ -763,7 +763,17 @@ async function waitForOneSignal(){
 async function refreshPushUI(){
   const status=document.getElementById('np-status');
   const btn=document.getElementById('np-btn');
+  const foot=document.getElementById('np-foot');
   if(!status||!btn) return;
+  // Show iOS-Safari warning prominently when applicable
+  if(isIOS() && !isStandalone()){
+    status.textContent = "Add to Home Screen first — iPhone push won't work in Safari.";
+    status.classList.remove('subscribed');
+    btn.textContent = 'How to add to Home Screen';
+    btn.classList.remove('subscribed');
+    if(foot){ foot.innerHTML = "<b>iPhone steps:</b> Tap the Share button (square with up arrow) at the bottom of Safari → scroll → tap <b>Add to Home Screen</b> → tap Add. Open the new icon from your Home Screen and come back to this page."; }
+    return;
+  }
   const os = await waitForOneSignal().catch(()=>null);
   const optedIn = os && os.User && os.User.PushSubscription ? os.User.PushSubscription.optedIn : false;
   if(optedIn){
@@ -786,30 +796,49 @@ async function refreshPushUI(){
     btn.classList.remove('subscribed');
   }
 }
+function isIOS(){
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+function isStandalone(){
+  return window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches;
+}
+function withTimeout(promise, ms, label){
+  return Promise.race([
+    promise,
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error('Timeout: '+label)), ms))
+  ]);
+}
 async function savePushPrefs(){
   const btn=document.getElementById('np-btn');
+  // iOS gate — push only works in PWA-from-home-screen on iPhone/iPad
+  if(isIOS() && !isStandalone()){
+    alert("To get push notifications on iPhone, the app needs to be installed to your Home Screen first.\n\nSteps:\n1. Tap the Share button at the bottom of Safari (square with up arrow)\n2. Scroll and tap 'Add to Home Screen'\n3. Tap 'Add'\n4. Open the app from the new icon on your Home Screen\n5. Come back here and tap Save again");
+    return;
+  }
   btn.disabled = true;
   btn.textContent = 'Working…';
+  const resetBtn=()=>{ btn.disabled=false; refreshPushUI(); };
   try {
-    const os = await waitForOneSignal();
+    const os = await withTimeout(waitForOneSignal(), 6000, 'OneSignal init');
     // 1. Request permission (user-initiated tap satisfies iOS)
     let permission = (os.Notifications && os.Notifications.permission) || Notification.permission;
     if(permission !== 'granted'){
-      await os.Notifications.requestPermission();
+      try { await withTimeout(os.Notifications.requestPermission(), 15000, 'permission'); } catch(e){}
       permission = (os.Notifications && os.Notifications.permission) || Notification.permission;
     }
     if(permission !== 'granted'){
-      alert("Notifications were blocked.\n\nOn iPhone: open Settings → Notifications → scroll to LEGACY → toggle ON.\nThen come back and tap Save again.");
-      await refreshPushUI(); btn.disabled=false; return;
+      alert("Notifications were blocked or dismissed.\n\nOn iPhone: open Settings → Notifications → scroll to LEGACY → toggle ON. Then come back and tap Save again.");
+      resetBtn(); return;
     }
     // 2. Make sure we're opted-in on OneSignal's side
-    try { await os.User.PushSubscription.optIn(); } catch(e){}
+    try { await withTimeout(os.User.PushSubscription.optIn(), 8000, 'optIn'); } catch(e){ console.log('[push] optIn warning', e); }
     // 3. Save tags reflecting preferences
     const tags = {};
     document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{
       tags[cb.dataset.tag] = cb.checked ? '1' : '0';
     });
-    await os.User.addTags(tags);
+    try { await withTimeout(os.User.addTags(tags), 6000, 'addTags'); } catch(e){ console.log('[push] addTags warning', e); }
     await refreshPushUI();
     btn.disabled=false;
     alert("You're subscribed. We'll send you a push for whatever you checked.");
@@ -817,7 +846,11 @@ async function savePushPrefs(){
     console.log('[push] save error', e);
     btn.disabled=false;
     btn.textContent='Save & enable notifications';
-    alert("Something went wrong. Make sure you opened the app from the Home Screen icon, not Safari. Then try again.");
+    if(isIOS() && !isStandalone()){
+      alert("This needs the app to be installed to your Home Screen first. Tap Share → Add to Home Screen, then open from the new icon.");
+    } else {
+      alert("Couldn't enable notifications. Open Settings → Notifications → LEGACY and turn them on, then try again.");
+    }
   }
 }
 
