@@ -351,7 +351,29 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "c95f53b2-4df0-4ea8-9771-a4773201e7fd",
+      autoResubscribe: true,
+      notifyButton: { enable: false },
+      promptOptions: {
+        slidedown: {
+          prompts: [{
+            type: "push",
+            autoPrompt: true,
+            text: {
+              actionMessage: "Get notified about urgent schedule changes and coverage needs.",
+              acceptButton: "Allow",
+              cancelButton: "Not now"
+            },
+            delay: { pageViews: 1, timeDelay: 3 }
+          }]
+        }
+      }
     });
+    // Log subscription state for debugging
+    try {
+      const optedIn = OneSignal.User.PushSubscription.optedIn;
+      const id = OneSignal.User.PushSubscription.id;
+      console.log('[OneSignal] optedIn:', optedIn, 'subId:', id);
+    } catch(e){ console.log('[OneSignal] state probe error:', e); }
   });
 </script>
 </head>
