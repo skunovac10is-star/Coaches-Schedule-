@@ -902,16 +902,17 @@ function wireNewsTabs(){
 // Notes auto-hide after `end` passes.
 const TEAM_NOTES = [
   {who:'Gabe K',       what:'out today — Anna M covering Adult 3.5+, Bella N covering Comp Clinic, TT1 slot not needed', start:'2026-05-12', end:'2026-05-12'},
+  // ^ renders as: "Gabe K 5/12 out today — Anna M covering ..."
   {who:'Kat & Sanjin', what:'on vacation', start:'2026-05-14', end:'2026-05-18'},
   {who:'Andrew W',     what:'on vacation', start:'2026-05-18', end:'2026-05-27'},
   {who:'Aleix C',      what:'away',        start:'2026-06-01', end:'2026-06-13'},
 ];
 
 function fmtNoteRange(s, e){
-  const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const sd=new Date(s+'T12:00:00'), ed=new Date(e+'T12:00:00');
-  if(sd.getMonth()===ed.getMonth()) return `${ms[sd.getMonth()]} ${sd.getDate()}–${ed.getDate()}`;
-  return `${ms[sd.getMonth()]} ${sd.getDate()} – ${ms[ed.getMonth()]} ${ed.getDate()}`;
+  if(s===e) return `${sd.getMonth()+1}/${sd.getDate()}`;
+  if(sd.getMonth()===ed.getMonth()) return `${sd.getMonth()+1}/${sd.getDate()}–${ed.getDate()}`;
+  return `${sd.getMonth()+1}/${sd.getDate()} – ${ed.getMonth()+1}/${ed.getDate()}`;
 }
 function renderTeamNotes(){
   const wrap=document.getElementById('team-notes');
@@ -922,7 +923,7 @@ function renderTeamNotes(){
     .sort((a,b)=>a.start.localeCompare(b.start));
   if(!active.length){ wrap.style.display='none'; return; }
   wrap.style.display='block';
-  list.innerHTML=active.map(n=>`<li><span class="tn-who">${n.who}</span> ${n.what} <span class="tn-date">— ${fmtNoteRange(n.start,n.end)}</span></li>`).join('');
+  list.innerHTML=active.map(n=>`<li><span class="tn-who">${n.who}</span> <span class="tn-date">${fmtNoteRange(n.start,n.end)}</span> ${n.what}</li>`).join('');
 }
 
 // Week of May 11, 2026 (Mon) — Session 3 Week 9
