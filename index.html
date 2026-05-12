@@ -310,20 +310,26 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 .btn-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}
 .policy{font-size:12px;color:var(--gray-500);line-height:1.5}
 .success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
-.news-head{margin-bottom:1.25rem}
+.news-head{margin-bottom:1rem}
 .news-title{font-size:24px;font-weight:700;color:var(--black);letter-spacing:-.2px;margin-bottom:4px}
 .news-sub{font-size:13px;color:var(--gray-500)}
+.news-tabs{display:flex;gap:6px;margin-bottom:1.1rem;flex-wrap:wrap}
+.ntab{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:14px;border:1.5px solid var(--gray-200);background:#fff;color:var(--gray-700);font-size:13px;font-weight:600;cursor:pointer;transition:all .12s;letter-spacing:.2px}
+.ntab:hover{border-color:var(--black);color:var(--black)}
+.ntab.active{background:var(--black);border-color:var(--black);color:#fff;box-shadow:0 4px 12px rgba(10,10,10,.15)}
+.ntab-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;font-size:10.5px;font-weight:800;background:var(--gray-100);color:var(--gray-700);border-radius:9px;letter-spacing:0}
+.ntab.active .ntab-count{background:rgba(255,255,255,.18);color:#fff}
 .news-list{display:flex;flex-direction:column;gap:.75rem}
 .news-item{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem 1.1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
-.news-item.pinned{border-left:3px solid #C9A227;background:#FFFBEC}
 .news-item.alert{border-left:3px solid #D04545}
 .news-item.info{border-left:3px solid #1164A3}
+.news-item.calendar{border-left:3px solid #C9A227;background:#FFFBEC}
 .news-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
 .news-date{font-size:11px;color:var(--gray-500);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
 .news-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;letter-spacing:.4px;text-transform:uppercase}
-.news-tag.pinned{background:#FFF1C2;color:#6B4B00}
 .news-tag.alert{background:#FAD7D7;color:#8A1313}
 .news-tag.info{background:#DDEBFA;color:#0C447C}
+.news-tag.calendar{background:#FFF1C2;color:#6B4B00}
 .news-item-title{font-size:15px;font-weight:700;color:var(--black);margin-bottom:6px;line-height:1.3}
 .news-item-body{font-size:13.5px;color:var(--gray-700);line-height:1.55}
 .news-empty{text-align:center;padding:3rem 1rem;color:var(--gray-500);font-size:13px;background:#fff;border:1px dashed var(--gray-300);border-radius:var(--rlg)}
@@ -590,8 +596,13 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
     <div class="news-title">What's new</div>
     <div class="news-sub">Recent updates and announcements. Newest first.</div>
   </div>
+  <div class="news-tabs" id="news-tabs">
+    <button class="ntab active" data-cat="alert">🚨 Alerts <span class="ntab-count" id="nt-c-alert">0</span></button>
+    <button class="ntab" data-cat="info">📰 General <span class="ntab-count" id="nt-c-info">0</span></button>
+    <button class="ntab" data-cat="calendar">📅 Dates <span class="ntab-count" id="nt-c-calendar">0</span></button>
+  </div>
   <div id="news-list" class="news-list"></div>
-  <div id="news-empty" class="news-empty" style="display:none">No updates yet. Check back soon.</div>
+  <div id="news-empty" class="news-empty" style="display:none">No updates in this category yet.</div>
 </div>
 
 <script>
@@ -787,12 +798,13 @@ function renderSchedule(day){
 }
 
 // ---- WHAT'S NEW ---- (edit this list to add announcements)
-// type: 'pinned' (yellow, stays up top), 'alert' (red, urgent), 'info' (blue, general)
-// date: 'YYYY-MM-DD'
+// type: 'alert' (red, urgent), 'info' (blue, general), 'calendar' (amber, dates to remember)
+// date: 'YYYY-MM-DD'  — when the entry was posted
+// eventDate (calendar only, optional): 'YYYY-MM-DD' — the actual event date
 const NEWS_ITEMS = [
   {date:'2026-05-12', type:'alert', title:'Gabe K out today — coverage set',
    body:"Heads up team: Gabe K is out today (Tue 5/12). Coverage: Anna M is covering Adult 3.5+, Bella N is covering Comp Clinic. The TT1 slot is unfilled — we won't need it tonight. Schedule is updated to reflect this."},
-  {date:'2026-05-11', type:'pinned', title:'New "What\'s New" tab is live',
+  {date:'2026-05-11', type:'info', title:'New "What\'s New" tab is live',
    body:"Team — after our meeting I took your feedback and added this section. From now on you can come here to see all updates and major announcements/changes in one place. We'll keep making improvements as we go!"},
   {date:'2026-05-11', type:'info', title:'New: push notifications are live',
    body:"You can now get push alerts from this app for urgent schedule changes, cancellations, and coverage needs. Make sure you tapped Allow when you opened the app. If you missed the prompt, check your phone Settings → Notifications → enable for LEGACY."},
@@ -800,33 +812,63 @@ const NEWS_ITEMS = [
    body:"Welcome to the new Legacy coaches schedule app. Use it to see who's coaching, check who's free, request time off, and stay current on team updates. Text Sanjin with feedback."},
 ];
 
+let _activeNewsCat = 'alert';
+
 function fmtNewsDate(s){
   const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const d=new Date(s+'T12:00:00');
   return `${ms[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 }
+function newsCounts(){
+  const c={alert:0,info:0,calendar:0};
+  NEWS_ITEMS.forEach(n=>{ if(c[n.type]!=null) c[n.type]++; });
+  return c;
+}
 function renderNews(){
   const list=document.getElementById('news-list');
   const empty=document.getElementById('news-empty');
   if(!list) return;
-  if(!NEWS_ITEMS.length){ list.innerHTML=''; if(empty) empty.style.display='block'; return; }
+  // Update counts on the sub-tabs
+  const c=newsCounts();
+  ['alert','info','calendar'].forEach(cat=>{
+    const el=document.getElementById('nt-c-'+cat); if(el) el.textContent=c[cat];
+  });
+  // Filter by active category
+  const items=NEWS_ITEMS.filter(n=>n.type===_activeNewsCat);
+  if(!items.length){ list.innerHTML=''; if(empty) empty.style.display='block'; return; }
   if(empty) empty.style.display='none';
-  // Sort: pinned first, then newest date
-  const sorted=[...NEWS_ITEMS].sort((a,b)=>{
-    if((a.type==='pinned')!==(b.type==='pinned')) return a.type==='pinned'?-1:1;
+  // Calendar: sort by eventDate ascending (upcoming first). Others: newest post date first.
+  const sorted=[...items].sort((a,b)=>{
+    if(_activeNewsCat==='calendar'){
+      const ad=a.eventDate||a.date, bd=b.eventDate||b.date;
+      return ad.localeCompare(bd);
+    }
     return b.date.localeCompare(a.date);
   });
   list.innerHTML=sorted.map(n=>{
-    const tagLabel = n.type==='pinned'?'Pinned':n.type==='alert'?'Alert':'Update';
+    const tagLabel = n.type==='alert'?'Alert':n.type==='calendar'?'Save the date':'Update';
+    const dateBit = (n.type==='calendar' && n.eventDate)
+      ? `<span class="news-date">📅 ${fmtNewsDate(n.eventDate)}</span>`
+      : `<span class="news-date">${fmtNewsDate(n.date)}</span>`;
     return `<div class="news-item ${n.type}">
       <div class="news-meta">
         <span class="news-tag ${n.type}">${tagLabel}</span>
-        <span class="news-date">${fmtNewsDate(n.date)}</span>
+        ${dateBit}
       </div>
       <div class="news-item-title">${n.title}</div>
       <div class="news-item-body">${n.body}</div>
     </div>`;
   }).join('');
+}
+function wireNewsTabs(){
+  document.querySelectorAll('.ntab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      _activeNewsCat=t.dataset.cat;
+      renderNews();
+    });
+  });
 }
 
 // ---- TEAM NOTES ---- (edit this list to update the banner)
@@ -1392,6 +1434,7 @@ function showMine(){
 }
 
 showAdminBar();
+wireNewsTabs();
 renderNews();
 renderTeamNotes();
 buildSchedTabs();
