@@ -376,7 +376,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
       autoResubscribe: true,
       notifyButton: { enable: false },
       // GitHub Pages serves this project from /Coaches-Schedule-/ — tell OneSignal where the SW lives
-      serviceWorkerPath: "Coaches-Schedule-/OneSignalSDKWorker.js",
+      serviceWorkerPath: "/Coaches-Schedule-/OneSignalSDKWorker.js",
       serviceWorkerParam: { scope: "/Coaches-Schedule-/" },
       promptOptions: {
         slidedown: {
@@ -816,9 +816,15 @@ function withTimeout(promise, ms, label){
     new Promise((_,rej)=>setTimeout(()=>rej(new Error('Timeout: '+label)), ms))
   ]);
 }
+// OneSignal v16 returns BOOLEAN for permission, native API returns STRING. Handle both.
+function permGranted(os){
+  const osPerm = os && os.Notifications && os.Notifications.permission;
+  const nativePerm = (typeof Notification !== 'undefined') ? Notification.permission : null;
+  return osPerm === true || nativePerm === 'granted';
+}
+
 async function savePushPrefs(){
   const btn=document.getElementById('np-btn');
-  // iOS gate — push only works in PWA-from-home-screen on iPhone/iPad
   if(isIOS() && !isStandalone()){
     alert("To get push notifications on iPhone, the app needs to be installed to your Home Screen first.\n\nSteps:\n1. Tap the Share button at the bottom of Safari (square with up arrow)\n2. Scroll and tap 'Add to Home Screen'\n3. Tap 'Add'\n4. Open the app from the new icon on your Home Screen\n5. Come back here and tap Save again");
     return;
@@ -828,19 +834,25 @@ async function savePushPrefs(){
   const resetBtn=()=>{ btn.disabled=false; refreshPushUI(); };
   try {
     const os = await withTimeout(waitForOneSignal(), 6000, 'OneSignal init');
-    // 1. Request permission (user-initiated tap satisfies iOS)
-    let permission = (os.Notifications && os.Notifications.permission) || Notification.permission;
-    if(permission !== 'granted'){
+    // 1. Request permission if not already granted
+    if(!permGranted(os)){
       try { await withTimeout(os.Notifications.requestPermission(), 15000, 'permission'); } catch(e){}
-      permission = (os.Notifications && os.Notifications.permission) || Notification.permission;
     }
-    if(permission !== 'granted'){
+    if(!permGranted(os)){
       alert("Notifications were blocked or dismissed.\n\nOn iPhone: open Settings → Notifications → scroll to LEGACY → toggle ON. Then come back and tap Save again.");
       resetBtn(); return;
     }
-    // 2. Make sure we're opted-in on OneSignal's side
-    try { await withTimeout(os.User.PushSubscription.optIn(), 8000, 'optIn'); } catch(e){ console.log('[push] optIn warning', e); }
-    // 3. Save tags reflecting preferences
+    // 2. Make sure the SW is registered (OneSignal sometimes fails this silently on GitHub Pages subpaths)
+    if(navigator.serviceWorker && !window._swRegistered){
+      try {
+        await navigator.serviceWorker.register('/Coaches-Schedule-/OneSignalSDKWorker.js', {scope:'/Coaches-Schedule-/'});
+        window._swRegistered = true;
+      } catch(e){ console.log('[push] SW reg err', e); }
+    }
+    // 3. Force fresh subscription: optOut clears stale state, then optIn creates a real push token
+    try { await withTimeout(os.User.PushSubscription.optOut(), 8000, 'optOut'); } catch(e){}
+    try { await withTimeout(os.User.PushSubscription.optIn(), 20000, 'optIn'); } catch(e){ console.log('[push] optIn err', e); }
+    // 4. Save tags reflecting preferences
     const tags = {};
     document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{
       tags[cb.dataset.tag] = cb.checked ? '1' : '0';
