@@ -1117,14 +1117,13 @@ const TEAM_NOTES = [
   // ^ renders as: "Gabe K 5/12 out today — Anna M covering ..."
   {who:'Kat & Sanjin', what:'on vacation', start:'2026-05-14', end:'2026-05-18'},
   {who:'Andrew W',     what:'on vacation', start:'2026-05-18', end:'2026-05-27'},
-  {who:'Aleix C',      what:'away',        start:'2026-06-01', end:'2026-06-13'},
+  {who:'Aleix C',      what:'out — away in Spain', start:'2026-06-01', end:'2026-06-13'},
 ];
 
 function fmtNoteRange(s, e){
   const sd=new Date(s+'T12:00:00'), ed=new Date(e+'T12:00:00');
   if(s===e) return `${sd.getMonth()+1}/${sd.getDate()}`;
-  if(sd.getMonth()===ed.getMonth()) return `${sd.getMonth()+1}/${sd.getDate()}–${ed.getDate()}`;
-  return `${sd.getMonth()+1}/${sd.getDate()} – ${ed.getMonth()+1}/${ed.getDate()}`;
+  return `${sd.getMonth()+1}/${sd.getDate()} to ${ed.getMonth()+1}/${ed.getDate()}`;
 }
 function renderTeamNotes(){
   const wrap=document.getElementById('team-notes');
