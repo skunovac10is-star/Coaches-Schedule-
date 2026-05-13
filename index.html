@@ -133,6 +133,8 @@ body{padding-left:240px;padding-top:58px}
 .np-btn{width:100%;background:#1164A3;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;transition:filter .12s}
 .np-btn:hover{filter:brightness(1.05)}
 .np-btn.subscribed{background:#3FB664}
+.np-unsub{display:block;width:100%;background:transparent;border:none;padding:10px 0 0;color:var(--gray-500);font-size:12.5px;text-decoration:underline;cursor:pointer;text-align:center}
+.np-unsub:hover{color:#D04545}
 .np-foot{font-size:11.5px;color:var(--gray-500);margin-top:.7rem;line-height:1.5}
 .admin-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#0F1014;color:#fff;border-radius:var(--rlg);padding:.75rem 1rem;margin-bottom:1rem}
 .admin-bar .ab-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-right:8px}
@@ -666,6 +668,7 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
       <label class="np-opt"><input type="checkbox" id="np-general" data-tag="sub_general"> <span class="np-opt-text"><b>📰 All feeds</b> — every update, including small ones</span></label>
     </div>
     <button class="np-btn" id="np-btn" onclick="savePushPrefs()">Save & enable notifications</button>
+    <button class="np-unsub" id="np-unsub" onclick="unsubscribePush()" style="display:none">Turn off all notifications</button>
     <div class="np-foot" id="np-foot">If you don't see a permission prompt after tapping Save, make sure you opened the app from your Home Screen icon (not Safari). On iPhone, go to Settings → Notifications → LEGACY to enable.</div>
   </div>
   <div class="news-tabs" id="news-tabs">
@@ -771,7 +774,9 @@ async function refreshPushUI(){
   const status=document.getElementById('np-status');
   const btn=document.getElementById('np-btn');
   const foot=document.getElementById('np-foot');
+  const unsub=document.getElementById('np-unsub');
   if(!status||!btn) return;
+  if(unsub) unsub.style.display='none';
   // Show iOS-Safari warning prominently when applicable
   if(isIOS() && !isStandalone()){
     status.textContent = "Add to Home Screen first — iPhone push won't work in Safari.";
@@ -783,6 +788,7 @@ async function refreshPushUI(){
   }
   const os = await waitForOneSignal().catch(()=>null);
   const optedIn = os && os.User && os.User.PushSubscription ? os.User.PushSubscription.optedIn : false;
+  if(optedIn && unsub) unsub.style.display='block';
   if(optedIn){
     status.textContent = "You're subscribed. Update what you want to be notified about below.";
     status.classList.add('subscribed');
@@ -870,6 +876,27 @@ async function savePushPrefs(){
     } else {
       alert("Couldn't enable notifications. Open Settings → Notifications → LEGACY and turn them on, then try again.");
     }
+  }
+}
+
+async function unsubscribePush(){
+  if(!confirm("Turn off all push notifications? You can re-enable any time by tapping Save here.")) return;
+  const unsub=document.getElementById('np-unsub');
+  if(unsub){ unsub.disabled=true; unsub.textContent='Working…'; }
+  try {
+    const os = await waitForOneSignal();
+    try { await os.User.PushSubscription.optOut(); } catch(e){ console.log('[push] optOut err', e); }
+    // Clear preference tags so they're not stored against an unsubscribed user
+    try { await os.User.addTags({sub_alerts:'0', sub_calendar:'0', sub_general:'0'}); } catch(e){}
+    // Uncheck UI boxes
+    document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{ cb.checked = (cb.dataset.tag==='sub_alerts'); });
+    await refreshPushUI();
+    if(unsub){ unsub.disabled=false; unsub.textContent='Turn off all notifications'; }
+    alert("Notifications turned off. You can re-enable any time.");
+  } catch(e){
+    console.log('[push] unsub error', e);
+    if(unsub){ unsub.disabled=false; unsub.textContent='Turn off all notifications'; }
+    alert("Couldn't turn off notifications. As a fallback, open Settings → Notifications → LEGACY and toggle off.");
   }
 }
 
