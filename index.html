@@ -375,6 +375,9 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
       appId: "c95f53b2-4df0-4ea8-9771-a4773201e7fd",
       autoResubscribe: true,
       notifyButton: { enable: false },
+      // GitHub Pages serves this project from /Coaches-Schedule-/ — tell OneSignal where the SW lives
+      serviceWorkerPath: "Coaches-Schedule-/OneSignalSDKWorker.js",
+      serviceWorkerParam: { scope: "/Coaches-Schedule-/" },
       promptOptions: {
         slidedown: {
           prompts: [{
