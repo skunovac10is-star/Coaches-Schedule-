@@ -385,37 +385,83 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 <!-- OneSignal Web Push -->
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
+  // Debug panel — only renders when URL has ?debug=1 (so regular coaches don't see it)
+  window._DEBUG_PUSH = /[?&]debug=1\b/.test(location.search);
+  window._dbg = { events: [], lastError: null };
+  window.dbgLog = function dbgLog(msg){ window._dbg.events.push({t: Date.now(), m: String(msg).slice(0,200)}); if(window._DEBUG_PUSH){ try{ renderDebugPanel(); }catch(e){} } };
+  window.addEventListener('error', e=>{ window._dbg.lastError = (e.message||'')+' @ '+(e.filename||'')+':'+(e.lineno||''); if(window._DEBUG_PUSH) renderDebugPanel(); });
+  window.addEventListener('unhandledrejection', e=>{ window._dbg.lastError = 'unhandled: '+(e.reason && e.reason.message || e.reason || ''); if(window._DEBUG_PUSH) renderDebugPanel(); });
+
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "c95f53b2-4df0-4ea8-9771-a4773201e7fd",
-      autoResubscribe: true,
-      notifyButton: { enable: false },
-      // GitHub Pages serves this project from /Coaches-Schedule-/ — tell OneSignal where the SW lives
-      serviceWorkerPath: "/Coaches-Schedule-/OneSignalSDKWorker.js",
-      serviceWorkerParam: { scope: "/Coaches-Schedule-/" },
-      promptOptions: {
-        slidedown: {
-          prompts: [{
-            type: "push",
-            autoPrompt: true,
-            text: {
-              actionMessage: "Get notified about urgent schedule changes and coverage needs.",
-              acceptButton: "Allow",
-              cancelButton: "Not now"
-            },
-            delay: { pageViews: 1, timeDelay: 3 }
-          }]
-        }
-      }
-    });
-    // Log subscription state for debugging
+    dbgLog('SDK callback fired');
     try {
-      const optedIn = OneSignal.User.PushSubscription.optedIn;
-      const id = OneSignal.User.PushSubscription.id;
-      console.log('[OneSignal] optedIn:', optedIn, 'subId:', id);
-    } catch(e){ console.log('[OneSignal] state probe error:', e); }
+      await OneSignal.init({
+        appId: "c95f53b2-4df0-4ea8-9771-a4773201e7fd",
+        autoResubscribe: true,
+        notifyButton: { enable: false },
+        // GitHub Pages serves this project from /Coaches-Schedule-/ — tell OneSignal where the SW lives
+        serviceWorkerPath: "/Coaches-Schedule-/OneSignalSDKWorker.js",
+        serviceWorkerParam: { scope: "/Coaches-Schedule-/" },
+        serviceWorkerOverrideForTypicalSite: true
+      });
+      dbgLog('init resolved');
+      window._OS = OneSignal;
+      try {
+        OneSignal.User.PushSubscription.addEventListener('change', e=>{
+          dbgLog('PushSubscription change: optedIn='+(e.current && e.current.optedIn));
+        });
+        OneSignal.Notifications.addEventListener('permissionChange', granted=>{
+          dbgLog('permissionChange: '+granted);
+        });
+      } catch(e){ dbgLog('listener err: '+e.message); }
+      if(window._DEBUG_PUSH) renderDebugPanel();
+    } catch(e){ window._dbg.lastError = 'init: '+e.message; if(window._DEBUG_PUSH) renderDebugPanel(); }
   });
+
+  function renderDebugPanel(){
+    if(!window._DEBUG_PUSH) return;
+    let el = document.getElementById('dbg-panel');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'dbg-panel';
+      el.style.cssText = 'position:fixed;left:0;right:0;bottom:calc(72px + env(safe-area-inset-bottom));background:#0F1014;color:#fff;font-family:monospace;font-size:11px;line-height:1.45;padding:10px 12px;z-index:200;max-height:42vh;overflow-y:auto;border-top:2px solid #1164A3';
+      document.body.appendChild(el);
+    }
+    const standalone = (window.navigator.standalone === true) || window.matchMedia('(display-mode: standalone)').matches;
+    const isIOSdev = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const perm = (window.Notification && Notification.permission) || 'n/a';
+    let osPerm='n/a', optedIn='n/a', subId='n/a', userId='n/a', token='n/a';
+    try { if(window._OS){
+      osPerm = (_OS.Notifications && _OS.Notifications.permission) ?? 'n/a';
+      optedIn = (_OS.User && _OS.User.PushSubscription && _OS.User.PushSubscription.optedIn);
+      subId = (_OS.User && _OS.User.PushSubscription && _OS.User.PushSubscription.id) || 'null';
+      token = (_OS.User && _OS.User.PushSubscription && _OS.User.PushSubscription.token) || 'null';
+      userId = (_OS.User && _OS.User.onesignalId) || 'null';
+    }} catch(e){}
+    if(navigator.serviceWorker){
+      navigator.serviceWorker.getRegistrations().then(rs=>{
+        const txt = rs.length ? rs.map(r=>r.active?(r.scope+' ✓'):(r.scope+' (pending)')).join('\n      ') : 'none registered';
+        const swLine = document.getElementById('dbg-sw');
+        if(swLine) swLine.textContent = 'SW:    '+txt;
+      });
+    }
+    const events = (window._dbg.events||[]).slice(-6).map(e=>'  • '+e.m).join('\n') || '  (none)';
+    el.innerHTML = '<div style="font-weight:700;color:#1164A3;margin-bottom:6px">⚙ DEBUG (push diagnostics)</div>' +
+      '<div>iOS: device='+isIOSdev+'  standalone='+standalone+'</div>' +
+      '<div>Permission: native='+perm+'  OneSignal='+osPerm+'</div>' +
+      '<div>OneSignal: loaded='+!!window._OS+'</div>' +
+      '<div>  optedIn = '+optedIn+'</div>' +
+      '<div>  subId = '+String(subId).slice(0,40)+'</div>' +
+      '<div>  userId = '+String(userId).slice(0,40)+'</div>' +
+      '<div>  token = '+(token==='null'?'null':'set ('+String(token).length+' chars)')+'</div>' +
+      '<div id="dbg-sw">SW:    checking…</div>' +
+      '<div>Last error: <span style="color:#ff8a80">'+(window._dbg.lastError||'none')+'</span></div>' +
+      '<div>Events (last 6):</div>' +
+      '<div style="white-space:pre">'+events+'</div>' +
+      '<button onclick="this.parentNode.style.display=\'none\'" style="position:absolute;top:4px;right:8px;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer">×</button>';
+  }
+  if(window._DEBUG_PUSH) setInterval(renderDebugPanel, 2000);
 </script>
 </head>
 <body class="locked">
@@ -868,30 +914,40 @@ async function savePushPrefs(){
   const resetBtn=()=>{ btn.disabled=false; refreshPushUI(); };
   try {
     const os = await withTimeout(waitForOneSignal(), 6000, 'OneSignal init');
+    dbgLog('savePushPrefs start, granted='+permGranted(os));
     // 1. Request permission if not already granted
     if(!permGranted(os)){
-      try { await withTimeout(os.Notifications.requestPermission(), 15000, 'permission'); } catch(e){}
+      try { await withTimeout(os.Notifications.requestPermission(), 15000, 'permission'); } catch(e){ dbgLog('reqPerm err: '+e.message); }
     }
     if(!permGranted(os)){
       alert("Notifications were blocked or dismissed.\n\nOn iPhone: open Settings → Notifications → scroll to LEGACY → toggle ON. Then come back and tap Save again.");
       resetBtn(); return;
     }
+    dbgLog('perm OK, forcing fresh subscribe');
     // 2. Make sure the SW is registered (OneSignal sometimes fails this silently on GitHub Pages subpaths)
     if(navigator.serviceWorker && !window._swRegistered){
       try {
-        await navigator.serviceWorker.register('/Coaches-Schedule-/OneSignalSDKWorker.js', {scope:'/Coaches-Schedule-/'});
+        const reg = await navigator.serviceWorker.register('/Coaches-Schedule-/OneSignalSDKWorker.js', {scope:'/Coaches-Schedule-/'});
         window._swRegistered = true;
-      } catch(e){ console.log('[push] SW reg err', e); }
+        dbgLog('SW registered: '+reg.scope);
+      } catch(e){ dbgLog('SW reg err: '+e.message); }
     }
     // 3. Force fresh subscription: optOut clears stale state, then optIn creates a real push token
-    try { await withTimeout(os.User.PushSubscription.optOut(), 8000, 'optOut'); } catch(e){}
-    try { await withTimeout(os.User.PushSubscription.optIn(), 20000, 'optIn'); } catch(e){ console.log('[push] optIn err', e); }
+    try { await withTimeout(os.User.PushSubscription.optOut(), 8000, 'optOut'); dbgLog('optOut done'); }
+    catch(e){ dbgLog('optOut err: '+e.message); }
+    try { await withTimeout(os.User.PushSubscription.optIn(), 20000, 'optIn'); dbgLog('optIn resolved'); }
+    catch(e){ dbgLog('optIn err: '+e.message); }
+    try {
+      const sub = navigator.serviceWorker && await navigator.serviceWorker.ready.then(r=>r.pushManager.getSubscription());
+      dbgLog('pushManager.sub: '+(sub ? 'EXISTS endpoint='+sub.endpoint.slice(0,40) : 'null'));
+    } catch(e){ dbgLog('pushSub probe err: '+e.message); }
     // 4. Save tags reflecting preferences
     const tags = {};
     document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{
       tags[cb.dataset.tag] = cb.checked ? '1' : '0';
     });
-    try { await withTimeout(os.User.addTags(tags), 6000, 'addTags'); } catch(e){ console.log('[push] addTags warning', e); }
+    try { await withTimeout(os.User.addTags(tags), 6000, 'addTags'); dbgLog('addTags done'); }
+    catch(e){ dbgLog('addTags err: '+e.message); }
     await refreshPushUI();
     btn.disabled=false;
     alert("You're subscribed. We'll send you a push for whatever you checked.");
