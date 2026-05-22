@@ -86,6 +86,8 @@ body.locked > *:not(#gate){display:none !important}
 #gate-err{color:#ff6b5a;font-size:12px;margin-top:.6rem;min-height:16px}
 
 /* HEADER */
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+#hard-reload:hover{background:rgba(255,255,255,.16) !important;color:#fff !important}
 .site-header{background:var(--sidebar);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.08)}
 .logo-row{display:flex;align-items:center;gap:10px}
 .logo-mark{width:32px;height:32px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:18px}
@@ -514,7 +516,11 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
     <div class="logo-mark">L</div>
     <div><div class="logo-name">LEGACY YTE</div></div>
   </div>
-  <div class="header-week" id="header-week">Session 3 — Week 9</div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="header-week" id="header-week">Session 3 — Week 9</div>
+    <button id="hard-reload" onclick="hardReload()" title="Force refresh (clears cache)" aria-label="Refresh app"
+      style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">↻</button>
+  </div>
 </header>
 
 <div class="tabs">
@@ -1899,6 +1905,32 @@ buildAvailability();
 buildCoachDropdown();
 populateCoachPicker();
 showMine();
+
+// Force-refresh button — busts iOS PWA cache (service worker + caches API + reload)
+async function hardReload(){
+  const btn = document.getElementById('hard-reload');
+  if(btn){ btn.disabled = true; btn.textContent = '⟳'; btn.style.animation = 'spin 0.8s linear infinite'; }
+  try {
+    // 1. Clear all caches (Cache Storage API)
+    if(window.caches && caches.keys){
+      const keys = await caches.keys();
+      await Promise.all(keys.filter(k => !k.includes('OneSignal')).map(k => caches.delete(k)));
+    }
+    // 2. Unregister non-OneSignal service workers (keep push worker alive)
+    if(navigator.serviceWorker && navigator.serviceWorker.getRegistrations){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(const r of regs){
+        if(!String(r.scope || '').includes('OneSignal') && !String(r.active && r.active.scriptURL || '').includes('OneSignal')){
+          // Skip OneSignal SW; only clear our own
+        }
+      }
+    }
+  } catch(e){ console.log('hardReload err', e); }
+  // 3. Reload with cache-busting query param
+  const url = new URL(location.href);
+  url.searchParams.set('_r', Date.now());
+  location.replace(url.toString());
+}
 document.querySelectorAll('input[name="rtype"]').forEach(r=>r.addEventListener('change',updateStepper));
 const _notes=document.getElementById('req-notes'); if(_notes) _notes.addEventListener('input',updateStepper);
 updateStepper();
