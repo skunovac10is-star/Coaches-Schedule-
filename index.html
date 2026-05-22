@@ -813,16 +813,16 @@ const SCHEDULE = {
   ],
   Thursday:[
     {time:'4–5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Kein W','Nathan D','David S']},
-    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Stevie D','Jeremie C','Gabe K','Kris W','Anna M (2/3)']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Stevie D','Jeremie C','Gabe K','Kris W']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Laurence P','Anna M','Max O','Shevi A','Kris W','Jeremie C']},
     {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Stevie D']},
     {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Kein W','Laurence P']},
   ],
   Friday:[
-    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Aleix C','Stevie D','Nathan D','Kein W','Sean T','Kris W']},
-    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Nick F','TBD (Andrew W out)']},
-    {time:'5:30–6:30pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Kein W','Nick F','Sean T','Nathan D']},
-    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','TBD (Andrew W out)','Nathan D','Nick F','Aleix C','Kein W','Sean T','Max O 7–8:30']},
+    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Aleix C','Stevie D','Kein W','Sean T','Kris W','Ahmed A','Bella N']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Nick F','Ahmed A']},
+    {time:'5:30–6:30pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Kein W','Nick F','Sean T','Ahmed A','Max O']},
+    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Nick F','Aleix C','Kein W','Sean T','Max O','Ahmed A']},
   ],
   Saturday:[
     {time:'8:30–10am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Ahmed A']},
@@ -1141,6 +1141,8 @@ function renderSchedule(day){
 // date: 'YYYY-MM-DD'  — when the entry was posted
 // eventDate (calendar only, optional): 'YYYY-MM-DD' — the actual event date
 const NEWS_ITEMS = [
+  {date:'2026-05-22', type:'alert', title:'Friday 5/22 coverage — Ahmed A in, Nathan D out',
+   body:"Today's Friday lineup updated. Ahmed A is in for all Friday clinics. Bella N is on for CC (4–5:30pm). Max O is on for Munchkins (5:30–6:30pm) and TT Comp (6:30–8:30pm). Nathan D is out for the day. Schedule is updated."},
   {date:'2026-05-22', type:'info', title:'New: targeted notifications — tap to ID your phone',
    body:"We added a new feature so Sanjin can send updates to just one or two coaches at a time (so you're not getting buzzed for things that don't apply to you). Open News → 🔔 Push notifications, pick your name from the new dropdown, then tap Save & enable. Takes 10 seconds. Thanks!"},
   {date:'2026-05-21', type:'info', title:'Thursday recap (5/21) — Aleix C out, Shevi covered her CC',
