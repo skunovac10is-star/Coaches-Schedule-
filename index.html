@@ -743,6 +743,12 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
         <div class="np-sub" id="np-status">Choose what you want a phone alert for</div>
       </div>
     </div>
+    <div style="margin:.6rem 0 .9rem">
+      <label style="font-size:12px;color:var(--gray-500);font-weight:600;display:block;margin-bottom:5px">Who are you? (so Sanjin can send updates just to you when needed)</label>
+      <select id="np-coach-picker" style="width:100%;padding:9px 12px;border:1px solid var(--gray-200);border-radius:8px;font-family:inherit;font-size:14px;background:#fff;color:var(--black)">
+        <option value="">— Select your name —</option>
+      </select>
+    </div>
     <div class="np-options">
       <label class="np-opt"><input type="checkbox" id="np-alerts" data-tag="sub_alerts" checked> <span class="np-opt-text"><b>🚨 Alerts</b> — urgent, time-sensitive (Gabe out, clinic cancelled, etc.)</span></label>
       <label class="np-opt"><input type="checkbox" id="np-calendar" data-tag="sub_calendar"> <span class="np-opt-text"><b>📅 Dates to remember</b> — upcoming events Sanjin posts</span></label>
@@ -844,6 +850,32 @@ async function waitForOneSignal(){
     window.OneSignalDeferred.push(os=>r(os));
   });
 }
+function populateCoachPicker(){
+  const sel = document.getElementById('np-coach-picker');
+  if(!sel || sel.options.length > 1) return;
+  const groups = [
+    ['Pros (Full coverage)', ALL_COACHES.filter(c=>c.type==='pro')],
+    ['Part-time', ALL_COACHES.filter(c=>c.type==='pt')],
+    ['Junior pros', ALL_COACHES.filter(c=>c.type==='jr')],
+  ];
+  groups.forEach(([label, list])=>{
+    if(!list.length) return;
+    const og = document.createElement('optgroup'); og.label = label;
+    list.forEach(c=>{
+      const o = document.createElement('option'); o.value = c.id; o.textContent = c.abbr;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  // Pre-select from Mine tab if already chosen
+  const saved = localStorage.getItem(MINE_KEY);
+  if(saved) sel.value = saved;
+  // Keep in sync with Mine
+  sel.addEventListener('change', ()=>{
+    if(sel.value) localStorage.setItem(MINE_KEY, sel.value);
+  });
+}
+
 async function refreshPushUI(){
   const status=document.getElementById('np-status');
   const btn=document.getElementById('np-btn');
@@ -941,12 +973,23 @@ async function savePushPrefs(){
       const sub = navigator.serviceWorker && await navigator.serviceWorker.ready.then(r=>r.pushManager.getSubscription());
       dbgLog('pushManager.sub: '+(sub ? 'EXISTS endpoint='+sub.endpoint.slice(0,40) : 'null'));
     } catch(e){ dbgLog('pushSub probe err: '+e.message); }
-    // 4. Save tags reflecting preferences
+    // 4. Identify the coach so Sanjin can send to one or two people instead of everyone
+    const coachId = localStorage.getItem(MINE_KEY) || document.getElementById('np-coach-picker')?.value || '';
+    const coach = ALL_COACHES.find(c=>c.id===coachId);
+    if(coach){
+      try { await withTimeout(os.login(coach.abbr.replace(/\s+/g,'_')), 6000, 'login'); dbgLog('login as '+coach.abbr); }
+      catch(e){ dbgLog('login err: '+e.message); }
+    }
+    // 5. Save tags reflecting preferences + coach identity
     const tags = {};
     document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{
       tags[cb.dataset.tag] = cb.checked ? '1' : '0';
     });
-    try { await withTimeout(os.User.addTags(tags), 6000, 'addTags'); dbgLog('addTags done'); }
+    if(coach){
+      tags.coach_name = coach.abbr;
+      tags.coach_type = coach.type; // pro / pt / jr
+    }
+    try { await withTimeout(os.User.addTags(tags), 6000, 'addTags'); dbgLog('addTags done coach='+(coach?coach.abbr:'(none)')); }
     catch(e){ dbgLog('addTags err: '+e.message); }
     await refreshPushUI();
     btn.disabled=false;
@@ -1849,6 +1892,7 @@ buildSchedTabs();
 renderSchedule(todayDayName());
 buildAvailability();
 buildCoachDropdown();
+populateCoachPicker();
 showMine();
 document.querySelectorAll('input[name="rtype"]').forEach(r=>r.addEventListener('change',updateStepper));
 const _notes=document.getElementById('req-notes'); if(_notes) _notes.addEventListener('input',updateStepper);
