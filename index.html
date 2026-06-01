@@ -771,7 +771,6 @@ textarea{resize:vertical;min-height:64px;line-height:1.5}
 const DAYS_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
 const ALL_COACHES = [
-  {id:'aleix',name:'Aleix Calvo-Alvarez',abbr:'Aleix C',phone:'305-336-1088',email:'acalvo@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'jeremie',name:'Jeremie Casabon',abbr:'Jeremie C',phone:'267-606-8262',email:'Jcasabon123@gmail.com',type:'pro',level:'Full coverage'},
   {id:'stevie',name:'Stevie Dandridge',abbr:'Stevie D',phone:'267-975-1954',email:'sdandridge@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'nick',name:'Nick Fulcher',abbr:'Nick F',phone:'210-925-2935',email:'nfulcher@legacyyte.org',type:'pro',level:'Full coverage'},
@@ -800,9 +799,9 @@ const SCHEDULE = {
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
     {time:'12–1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
     {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Laurence P']},
-    {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','TBD (Andrew W out)','Gabe K','Stevie D','Aleix C','Jeremie C','Kein W']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','TBD (Andrew W out)','Gabe K','Stevie D','Jeremie C','Kein W']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Shevi A','Kris W','Sean T','Gabe K']},
-    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Jeremie C','Aleix C','Nick F']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Jeremie C','Nick F']},
     {time:'8:30–10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Shevi A','Gabe K']},
     {time:'8:30–10pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['Laurence P']},
   ],
@@ -1271,7 +1270,6 @@ const TEAM_NOTES = [
   // ^ renders as: "Gabe K 5/12 out today — Anna M covering ..."
   {who:'Kat & Sanjin', what:'on vacation', start:'2026-05-14', end:'2026-05-18'},
   {who:'Andrew W',     what:'out 5/18–5/31 — Tue TT1 Nick F, Wed TTC Nathan D, Wed TT1 Sanjin K, Thu TT1 + TTG Stevie D. Monday TTC + Friday slots still TBD.', start:'2026-05-18', end:'2026-05-31'},
-  {who:'Aleix C',      what:'out — away in Spain', start:'2026-06-01', end:'2026-06-13'},
 ];
 
 function fmtNoteRange(s, e){
