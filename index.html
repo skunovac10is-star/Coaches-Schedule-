@@ -2208,6 +2208,14 @@ initWeekNav();
 buildSchedTabs();
 renderSchedule(todayDayName());
 buildAvailability();
+// Pre-rollout: if this week is still school-year but next week is Summer Camp,
+// land coaches on the Summer week by default (school-year week still 1 tap back).
+(function(){
+  try{
+    const nextMon=new Date(WEEK_START_BASE); nextMon.setDate(nextMon.getDate()+7);
+    if(!weekMeta(WEEK_START_BASE).summer && weekMeta(nextMon).summer){ changeWeek(1); }
+  }catch(e){}
+})();
 buildCoachDropdown();
 populateCoachPicker();
 showMine();
