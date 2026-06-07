@@ -1529,7 +1529,15 @@ function weekRangeText(){
 }
 function setHeaderWeek(){
   const el=document.getElementById('header-week');
-  if(el) el.innerHTML=`Session ${SESSION_NUM} — Week ${WEEK_NUM}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
+  if(!el) return;
+  // Summer Camp uses a string SESSION_NUM; school-year uses a number with "Session N"
+  let label;
+  if(typeof SESSION_NUM === 'string'){
+    label = (WEEK_NUM < 1) ? `${SESSION_NUM} · starts Mon Jun 8` : `${SESSION_NUM} · Week ${WEEK_NUM}`;
+  } else {
+    label = `Session ${SESSION_NUM} — Week ${WEEK_NUM}`;
+  }
+  el.innerHTML=`${label}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
 }
 
 function todayDayName(){
