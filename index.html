@@ -1188,7 +1188,7 @@ function printWeek(){
     (ACTIVE_SCHEDULE[d]||[]).forEach(s=>{
       const chips=s.coaches.join(', ');
       const ct=(s.courts!=null)?s.courts:(DEFAULT_COURTS[s.type]||1);
-      html+=`<div style="margin:4px 0;font-size:12px;line-height:1.4"><b>${s.time}</b> &nbsp; ${s.name} <span style="color:#666">(${ct} courts, ${s.coaches.length} coaches)</span><br><span style="margin-left:1rem">${chips}</span></div>`;
+      html+=`<div style="margin:4px 0;font-size:12px;line-height:1.4"><b>${s.time}</b> &nbsp; ${s.name||s.program||""} <span style="color:#666">(${ct} courts, ${s.coaches.length} coaches)</span><br><span style="margin-left:1rem">${chips}</span></div>`;
     });
   });
   // Header
@@ -1253,7 +1253,7 @@ function renderSchedule(day){
     const row=document.createElement('div');
     row.className='t-row';
     const chips=s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
-    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
+    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
     tl.appendChild(row);
   });
 }
@@ -1785,7 +1785,7 @@ function onDateChange(n,dateStr){
   ACTIVE_SCHEDULE[day].forEach((s,idx)=>{
     const opt=document.createElement('option');
     opt.value=idx;
-    opt.textContent=`${s.time} · ${s.name}`;
+    opt.textContent=`${s.time} · ${s.name||s.program||""}`;
     sel.appendChild(opt);
   });
   picker.style.display='block';
@@ -2052,7 +2052,7 @@ function showMine(){
       const noteMatch=myChip&&myChip.match(/\((.+)\)/);
       const note=noteMatch?` <span style="font-size:11px;color:var(--red);font-weight:500">· ${noteMatch[1]}</span>`:'';
       const others=s.coaches.filter(c=>c!==myChip).map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
-      row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}${note}</div>${metaHtml(s)}<div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
+      row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}${note}</div>${metaHtml(s)}<div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
       tl.appendChild(row);
     });
     wrap.appendChild(tl);
