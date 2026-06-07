@@ -674,8 +674,8 @@ body{background:var(--lp-bg) !important}
     <button class="wn-btn" id="wn-next" onclick="changeWeek(1)" aria-label="Next week">›</button>
   </div>
   <div class="next-week-banner" id="next-week-banner" style="display:none">
-    <span class="nwb-ic">📝</span>
-    <span><strong>Draft preview.</strong> Next week's schedule is shown as a copy of the current week. Sanjin will finalize it before the week starts.</span>
+    <span class="nwb-ic">☀️</span>
+    <span><strong>Summer Camp starts Mon June 8.</strong> New schedule and format — camp clinics, LTC, Elite, and adult clinics. This is next week's preview.</span>
   </div>
   <div class="day-tabs" id="sched-day-tabs"></div>
   <div class="timeline" id="timeline"></div>
@@ -950,7 +950,7 @@ _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Flynn H']}); // m
 _edit(_monday, 'morning',   'LTC Indoor',      {add:['Flynn H']});        // ...to morning LTC camp
 _edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Flynn H']}); // Flynn out of afternoon Elite...
 _edit(_monday, 'afternoon', 'LTC Indoor',      {add:['Flynn H']});        // ...into afternoon LTC camp
-const SCHEDULE = {
+const SUMMER_SCHEDULE = {
   Monday:    [..._monday,                        ..._ADULT.Monday],
   Tuesday:   [..._summerDay(['Kein W']),         ..._ADULT.Tuesday],
   Wednesday: [..._summerDay(),                   ..._ADULT.Wednesday],
@@ -958,6 +958,62 @@ const SCHEDULE = {
   Friday:    [..._summerDay(),                   ..._ADULT.Friday],
   Saturday:  [],
   Sunday:    [..._ADULT.Sunday],
+};
+
+const SCHOOL_SCHEDULE = {
+  Monday:[
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
+    {time:'12–1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Laurence P']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Gabe K','Stevie D','Jeremie C','Kein W','Flynn H']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Shevi A','Kris W','Sean T','Gabe K','Flynn H']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Jeremie C']},
+    {time:'8:30–10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Shevi A','Gabe K']},
+    {time:'8:30–10pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['Laurence P']},
+  ],
+  Tuesday:[
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Laurence P']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Anna M','Flynn H','Kris W','Jeremie C','Stevie D','Gabe K','Andrew W']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Anna M','Laurence P','Gabe K','Sean T']},
+    {time:'7–8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Jeremie C','Flynn H']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',courts:1,coaches:['Gabe K','Kris W']},
+  ],
+  Wednesday:[
+    {time:'12–1:30pm',name:'Adult Adv Beginner',type:'adult',coaches:['Laurence P','David S']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Jeremie C','Andrew W','Laurence P','Flynn H','Gabe K']},
+    {time:'6–7pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Anna M','David S','Amy G','Shevi A','Bella N']},
+    {time:'7–9pm',name:'TT1',type:'tt',courts:8,coaches:['Sanjin K','Gabe K','Stevie D','Shevi A','Andrew W','Jeremie C','Anna M','Flynn H']},
+  ],
+  Thursday:[
+    {time:'4–5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','David S','Flynn H']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Stevie D','Jeremie C','Gabe K','Kris W','Flynn H','Andrew W']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Laurence P','Anna M','Kris W','Flynn H','Bella N','Sean T']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Stevie D','Andrew W']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Laurence P']},
+  ],
+  Friday:[
+    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Flynn H','Stevie D','Sean T','Kris W','Bella N']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Ahmed A','Andrew W']},
+    {time:'5:30–6:30pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','Ahmed A','Flynn H']},
+    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Flynn H','Sean T','Ahmed A','Bella N','Shevi A','Andrew W']},
+  ],
+  Saturday:[
+    {time:'8:30–10am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Ahmed A']},
+    {time:'10–11am',name:'Munchkins',type:'munch',courts:2,coaches:['Sean T','Ahmed A','Anna M','Bella N','Flynn H','Amy G']},
+    {time:'11am–12:30pm',name:'Comp Clinic',type:'comp',coaches:['Kris W','Shevi A','Ahmed A','Anna M','Sean T','Bella N','Flynn H','Amy G']},
+    {time:'1:30–3:30pm',name:'TT Comp',type:'comp',coaches:['Shevi A','Kris W','Sean T','Ahmed A','Bella N','Flynn H']},
+  ],
+  Sunday:[
+    {time:'7:30–9am',name:'Team United Clinic',type:'other',coaches:['Shevi A']},
+    {time:'8:30–10am',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Flynn H']},
+    {time:'11am–12pm',name:'Munchkins',type:'munch',courts:2,coaches:['Kein W','Anna M','Nick F','Laurence P','Shevi A','Jinay S','Sean T','Flynn H']},
+    {time:'12–1:30pm',name:'Comp Clinic',type:'comp',coaches:['Kein W','Shevi A','Nick F','Stevie D','Jinay S','Anna M','Sean T','Ahmed A']},
+    {time:'2:30–4pm',name:'TT Green 2 Y',type:'tt',courts:1,coaches:['Sean T','Bella N']},
+    {time:'2:30–4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Shevi A','Stevie D','Flynn H','Ahmed A','Andrew W']},
+    {time:'5:30–7pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Jinay S']},
+    {time:'5:30–7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W']},
+    {time:'5:30–7pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['TBD']},
+  ]
 };
 
 // ---- PUSH NOTIFICATION PREFS ----
@@ -1164,10 +1220,10 @@ function exitAdmin(){
 }
 function exportWeekJSON(){
   const data={
-    session:SESSION_NUM, week:WEEK_NUM,
+    session:_meta.label, week:WEEK_NUM,
     weekStart:WEEK_START.toISOString().slice(0,10),
     weekRange:weekRangeText(),
-    teamNotes:TEAM_NOTES, schedule:SCHEDULE, exportedAt:new Date().toISOString()
+    teamNotes:TEAM_NOTES, schedule:ACTIVE_SCHEDULE, exportedAt:new Date().toISOString()
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
@@ -1192,7 +1248,7 @@ function printWeek(){
     });
   });
   // Header
-  const banner=`<div style="margin-bottom:12px"><h1 style="font-family:Inter,sans-serif;font-size:22px;margin:0">LEGACY YTE — Session ${SESSION_NUM} Week ${WEEK_NUM}</h1><div style="font-size:13px;color:#444">${weekRangeText()}</div></div>`;
+  const banner=`<div style="margin-bottom:12px"><h1 style="font-family:Inter,sans-serif;font-size:22px;margin:0">LEGACY YTE — ${_weekLabel()}</h1><div style="font-size:13px;color:#444">${weekRangeText()}</div></div>`;
   tl.innerHTML=banner+html;
   setTimeout(()=>{
     window.print();
@@ -1471,54 +1527,62 @@ function renderTeamNotes(){
 // Week of May 11, 2026 (Mon) — Session 3 Week 9
 // Auto-shifting week — anchored to Session 3 Week 9 (May 11, 2026 = Mon)
 // WEEK_START_BASE recomputes each load, so on Sun→Mon rollover the app auto-advances.
-const _WEEK_ANCHOR_DATE = new Date(2026, 5, 8); // Summer Camp Week 1 = Mon Jun 8
-const _WEEK_ANCHOR_NUM = 1;
+const _SCHOOL_ANCHOR = new Date(2026, 4, 11);   // Session 3 Week 9 = Mon May 11
+const SUMMER_START   = new Date(2026, 5, 8);    // Summer Camp Week 1 = Mon Jun 8
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
-  const dow=d.getDay();              // Sun=0..Sat=6
-  const shift=(dow===0)?-6:(1-dow);  // back to Monday
+  const dow=d.getDay();
+  const shift=(dow===0)?-6:(1-dow);
   d.setDate(d.getDate()+shift);
   return d;
 }
 const WEEK_START_BASE = _thisMonday();
-const SESSION_NUM = 'Summer Camp';
-const WEEK_NUM_BASE = _WEEK_ANCHOR_NUM + Math.round((WEEK_START_BASE - _WEEK_ANCHOR_DATE)/(7*24*3600*1000));
+// Pick schedule + label by the week's Monday: Jun 8+ = Summer Camp, before = Session 3 (school year)
+function weekMeta(ws){
+  if(ws.getTime() >= SUMMER_START.getTime()){
+    return {schedule: SUMMER_SCHEDULE, label:'Summer Camp', num: 1 + Math.round((ws - SUMMER_START)/(7*864e5)), summer:true};
+  }
+  return {schedule: SCHOOL_SCHEDULE, label:'Session 3', num: 9 + Math.round((ws - _SCHOOL_ANCHOR)/(7*864e5)), summer:false};
+}
 let weekOffset = 0;
 let WEEK_START = new Date(WEEK_START_BASE);
-let WEEK_NUM = WEEK_NUM_BASE;
-let ACTIVE_SCHEDULE = SCHEDULE;
-function _cloneSched(src){const o={};for(const k in src){o[k]=src[k].map(s=>({...s,coaches:[...s.coaches]}));}return o;}
-const SCHEDULES = { 0: SCHEDULE, 1: _cloneSched(SCHEDULE) };
+let _meta = weekMeta(WEEK_START);
+let WEEK_NUM = _meta.num;
+let ACTIVE_SCHEDULE = _meta.schedule;
+function _weekLabel(){ return `${_meta.label} ${_meta.summer?'\u00b7':'\u2014'} Week ${WEEK_NUM}`; }
 function changeWeek(delta){
   const next = Math.max(0, Math.min(1, weekOffset + delta));
   if(next===weekOffset) return;
   weekOffset = next;
   WEEK_START = new Date(WEEK_START_BASE); WEEK_START.setDate(WEEK_START.getDate()+weekOffset*7);
-  WEEK_NUM = WEEK_NUM_BASE + weekOffset;
-  ACTIVE_SCHEDULE = SCHEDULES[weekOffset];
+  _meta = weekMeta(WEEK_START);
+  WEEK_NUM = _meta.num;
+  ACTIVE_SCHEDULE = _meta.schedule;
   const label=document.getElementById('wn-label');
   if(label){
-    label.querySelector('.wn-main').innerHTML = weekOffset===0
-      ? 'This week'
-      : 'Next week <span class="wn-draft">Draft</span>';
-    label.querySelector('.wn-sub').textContent = `Session ${SESSION_NUM} · Week ${WEEK_NUM} · ${weekRangeText()}`;
+    label.querySelector('.wn-main').innerHTML = weekOffset===0 ? 'This week' : 'Next week';
+    label.querySelector('.wn-sub').textContent = `${_weekLabel()} \u00b7 ${weekRangeText()}`;
   }
   document.getElementById('wn-prev').disabled = weekOffset<=0;
   document.getElementById('wn-next').disabled = weekOffset>=1;
+  // Banner only when viewing a Summer week while the current week is still school year
   const banner=document.getElementById('next-week-banner');
-  if(banner) banner.style.display = weekOffset===1 ? 'flex' : 'none';
+  if(banner){
+    const showBanner = _meta.summer && !weekMeta(WEEK_START_BASE).summer;
+    banner.style.display = showBanner ? 'flex' : 'none';
+  }
   const tn=document.getElementById('team-notes');
-  if(tn && weekOffset===1) tn.style.display='none';
+  if(tn) tn.style.display = _meta.summer ? 'none' : '';
   setHeaderWeek();
   buildSchedTabs();
   const dayToShow = weekOffset===0 ? todayDayName() : 'Monday';
   renderSchedule(dayToShow);
-  if(weekOffset===0 && typeof renderTeamNotes==='function') renderTeamNotes();
+  if(!_meta.summer && typeof renderTeamNotes==='function') renderTeamNotes();
   if(typeof buildAvailability==='function') buildAvailability();
 }
 function initWeekNav(){
   const prev=document.getElementById('wn-prev'); if(prev) prev.disabled=true;
-  const sub=document.getElementById('wn-sub'); if(sub) sub.textContent=`Session ${SESSION_NUM} · Week ${WEEK_NUM} · ${weekRangeText()}`;
+  const sub=document.getElementById('wn-sub'); if(sub) sub.textContent=`${_weekLabel()} \u00b7 ${weekRangeText()}`;
 }
 const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 function dateForDay(i){ const d=new Date(WEEK_START); d.setDate(d.getDate()+i); return d; }
@@ -1528,16 +1592,8 @@ function weekRangeText(){
   return `${MONTHS_SHORT[s.getMonth()]} ${s.getDate()} – ${MONTHS_SHORT[e.getMonth()]} ${e.getDate()}, ${s.getFullYear()}`;
 }
 function setHeaderWeek(){
-  const el=document.getElementById('header-week');
-  if(!el) return;
-  // Summer Camp uses a string SESSION_NUM; school-year uses a number with "Session N"
-  let label;
-  if(typeof SESSION_NUM === 'string'){
-    label = (WEEK_NUM < 1) ? `${SESSION_NUM} · starts Mon Jun 8` : `${SESSION_NUM} · Week ${WEEK_NUM}`;
-  } else {
-    label = `Session ${SESSION_NUM} — Week ${WEEK_NUM}`;
-  }
-  el.innerHTML=`${label}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
+  const el=document.getElementById('header-week'); if(!el) return;
+  el.innerHTML=`${_weekLabel()}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
 }
 
 function todayDayName(){
