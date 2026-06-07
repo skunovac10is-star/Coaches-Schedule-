@@ -209,6 +209,18 @@ body{padding-left:240px;padding-top:58px}
 
 .timeline{display:flex;flex-direction:column;gap:6px}
 
+/* Layout toggle */
+.layout-toggle{display:flex;align-items:center;gap:6px;margin:0 0 1rem}
+.layout-toggle .lt-label{font-size:12px;font-weight:600;color:var(--gray-500);margin-right:2px}
+.lt-btn{font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:10px;border:1.5px solid var(--gray-200);background:#fff;color:var(--gray-700);cursor:pointer;font-family:inherit}
+.lt-btn.active{background:#16151A;border-color:#16151A;color:#fff}
+/* By-group blocks: program shown once, AM + PM rows stacked */
+.grp-row{border-top:1px dashed var(--gray-200);padding:9px 0 4px;margin-top:8px}
+.grp-row:first-of-type{border-top:none;margin-top:4px;padding-top:4px}
+.grp-row-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.grp-row-when{font-size:11.5px;font-weight:700;color:var(--gray-700);text-transform:uppercase;letter-spacing:.4px}
+.grp-row-when .grp-courts{color:var(--gray-500);font-weight:600;text-transform:none;letter-spacing:0;margin-left:6px}
+
 /* ===== Summer Camp layout — Morning/Afternoon sections with program cards ===== */
 .summer-section{margin-bottom:1.5rem}
 .summer-section:last-child{margin-bottom:0}
@@ -678,6 +690,11 @@ body{background:var(--lp-bg) !important}
     <span><strong>Summer Camp starts Mon June 8.</strong> New schedule and format — camp clinics, LTC, Elite, and adult clinics. This is next week's preview.</span>
   </div>
   <div class="day-tabs" id="sched-day-tabs"></div>
+  <div class="layout-toggle" id="layout-toggle" style="display:none">
+    <span class="lt-label">View:</span>
+    <button class="lt-btn" data-layout="time" onclick="setLayout('time')">🕐 By time</button>
+    <button class="lt-btn" data-layout="group" onclick="setLayout('group')">🎾 By group</button>
+  </div>
   <div class="timeline" id="timeline"></div>
 </div>
 
@@ -1297,13 +1314,27 @@ function metaHtml(s){
 }
 
 // ---- SCHEDULE ----
+let _summerLayout = (function(){ try{ return localStorage.getItem('summer_layout')||'group'; }catch(e){ return 'group'; } })();
+function setLayout(mode){
+  _summerLayout = mode;
+  try{ localStorage.setItem('summer_layout', mode); }catch(e){}
+  document.querySelectorAll('.lt-btn').forEach(b=>b.classList.toggle('active', b.dataset.layout===mode));
+  const active=document.querySelector('#sched-day-tabs .dtab.active');
+  renderSchedule(active?active.dataset.day:(weekOffset>0?'Monday':todayDayName()));
+}
 function renderSchedule(day){
   const tl = document.getElementById('timeline');
   tl.innerHTML='';
   const slots = ACTIVE_SCHEDULE[day]||[];
-  // If any slot has a `session` field → render summer-camp card layout
   const isSummer = slots.some(s=>s.session);
-  if(isSummer){ renderSummerDay(tl, slots); return; }
+  const lt=document.getElementById('layout-toggle');
+  if(lt) lt.style.display = isSummer ? 'flex' : 'none';
+  if(isSummer){
+    document.querySelectorAll('.lt-btn').forEach(b=>b.classList.toggle('active', b.dataset.layout===_summerLayout));
+    if(_summerLayout==='group') renderSummerDayByGroup(tl, slots);
+    else renderSummerDay(tl, slots);
+    return;
+  }
   // Default school-year timeline layout
   slots.forEach(s=>{
     const row=document.createElement('div');
@@ -1377,6 +1408,55 @@ function renderSummerDay(tl, slots){
   renderSummerSection(tl, 'Adult — Evening',   purpleBall, '6:30 – 8:00pm', adultEve);
 }
 
+
+function _ratioBadge(s){
+  if(s.campers==null) return '';
+  const showRatio = s.campers>0 && s.coaches.length;
+  const r = showRatio ? ` · 1:${Math.round(s.campers/s.coaches.length)}` : '';
+  const z = s.campers===0 ? ' zero' : '';
+  return `<span class="summer-card-campers${z}">👤 ${s.campers}${r}</span>`;
+}
+function _rowChips(s){
+  return s.coaches.length
+    ? s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('')
+    : '<span class="sc-unstaffed">Needs staffing</span>';
+}
+function renderGroupBlock(tl, program, cls, icon, rows){
+  const live = rows.filter(r=>r.s);
+  if(!live.length) return;
+  const body = live.map(r=>`
+    <div class="grp-row">
+      <div class="grp-row-head">
+        <span class="grp-row-when">${r.label} ${r.s.time||''}<span class="grp-courts">${r.s.courts}</span></span>
+        ${_ratioBadge(r.s)}
+      </div>
+      <div class="summer-card-chips">${_rowChips(r.s)}</div>
+    </div>`).join('');
+  const card=document.createElement('div');
+  card.className=`summer-card ${cls}`;
+  card.innerHTML=`<div class="summer-card-head"><div class="summer-card-title"><span class="sc-ic">${icon}</span>${program}</div></div>${body}`;
+  tl.appendChild(card);
+}
+function renderSummerDayByGroup(tl, slots){
+  renderGroupBlock(tl, 'Munchkins', 'munch', '<span class="cball cball-red"></span>',
+    [{label:'All day', s:slots.find(s=>s.session==='allday')}]);
+  renderGroupBlock(tl, 'LTC Indoor', 'indoor', '<span class="cball cball-orange"></span>', [
+    {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program==='LTC Indoor')},
+    {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program==='LTC Indoor')},
+  ]);
+  renderGroupBlock(tl, 'LTC Elite — Group 1', 'elite1', '<span class="cball cball-blue"></span>', [
+    {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program.indexOf('Group 1')>-1)},
+    {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program.indexOf('Group 1')>-1)},
+  ]);
+  renderGroupBlock(tl, 'LTC Elite — Group 2', 'elite2', '<span class="cball cball-green"></span>', [
+    {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program.indexOf('Group 2')>-1)},
+    {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program.indexOf('Group 2')>-1)},
+  ]);
+  const adults = slots.filter(s=>s.session==='adult');
+  if(adults.length){
+    renderSummerSection(tl, 'Adult Clinics', '<span class="cball cball-purple"></span>', '', adults);
+  }
+}
 
 // ---- WHAT'S NEW ---- (edit this list to add announcements)
 // type: 'alert' (red, urgent), 'info' (blue, general), 'calendar' (amber, dates to remember)
@@ -1611,6 +1691,7 @@ function buildSchedTabs(){
     const t=document.createElement('div');
     const activeDay = isFuture ? 'Monday' : todayName;
     t.className='dtab'+(d===activeDay?' active':'')+(isFuture?' future':'');
+    t.dataset.day=d;
     const dt=dateForDay(i);
     const nameLabel = isFuture ? `${MONTHS_SHORT[dt.getMonth()].toUpperCase()} ${d.slice(0,3)}` : d.slice(0,3);
     t.innerHTML=`<span class="dt-name">${nameLabel}</span><span class="dt-date">${dt.getDate()}</span>`;
