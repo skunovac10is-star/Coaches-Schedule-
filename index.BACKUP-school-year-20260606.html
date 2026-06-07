@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="app-version" content="2026-05-12-v2">
+<title>LEGACY YTE — Weekly Schedule</title>
+<meta name="theme-color" content="#19171D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="LEGACY">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23611F69'/><text x='90' y='128' font-family='Arial Black,sans-serif' font-size='120' font-weight='900' fill='white' text-anchor='middle'>L</text></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23611F69'/><text x='32' y='46' font-family='Arial Black,sans-serif' font-size='42' font-weight='900' fill='white' text-anchor='middle'>L</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#611F69;--red-dark:#4A154B;--red-light:#F4EDF5;
+  --black:#1D1C1D;--white:#fff;
+  --gray-50:#F8F8F8;--gray-100:#F3F3F3;--gray-200:#E8E8E8;
+  --gray-300:#D1D1D1;--gray-500:#696969;--gray-700:#454245;
+  --accent-2:#1264A3;--success:#2BAC76;
+  --sidebar:#19171D;--sidebar-hover:#27242C;--sidebar-active:#1164A3;
+  --r:6px;--rlg:8px;
+}
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--gray-50);color:var(--black);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom);overscroll-behavior-y:none}
+button,.coach-tap,.dtab,.tab,.pill label,.cf-btn,.amp-btn,.btn-submit,.add-day-btn,.tabbar-item{-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none}
+button:active,.coach-tap:active,.dtab:active,.pill label:active,.cf-btn:active,.btn-submit:active,.tabbar-item:active{transform:scale(.96);transition:transform .08s}
+@media (hover:none){ .coach-tap:hover,.t-block:hover{transform:none !important;box-shadow:0 1px 2px rgba(10,10,10,.04) !important} }
+
+/* Bottom tab bar — mobile only */
+.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--gray-200);padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:150;justify-content:space-around}
+.tabbar-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px;color:var(--gray-500);cursor:pointer;font-size:10px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;min-height:52px;border-radius:10px;transition:all .15s;margin:0 4px}
+.tabbar-item.active{color:#1164A3;background:rgba(17,100,163,.12);font-weight:800}
+.tabbar-item.active .tabbar-icon{transform:scale(1.08)}
+.tabbar-item.active .tabbar-label{font-weight:800}
+.tabbar-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:20px;line-height:1}
+.tabbar-label{font-size:10px;letter-spacing:.3px}
+
+@media (max-width:640px){
+  .tabs{display:none}
+  .tabbar{display:flex}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .panel{padding:1rem 1rem 1.5rem}
+  .site-header{height:calc(58px + max(env(safe-area-inset-top), 50px));padding:max(env(safe-area-inset-top), 50px) 1.1rem 0;box-sizing:border-box}
+  body{padding-top:calc(58px + max(env(safe-area-inset-top), 50px))}
+  .logo-name{font-size:18px}
+  .header-week{font-size:10.5px;text-align:right;line-height:1.2;max-width:130px;white-space:normal}
+  .header-week span{display:block;font-size:9.5px}
+  .day-avail-header{font-size:22px}
+  .t-time{font-size:10px}
+  .t-name{font-size:13px}
+  .coach-cards{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .chip{font-size:10px;padding:4px 9px}
+  .tab{padding:14px 14px;font-size:12px}
+  .cf-btn{min-height:44px}
+  .btn-submit{width:100%;padding:15px;font-size:15px}
+  input[type=text],input[type=email],input[type=date],select,textarea{font-size:16px;padding:12px 14px}
+  .pill label{padding:10px 16px;font-size:14px}
+  .dtab{padding:7px 12px;min-width:54px}
+  .dtab .dt-date{font-size:16px}
+  .cov-intro-card{padding:.9rem 1rem}
+  .cov-intro-body{font-size:12.5px;line-height:1.6}
+  .day-tabs{overflow-x:auto;flex-wrap:nowrap;margin-left:-1rem;margin-right:-1rem;padding:0 1rem 4px;scrollbar-width:none}
+  .day-tabs::-webkit-scrollbar{display:none}
+  .t-row{grid-template-columns:62px 1fr;gap:8px}
+  html,body{overflow-x:hidden;max-width:100%}
+}
+body.locked > *:not(#gate){display:none !important}
+#gate{position:fixed;inset:0;background:var(--black);display:flex;align-items:center;justify-content:center;z-index:9999;padding:1.5rem}
+#gate.hidden{display:none}
+.gate-box{background:#1a1a1a;border-radius:12px;padding:2rem;max-width:360px;width:100%;text-align:center;border:1px solid #333}
+.gate-logo{width:48px;height:48px;background:var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:26px;margin:0 auto 1rem}
+.gate-title{font-family:'Bebas Neue',sans-serif;color:#fff;font-size:22px;letter-spacing:2px;margin-bottom:.35rem}
+.gate-sub{color:#aaa;font-size:13px;margin-bottom:1.5rem}
+#gate-input{width:100%;border:1px solid #333;background:#0f0f0f;border-radius:8px;padding:11px 14px;font-family:'Inter',sans-serif;font-size:15px;color:#fff;outline:none;margin-bottom:.75rem;text-align:center;letter-spacing:2px}
+#gate-input:focus{border-color:var(--red)}
+#gate-btn{width:100%;background:#007A5A;color:#fff;border:none;border-radius:10px;padding:14px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(0,122,90,.25);letter-spacing:.3px}
+#gate-btn:hover{filter:brightness(1.05)}
+#gate-err{color:#ff6b5a;font-size:12px;margin-top:.6rem;min-height:16px}
+
+/* HEADER */
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+#hard-reload:hover{background:rgba(255,255,255,.16) !important;color:#fff !important}
+.site-header{background:var(--sidebar);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:58px;position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid rgba(255,255,255,.08)}
+.logo-row{display:flex;align-items:center;gap:10px}
+.logo-mark{width:32px;height:32px;background:var(--red);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;color:#fff;font-size:18px}
+.logo-name{font-family:'Inter',sans-serif;color:#fff;font-size:15px;font-weight:700;letter-spacing:.3px}
+.header-week{font-size:12px;color:rgba(255,255,255,.6);font-weight:500}
+
+/* TABS */
+.tabs{background:var(--sidebar);display:flex;flex-direction:column;align-items:stretch;padding:14px 10px;gap:2px;position:fixed;left:0;top:58px;bottom:0;width:240px;z-index:90;border-right:1px solid rgba(255,255,255,.06);overflow-y:auto}
+.tabs::before{content:"Navigation";display:block;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.45);padding:4px 12px 10px}
+.tab{display:flex;align-items:center;gap:10px;padding:8px 12px;font-size:14px;font-weight:500;color:rgba(255,255,255,.78);cursor:pointer;border-radius:6px;transition:all .1s;white-space:nowrap;background:transparent;letter-spacing:.1px}
+.tab:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tab.active{color:#fff;background:var(--sidebar-active);font-weight:600}
+.tab::before{font-size:15px;line-height:1;width:20px;text-align:center;flex-shrink:0}
+.tab[data-icon="schedule"]::before{content:"#"}
+.tab[data-icon="mine"]::before{content:"★"}
+.tab[data-icon="coverage"]::before{content:"◉"}
+.tab[data-icon="request"]::before{content:"✈"}
+.tab[data-icon="news"]::before{content:"📣"}
+body{padding-left:240px;padding-top:58px}
+
+@media (max-width:900px){
+  body{padding-left:0}
+  .tabs{display:none}
+}
+
+/* PANELS */
+.panel{display:none;padding:1.25rem;max-width:860px;margin:0 auto}
+.panel.active{display:block;animation:panelIn .25s cubic-bezier(.25,.8,.25,1)}
+@keyframes panelIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ==================== SCHEDULE TAB ==================== */
+.notif-prefs{background:#fff;border:1px solid var(--gray-200);border-left:3px solid #1164A3;border-radius:var(--rlg);padding:1rem 1.1rem;margin-bottom:1.25rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.np-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:.85rem}
+.np-icon{font-size:20px;line-height:1}
+.np-title-block{flex:1;min-width:0}
+.np-title{font-size:15px;font-weight:700;color:var(--black);margin-bottom:2px}
+.np-sub{font-size:12.5px;color:var(--gray-500);line-height:1.4}
+.np-sub.subscribed{color:#1F6B3A;font-weight:600}
+.np-options{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.85rem}
+.np-opt{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--gray-700);line-height:1.45;cursor:pointer;padding:6px 4px;border-radius:6px}
+.np-opt:hover{background:var(--gray-50)}
+.np-opt input{margin-top:3px;width:16px;height:16px;cursor:pointer;flex-shrink:0;accent-color:#1164A3}
+.np-opt-text{flex:1}
+.np-opt-text b{color:var(--black);font-weight:700}
+.np-btn{width:100%;background:#1164A3;color:#fff;border:none;padding:11px 16px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;transition:filter .12s}
+.np-btn:hover{filter:brightness(1.05)}
+.np-btn.subscribed{background:#3FB664}
+.np-unsub{display:block;width:100%;background:transparent;border:none;padding:10px 0 0;color:var(--gray-500);font-size:12.5px;text-decoration:underline;cursor:pointer;text-align:center}
+.np-unsub:hover{color:#D04545}
+.np-foot{font-size:11.5px;color:var(--gray-500);margin-top:.7rem;line-height:1.5}
+.admin-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:#0F1014;color:#fff;border-radius:var(--rlg);padding:.75rem 1rem;margin-bottom:1rem}
+.admin-bar .ab-label{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-right:8px}
+.admin-bar .ab-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.18);padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .12s}
+.admin-bar .ab-btn:hover{background:rgba(255,255,255,.18)}
+.admin-bar .ab-btn.ab-exit{margin-left:auto;background:transparent;color:rgba(255,255,255,.6);border-color:transparent}
+.admin-bar .ab-btn.ab-exit:hover{color:#fff}
+@media (max-width:640px){.admin-bar{padding:.6rem .7rem}.admin-bar .ab-btn{font-size:11.5px;padding:6px 10px}.admin-bar .ab-btn.ab-exit{margin-left:0}}
+@media print{
+  .site-header,.tabs,.tabbar,.day-tabs,.admin-bar,.team-notes{display:none !important}
+  body{padding:0;background:#fff}
+  .panel{padding:0;max-width:none}
+  .t-row{break-inside:avoid;page-break-inside:avoid}
+}
+.team-notes{background:#FFF7DB;border:1px solid #F0D97A;border-left:3px solid #C9A227;border-radius:var(--rlg);padding:.85rem 1rem;margin-bottom:1rem}
+.tn-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.tn-icon{font-size:14px}
+.tn-title{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#6B4B00}
+.tn-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px}
+.tn-list li{font-size:13px;color:#3a2a00;line-height:1.45;padding-left:14px;position:relative}
+.tn-list li::before{content:"•";position:absolute;left:2px;color:#C9A227;font-weight:700}
+.tn-who{font-weight:600;color:#1a1a1a}
+.tn-date{color:#6B4B00;font-weight:500}
+@media (max-width:640px){.team-notes{padding:.75rem .9rem}.tn-list li{font-size:12.5px}}
+.week-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;padding:6px 4px}
+.wn-btn{appearance:none;border:1.5px solid var(--gray-200);background:#fff;color:var(--gray-700);width:34px;height:34px;border-radius:50%;font-size:18px;line-height:1;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all .12s}
+.wn-btn:hover:not(:disabled){border-color:var(--black);color:var(--black)}
+.wn-btn:disabled{opacity:.35;cursor:not-allowed}
+.wn-label{flex:1;text-align:center;font-weight:700;font-size:14px;color:var(--gray-700);display:flex;flex-direction:column;gap:2px;line-height:1.1}
+.wn-label .wn-main{font-size:14px;color:#1a1a1a}
+.wn-label .wn-sub{font-size:11px;color:var(--gray-500);font-weight:500}
+.wn-draft{display:inline-block;margin-left:6px;font-size:9.5px;letter-spacing:.6px;padding:2px 7px;border-radius:8px;background:#FAEEDA;color:#7A4A0C;font-weight:700;text-transform:uppercase;vertical-align:middle}
+.next-week-banner{background:#FFF7E6;border:1px solid #F2D7A0;color:#7A4A0C;border-radius:12px;padding:.65rem .85rem;font-size:12.5px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px}
+.next-week-banner .nwb-ic{font-size:14px;line-height:1.1}
+.day-tabs{display:flex;gap:5px;margin-bottom:1.25rem;flex-wrap:wrap}
+.dtab{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px;border-radius:14px;cursor:pointer;border:1.5px solid var(--gray-200);color:var(--gray-700);background:#fff;transition:all .12s;flex-shrink:0;line-height:1.1;min-width:60px}
+.dtab .dt-name{font-size:10px;letter-spacing:.7px;text-transform:uppercase;font-weight:700;opacity:.65}
+.dtab .dt-date{font-size:18px;font-weight:700;line-height:1}
+.dtab:hover{border-color:var(--black);color:var(--black)}
+.dtab.active{background:var(--black);border-color:var(--black);color:#fff;box-shadow:0 4px 12px rgba(10,10,10,.15)}
+.dtab.active .dt-name{opacity:.8}
+.dtab.future{border-style:dashed;border-color:#E0863A;background:#FFF8EE;color:#7A4A0C}
+.dtab.future .dt-name{color:#B5712A;opacity:.85}
+.dtab.future.active{background:#E0863A;border-style:solid;border-color:#E0863A;color:#fff;box-shadow:0 4px 12px rgba(224,134,58,.25)}
+.dtab.future.active .dt-name{color:#fff;opacity:.85}
+.sidebar-legend{margin-top:auto;padding:14px 6px 10px;border-top:1px solid rgba(255,255,255,.08)}
+.sl-title{color:rgba(255,255,255,.45);font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;margin:0 8px 8px}
+.sl-section{margin-bottom:10px}
+.sl-section:last-child{margin-bottom:0}
+.sl-row{display:flex;align-items:center;gap:9px;padding:5px 8px;color:rgba(255,255,255,.82);font-size:12px;line-height:1}
+.sl-ic{display:inline-flex;align-items:center;justify-content:center;width:18px;flex-shrink:0;color:#9CCDFF}
+.sl-ic svg{width:14px;height:14px}
+.sl-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-left:4px}
+.sl-dot.over{background:#A266DC}
+.sl-dot.perfect{background:#3FB664}
+.sl-dot.short1{background:#E0863A}
+.sl-dot.short2{background:#D04545}
+.sl-chip{font-size:10px;padding:2px 8px;border-radius:9px;font-weight:700;flex-shrink:0;letter-spacing:.2px}
+.sl-chip.pro{background:#DDEBFA;color:#0C447C}
+.sl-chip.pt{background:#FAEEDA;color:#7A4A0C}
+.sl-chip.jr{background:#E5F0D8;color:#1F6B2A}
+
+.legend{display:flex;gap:14px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
+.leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-700)}
+.leg-key{padding-left:14px;border-left:1px solid var(--gray-200);color:var(--gray-500);font-weight:500}
+.leg-key .leg-ic{display:inline-flex;align-items:center;justify-content:center;width:20px;height:12px}
+.leg-key .leg-ic.ppl{font-size:12px;width:auto}
+.leg-key .leg-ic svg{width:20px;height:12px}
+.leg-bar{width:3px;height:16px;border-radius:2px}
+
+.timeline{display:flex;flex-direction:column;gap:6px}
+.t-row{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:stretch}
+.t-time{font-size:11px;color:var(--gray-500);font-weight:500;text-align:right;padding-top:10px;line-height:1.3;padding-right:2px}
+.t-block{background:#fff;border:1px solid var(--gray-200);border-radius:0 var(--rlg) var(--rlg) 0;padding:14px 16px;display:flex;align-items:center;gap:10px;border-left-width:4px;box-shadow:0 1px 2px rgba(10,10,10,.04);transition:transform .12s, box-shadow .12s}
+.t-block:hover{transform:translateX(2px);box-shadow:0 4px 12px rgba(10,10,10,.06)}
+.t-block.comp{border-left-color:var(--red)}
+.t-block.tt{border-left-color:#378ADD}
+.t-block.adult{border-left-color:#1D9E75}
+.t-block.munch{border-left-color:#BA7517}
+.t-block.other{border-left-color:#888}
+.t-name{font-size:13px;font-weight:500;color:var(--black);min-width:120px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.t-meta{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:4px}
+.meta-pill{display:inline-flex;align-items:center;gap:4px;background:var(--gray-100);color:var(--gray-700);font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.2px;white-space:nowrap}
+.meta-pill .mi{display:inline-flex;align-items:center;opacity:.9}
+.meta-pill .mi svg{width:12px;height:12px;display:block}
+.meta-pill .mi.ppl{font-size:11px;line-height:1}
+.meta-pill.coach.over{background:#EFE3F7;color:#5B2A86}
+.meta-pill.coach.perfect{background:#E2F5E8;color:#1F6B3A}
+.meta-pill.coach.short1{background:#FCE9D2;color:#8A4B0E}
+.meta-pill.coach.short2{background:#FAD7D7;color:#9B1C1C}
+.meta-pill.courts{background:#EEF4FB;color:#0C447C}
+.meta-pill.short{background:#FFF5D6;color:#6B4B00}
+.t-chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;flex-shrink:0;max-width:60%;margin-left:auto}
+@media (max-width:640px){
+  .t-meta{gap:4px}
+  .meta-pill{font-size:10px;padding:2px 7px}
+  .t-block{flex-wrap:wrap;padding:12px 14px;gap:8px}
+  .t-name{min-width:0;flex:1 1 auto}
+  .t-chips{flex-basis:100%;justify-content:flex-start;max-width:100%;margin-top:2px;margin-left:0}
+}
+.chip{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:600;letter-spacing:.2px}
+.chip-pro{background:#E6F1FB;color:#0C447C}
+.chip-pt{background:#FAEEDA;color:#633806}
+.chip-jr{background:#EAF3DE;color:#27500A}
+
+/* ==================== AVAILABILITY TAB ==================== */
+.avail-intro{font-size:13px;color:var(--gray-700);margin-bottom:1.25rem;line-height:1.6;background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem}
+.avail-intro strong{color:var(--black)}
+.cov-intro-card{background:#fff;border:1px solid var(--gray-200);border-left:3px solid #1164A3}
+.cov-intro-body{font-size:13px;color:var(--gray-700);line-height:1.65}
+.req-stepper{display:flex;align-items:flex-start;gap:0;background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.1rem 1.25rem;margin-bottom:1rem}
+.req-step{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;min-width:62px}
+.req-step .rs-dot{width:30px;height:30px;border-radius:50%;background:var(--gray-200);color:var(--gray-700);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;transition:all .2s}
+.req-step .rs-label{font-size:10.5px;font-weight:700;color:var(--gray-500);letter-spacing:.4px;text-transform:uppercase;text-align:center}
+.req-step.active .rs-dot{background:var(--black);color:#fff;box-shadow:0 0 0 4px rgba(10,10,10,.08)}
+.req-step.done .rs-dot{background:#3FB664;color:#fff}
+.req-step.active .rs-label,.req-step.done .rs-label{color:var(--black)}
+.req-line{flex:1;height:3px;background:var(--gray-200);border-radius:2px;margin:14px 6px 0;position:relative;overflow:hidden;min-width:14px}
+.req-line .rl-fill{height:100%;background:#3FB664;border-radius:2px;width:0;transition:width .35s}
+@media (max-width:640px){.req-stepper{padding:.9rem .6rem}.req-step{min-width:48px}.req-step .rs-label{font-size:9.5px}.req-line{margin:14px 3px 0}}
+.tap-hint{display:inline-flex;align-items:center;gap:5px;font-size:12px;background:var(--red-light);color:var(--red);border-radius:6px;padding:3px 9px;font-weight:500;margin-top:6px}
+
+.day-avail{margin-bottom:1rem}
+.day-avail-header{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1.5px;color:var(--black);margin-bottom:.8rem;display:flex;align-items:center;gap:10px}
+.day-avail-header .count{font-family:'Inter',sans-serif;font-size:12px;font-weight:500;color:var(--gray-500);letter-spacing:0}
+
+.group-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--gray-500);font-weight:500;margin-bottom:.4rem;margin-top:.75rem}
+.group-label:first-of-type{margin-top:0}
+
+.coach-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:.25rem}
+.coach-tap{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:14px 14px;cursor:pointer;transition:all .15s;position:relative;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.coach-tap:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(10,10,10,.08)}
+.coach-tap:hover{border-color:var(--red);background:var(--red-light)}
+.coach-tap.pro-card:hover{border-color:#378ADD;background:#E6F1FB}
+.coach-tap.pt-card:hover{border-color:#BA7517;background:#FAEEDA}
+.coach-tap.jr-card{border-style:dashed}
+.coach-tap.jr-card:hover{border-color:#1D9E75;background:#EAF3DE;border-style:dashed}
+.tap-indicator{position:absolute;top:8px;right:8px;width:16px;height:16px;border-radius:50%;background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--gray-500)}
+.coach-tap-name{font-size:13px;font-weight:500;color:var(--black);margin-bottom:2px;padding-right:18px}
+.coach-tap-level{font-size:11px;color:var(--gray-500)}
+
+/* CONTACT FLYOUT */
+.contact-flyout{display:none;background:var(--black);border-radius:var(--rlg);padding:1rem 1.25rem;margin-top:.5rem;margin-bottom:.25rem}
+.contact-flyout.open{display:block}
+.cf-name{font-size:15px;font-weight:500;color:#fff;margin-bottom:.6rem}
+.cf-level{font-size:11px;color:#aaa;margin-bottom:.75rem}
+.cf-actions{display:flex;gap:8px;flex-wrap:wrap}
+.cf-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;border-radius:var(--r);font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;flex:1;min-width:120px;justify-content:center}
+.cf-call{background:#007A5A;color:#fff;box-shadow:0 4px 14px rgba(0,122,90,.3)}
+.cf-call:hover{filter:brightness(1.05)}
+.cf-text{background:#1a1a1a;color:#fff;border:1px solid #333}
+.cf-text:hover{background:#2a2a2a}
+.cf-email{background:#1a1a1a;color:#fff;border:1px solid #333}
+.cf-email:hover{background:#2a2a2a}
+.cf-no-contact{font-size:12px;color:#888;font-style:italic}
+.cf-close{font-size:11px;color:#666;cursor:pointer;margin-top:.6rem;display:block;text-align:center}
+.cf-close:hover{color:#aaa}
+
+
+/* ==================== FORM TAB ==================== */
+.card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1.25rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.sec-label{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--red);font-weight:500;margin-bottom:1rem}
+.field{margin-bottom:1rem}
+.field:last-child{margin-bottom:0}
+label.fl{display:block;font-size:13px;color:var(--gray-700);margin-bottom:5px;font-weight:500}
+.req{color:var(--red)}
+input[type=text],input[type=email],input[type=date],select,textarea{width:100%;border:1px solid var(--gray-200);border-radius:var(--r);padding:9px 12px;font-family:'Inter',sans-serif;font-size:14px;color:var(--black);background:#fff;outline:none;transition:border-color .15s;-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--red)}
+textarea{resize:vertical;min-height:64px;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:500px){.row2{grid-template-columns:1fr}}
+.pill-group{display:flex;flex-wrap:wrap;gap:8px}
+.pill{position:relative}
+.pill input{position:absolute;opacity:0;width:0;height:0}
+.pill label{display:block;border:1px solid var(--gray-200);border-radius:20px;padding:7px 14px;font-size:13px;color:var(--gray-500);cursor:pointer;transition:all .15s;margin:0;background:#fff}
+.pill input:checked+label{background:var(--red);border-color:var(--red);color:#fff;font-weight:500}
+.day-block{background:var(--gray-50);border-radius:var(--r);padding:1rem;margin-bottom:.75rem;border:1px solid var(--gray-200)}
+.day-header{font-size:13px;font-weight:500;color:var(--black);margin-bottom:.875rem;display:flex;align-items:center;gap:8px}
+.day-num{background:var(--red);color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+.sub-field{margin-bottom:.75rem}
+.sub-field:last-child{margin-bottom:0}
+.sub-label{font-size:12px;color:var(--gray-700);margin-bottom:5px;font-weight:500}
+.add-day-btn{width:100%;border:1px dashed var(--gray-300);border-radius:var(--r);padding:10px;background:transparent;color:var(--gray-500);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;transition:all .15s;margin-top:.5rem}
+.add-day-btn:hover{border-color:var(--red);color:var(--red)}
+.remove-btn{margin-left:auto;font-size:11px;color:var(--gray-500);cursor:pointer;padding:2px 8px;border:1px solid var(--gray-200);border-radius:4px;background:#fff}
+.cbox{display:none;margin-top:.75rem;padding:.875rem;background:#fff;border-radius:var(--r);border:1px solid var(--gray-200)}
+.cbox.on{display:block}
+.hint{font-size:12px;color:var(--gray-500);margin-top:4px;line-height:1.4}
+.warn{font-size:14px;font-weight:600;color:#fff;background:#E01E5A;border-radius:var(--rlg);padding:14px 16px 14px 48px;margin-top:12px;line-height:1.45;border:none;box-shadow:0 6px 18px rgba(224,30,90,.28);position:relative;letter-spacing:.1px}
+.warn::before{content:"⚠";position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:22px;line-height:1}
+.avail-mini-panel{border-radius:var(--r);overflow:hidden;border:1px solid var(--gray-200);margin-top:.75rem}
+.amp-header{background:var(--black);color:#fff;padding:7px 12px;font-size:11px;font-weight:500;letter-spacing:.5px}
+.amp-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--gray-100);gap:8px;flex-wrap:wrap}
+.amp-row:last-child{border-bottom:none}
+.amp-name{font-size:13px;font-weight:500;color:var(--black)}
+.amp-meta{font-size:11px;color:var(--gray-500)}
+.amp-btns{display:flex;gap:6px;flex-shrink:0}
+.amp-btn{font-size:11px;padding:4px 10px;border-radius:5px;text-decoration:none;font-weight:500}
+.amp-call{background:var(--red-light);color:var(--red)}
+.amp-email{background:#E6F1FB;color:#0C447C}
+.no-avail{font-size:13px;color:var(--gray-500);padding:10px 12px;font-style:italic}
+.sessions-list{display:flex;flex-direction:column;gap:8px;margin-bottom:.5rem}
+.session-row{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r);padding:12px 14px;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.session-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px}
+.session-title{font-size:14px;font-weight:600;color:var(--black);line-height:1.3}
+.session-remove{font-size:11px;color:var(--gray-500);background:transparent;border:1px solid var(--gray-200);padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;flex-shrink:0}
+.session-remove:hover{color:var(--red);border-color:var(--red)}
+.session-cover{width:100%;font-size:14px}
+.cover-status{margin-top:8px;font-size:12px;font-weight:500;padding:6px 10px;border-radius:6px;display:inline-block}
+.cover-status.pending{background:#FCECEF;color:#A1173D}
+.cover-status.covered{background:#E6F5EF;color:#00573F}
+.session-picker{margin-top:.25rem}
+.session-picker select{width:100%;background:var(--red-light);border:1.5px dashed var(--red);color:var(--red);font-weight:600;cursor:pointer}
+.no-sessions{font-size:13px;color:var(--gray-500);font-style:italic;padding:8px 2px}
+.private-section{margin-top:1rem;padding-top:1rem;border-top:1px dashed var(--gray-200)}
+.private-section .sub-label{font-size:12px;text-transform:uppercase;letter-spacing:1.2px;color:var(--red);font-weight:600}
+.btn-submit{background:#007A5A;color:#fff;border:none;border-radius:var(--r);padding:14px 28px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:filter .15s;box-shadow:0 6px 20px rgba(0,122,90,.25);letter-spacing:.2px}
+.btn-submit:hover{filter:brightness(1.05)}
+.btn-row{display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+.policy{font-size:12px;color:var(--gray-500);line-height:1.5}
+.success-msg{display:none;background:#e8f5e9;border:1px solid #a5d6a7;border-radius:var(--r);padding:1rem;color:#1b5e20;font-size:14px;margin-top:1rem}
+.news-head{margin-bottom:1rem}
+.news-title{font-size:24px;font-weight:700;color:var(--black);letter-spacing:-.2px;margin-bottom:4px}
+.news-sub{font-size:13px;color:var(--gray-500)}
+.news-tabs{display:flex;gap:6px;margin-bottom:1.1rem;flex-wrap:wrap}
+.ntab{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:14px;border:1.5px solid var(--gray-200);background:#fff;color:var(--gray-700);font-size:13px;font-weight:600;cursor:pointer;transition:all .12s;letter-spacing:.2px}
+.ntab:hover{border-color:var(--black);color:var(--black)}
+.ntab.active{background:var(--black);border-color:var(--black);color:#fff;box-shadow:0 4px 12px rgba(10,10,10,.15)}
+.ntab-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;font-size:10.5px;font-weight:800;background:var(--gray-100);color:var(--gray-700);border-radius:9px;letter-spacing:0}
+.ntab.active .ntab-count{background:rgba(255,255,255,.18);color:#fff}
+.news-list{display:flex;flex-direction:column;gap:.75rem}
+.news-item{background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem 1.1rem;box-shadow:0 1px 2px rgba(10,10,10,.03)}
+.news-item.alert{border-left:3px solid #D04545}
+.news-item.info{border-left:3px solid #1164A3}
+.news-item.calendar{border-left:3px solid #C9A227;background:#FFFBEC}
+.news-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.news-date{font-size:11px;color:var(--gray-500);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.news-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;letter-spacing:.4px;text-transform:uppercase}
+.news-tag.alert{background:#FAD7D7;color:#8A1313}
+.news-tag.info{background:#DDEBFA;color:#0C447C}
+.news-tag.calendar{background:#FFF1C2;color:#6B4B00}
+.news-item-title{font-size:15px;font-weight:700;color:var(--black);margin-bottom:6px;line-height:1.3}
+.news-item-body{font-size:13.5px;color:var(--gray-700);line-height:1.55}
+.news-empty{text-align:center;padding:3rem 1rem;color:var(--gray-500);font-size:13px;background:#fff;border:1px dashed var(--gray-300);border-radius:var(--rlg)}
+@media (max-width:640px){.news-title{font-size:20px}.news-item{padding:.85rem .95rem}}
+</style>
+
+<!-- OneSignal Web Push -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  // Debug panel — only renders when URL has ?debug=1 (so regular coaches don't see it)
+  // and the user hasn't permanently dismissed it
+  window._DEBUG_PUSH = /[?&]debug=1\b/.test(location.search) && localStorage.getItem('hide_debug') !== '1';
+  window._dbg = { events: [], lastError: null };
+  window.dbgLog = function dbgLog(msg){ window._dbg.events.push({t: Date.now(), m: String(msg).slice(0,200)}); if(window._DEBUG_PUSH){ try{ renderDebugPanel(); }catch(e){} } };
+  window.addEventListener('error', e=>{ window._dbg.lastError = (e.message||'')+' @ '+(e.filename||'')+':'+(e.lineno||''); if(window._DEBUG_PUSH) renderDebugPanel(); });
+  window.addEventListener('unhandledrejection', e=>{ window._dbg.lastError = 'unhandled: '+(e.reason && e.reason.message || e.reason || ''); if(window._DEBUG_PUSH) renderDebugPanel(); });
+
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    dbgLog('SDK callback fired');
+    try {
+      await OneSignal.init({
+        appId: "c95f53b2-4df0-4ea8-9771-a4773201e7fd",
+        autoResubscribe: true,
+        notifyButton: { enable: false },
+        // GitHub Pages serves this project from /Coaches-Schedule-/ — tell OneSignal where the SW lives
+        serviceWorkerPath: "/Coaches-Schedule-/OneSignalSDKWorker.js",
+        serviceWorkerParam: { scope: "/Coaches-Schedule-/" },
+        serviceWorkerOverrideForTypicalSite: true
+      });
+      dbgLog('init resolved');
+      window._OS = OneSignal;
+      try {
+        OneSignal.User.PushSubscription.addEventListener('change', e=>{
+          dbgLog('PushSubscription change: optedIn='+(e.current && e.current.optedIn));
+        });
+        OneSignal.Notifications.addEventListener('permissionChange', granted=>{
+          dbgLog('permissionChange: '+granted);
+        });
+      } catch(e){ dbgLog('listener err: '+e.message); }
+      if(window._DEBUG_PUSH) renderDebugPanel();
+    } catch(e){ window._dbg.lastError = 'init: '+e.message; if(window._DEBUG_PUSH) renderDebugPanel(); }
+  });
+
+  function renderDebugPanel(){
+    if(!window._DEBUG_PUSH) return;
+    let el = document.getElementById('dbg-panel');
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'dbg-panel';
+      el.style.cssText = 'position:fixed;left:0;right:0;bottom:calc(72px + env(safe-area-inset-bottom));background:#0F1014;color:#fff;font-family:monospace;font-size:11px;line-height:1.45;padding:10px 12px;z-index:200;max-height:42vh;overflow-y:auto;border-top:2px solid #1164A3';
+      document.body.appendChild(el);
+    }
+    const standalone = (window.navigator.standalone === true) || window.matchMedia('(display-mode: standalone)').matches;
+    const isIOSdev = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const perm = (window.Notification && Notification.permission) || 'n/a';
+    let osPerm='n/a', optedIn='n/a', subId='n/a', userId='n/a', token='n/a';
+    try { if(window._OS){
+      osPerm = (_OS.Notifications && _OS.Notifications.permission) ?? 'n/a';
+      optedIn = (_OS.User && _OS.User.PushSubscription && _OS.User.PushSubscription.optedIn);
+      subId = (_OS.User && _OS.User.PushSubscription && _OS.User.PushSubscription.id) || 'null';
+      token = (_OS.User && _OS.User.PushSubscription && _OS.User.PushSubscription.token) || 'null';
+      userId = (_OS.User && _OS.User.onesignalId) || 'null';
+    }} catch(e){}
+    if(navigator.serviceWorker){
+      navigator.serviceWorker.getRegistrations().then(rs=>{
+        const txt = rs.length ? rs.map(r=>r.active?(r.scope+' ✓'):(r.scope+' (pending)')).join('\n      ') : 'none registered';
+        const swLine = document.getElementById('dbg-sw');
+        if(swLine) swLine.textContent = 'SW:    '+txt;
+      });
+    }
+    const events = (window._dbg.events||[]).slice(-6).map(e=>'  • '+e.m).join('\n') || '  (none)';
+    el.innerHTML = '<div style="font-weight:700;color:#1164A3;margin-bottom:6px">⚙ DEBUG (push diagnostics)</div>' +
+      '<div>iOS: device='+isIOSdev+'  standalone='+standalone+'</div>' +
+      '<div>Permission: native='+perm+'  OneSignal='+osPerm+'</div>' +
+      '<div>OneSignal: loaded='+!!window._OS+'</div>' +
+      '<div>  optedIn = '+optedIn+'</div>' +
+      '<div>  subId = '+String(subId).slice(0,40)+'</div>' +
+      '<div>  userId = '+String(userId).slice(0,40)+'</div>' +
+      '<div>  token = '+(token==='null'?'null':'set ('+String(token).length+' chars)')+'</div>' +
+      '<div id="dbg-sw">SW:    checking…</div>' +
+      '<div>Last error: <span style="color:#ff8a80">'+(window._dbg.lastError||'none')+'</span></div>' +
+      '<div>Events (last 6):</div>' +
+      '<div style="white-space:pre">'+events+'</div>' +
+      '<button onclick="localStorage.setItem(\'hide_debug\',\'1\');this.parentNode.style.display=\'none\';window._DEBUG_PUSH=false" style="position:absolute;top:4px;right:8px;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer">×</button>';
+  }
+  if(window._DEBUG_PUSH) setInterval(renderDebugPanel, 2000);
+</script>
+</head>
+<body class="locked">
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">L</div>
+    <div class="gate-title">LEGACY YTE</div>
+    <div class="gate-sub">Enter password to view schedule</div>
+    <input type="password" id="gate-input" autocomplete="off" placeholder="Password">
+    <button id="gate-btn" onclick="tryUnlock()">Unlock</button>
+    <div id="gate-err"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const HASH = 'f959ac10dabbe17aabef122bdb1ae6cd0d5befa264a4799f5f69e6844759dfc9';
+  const KEY = 'legacy_unlocked_v1';
+  async function sha256(s){
+    const buf = new TextEncoder().encode(s);
+    const h = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  function unlock(){
+    document.body.classList.remove('locked');
+    document.getElementById('gate').classList.add('hidden');
+  }
+  if(sessionStorage.getItem(KEY)==='1'){ unlock(); return; }
+  window.tryUnlock = async function(){
+    const v = document.getElementById('gate-input').value;
+    const err = document.getElementById('gate-err');
+    err.textContent = '';
+    if(!v){ err.textContent='Enter a password'; return; }
+    const h = await sha256(v);
+    if(h===HASH){ sessionStorage.setItem(KEY,'1'); unlock(); }
+    else{ err.textContent='Incorrect password'; }
+  };
+  document.addEventListener('DOMContentLoaded', function(){
+    const i = document.getElementById('gate-input');
+    if(i){ i.focus(); i.addEventListener('keydown', e=>{ if(e.key==='Enter') window.tryUnlock(); }); }
+  });
+})();
+</script>
+
+<header class="site-header">
+  <div class="logo-row">
+    <div class="logo-mark">L</div>
+    <div><div class="logo-name">LEGACY YTE</div></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="header-week" id="header-week">Session 3 — Week 9</div>
+    <button id="hard-reload" onclick="hardReload()" title="Force refresh (clears cache)" aria-label="Refresh app"
+      style="background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.85);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0">↻</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-icon="schedule" onclick="switchTab('schedule')">Weekly schedule</div>
+  <div class="tab" data-icon="mine" onclick="switchTab('mine')">My schedule</div>
+  <div class="tab" data-icon="coverage" onclick="switchTab('coverage')">Who's available</div>
+  <div class="tab" data-icon="request" onclick="switchTab('request')">Request time off</div>
+  <div class="tab" data-icon="news" onclick="switchTab('news')">What's new</div>
+
+  <div class="sidebar-legend">
+    <div class="sl-title">Legend</div>
+    <div class="sl-section">
+      <div class="sl-row"><span class="sl-ic"><svg viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="18" height="10" rx="1"/><line x1="10" y1="1" x2="10" y2="11"/><line x1="1" y1="6" x2="19" y2="6" stroke-dasharray="1.2 1.2"/></svg></span>Courts</div>
+      <div class="sl-row"><span class="sl-ic">👥</span>Coaches</div>
+    </div>
+    <div class="sl-section">
+      <div class="sl-row"><span class="sl-chip pro">Pro</span>Full-time</div>
+      <div class="sl-row"><span class="sl-chip pt">Pro</span>Part-time</div>
+      <div class="sl-row"><span class="sl-chip jr">Jr</span>Junior pro</div>
+    </div>
+    <div class="sl-section">
+      <div class="sl-row"><span class="sl-dot perfect"></span>Staffed</div>
+      <div class="sl-row"><span class="sl-dot over"></span>Overstaffed</div>
+      <div class="sl-row"><span class="sl-dot short1"></span>1 short</div>
+      <div class="sl-row"><span class="sl-dot short2"></span>2+ short</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom tab bar (mobile) -->
+<nav class="tabbar" id="tabbar">
+  <div class="tabbar-item active" data-tab="schedule" onclick="switchTab('schedule')">
+    <div class="tabbar-icon">📅</div><div class="tabbar-label">Schedule</div>
+  </div>
+  <div class="tabbar-item" data-tab="mine" onclick="switchTab('mine')">
+    <div class="tabbar-icon">⭐</div><div class="tabbar-label">Mine</div>
+  </div>
+  <div class="tabbar-item" data-tab="coverage" onclick="switchTab('coverage')">
+    <div class="tabbar-icon">👥</div><div class="tabbar-label">Coverage</div>
+  </div>
+  <div class="tabbar-item" data-tab="request" onclick="switchTab('request')">
+    <div class="tabbar-icon">🏝️</div><div class="tabbar-label">Time off</div>
+  </div>
+  <div class="tabbar-item" data-tab="news" onclick="switchTab('news')">
+    <div class="tabbar-icon">📣</div><div class="tabbar-label">News</div>
+  </div>
+</nav>
+
+<!-- ===== SCHEDULE TAB ===== -->
+<div class="panel active" id="tab-schedule">
+  <div class="admin-bar" id="admin-bar" style="display:none">
+    <div class="ab-label">Admin tools</div>
+    <button class="ab-btn" onclick="exportWeekJSON()">📥 Save snapshot (JSON)</button>
+    <button class="ab-btn" onclick="printWeek()">🖨️ Print / Save PDF</button>
+    <button class="ab-btn" onclick="showResetHelp()">♻️ Reset to template</button>
+    <button class="ab-btn ab-exit" onclick="exitAdmin()">Exit admin</button>
+  </div>
+  <div class="team-notes" id="team-notes" style="display:none">
+    <div class="tn-head"><span class="tn-icon">📌</span><span class="tn-title">Team notes</span></div>
+    <ul class="tn-list" id="tn-list"></ul>
+  </div>
+  <div class="week-nav" id="week-nav">
+    <button class="wn-btn" id="wn-prev" onclick="changeWeek(-1)" aria-label="Previous week">‹</button>
+    <div class="wn-label" id="wn-label">
+      <span class="wn-main">This week</span>
+      <span class="wn-sub" id="wn-sub">Session 3 · Week 9</span>
+    </div>
+    <button class="wn-btn" id="wn-next" onclick="changeWeek(1)" aria-label="Next week">›</button>
+  </div>
+  <div class="next-week-banner" id="next-week-banner" style="display:none">
+    <span class="nwb-ic">📝</span>
+    <span><strong>Draft preview.</strong> Next week's schedule is shown as a copy of the current week. Sanjin will finalize it before the week starts.</span>
+  </div>
+  <div class="day-tabs" id="sched-day-tabs"></div>
+  <div class="timeline" id="timeline"></div>
+</div>
+
+<!-- ===== MY SCHEDULE TAB ===== -->
+<div class="panel" id="tab-mine">
+  <div id="mine-picker" style="display:none">
+    <div class="avail-intro">
+      <strong>Pick your name</strong> to see just your week. We'll remember it on this device.
+    </div>
+    <div id="mine-picker-list"></div>
+  </div>
+  <div id="mine-view" style="display:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+      <div class="day-avail-header" id="mine-name" style="margin:0"></div>
+      <a href="#" onclick="clearMine();return false" style="font-size:12px;color:var(--gray-500);text-decoration:none;border:1px solid var(--gray-200);padding:5px 10px;border-radius:6px;background:#fff">Switch coach</a>
+    </div>
+    <div id="mine-list"></div>
+  </div>
+</div>
+
+<!-- ===== AVAILABILITY TAB ===== -->
+<div class="panel" id="tab-coverage">
+  <div class="avail-intro">
+    <strong>Who's not scheduled</strong> — these coaches are free each day and should be your first call for coverage.<br>
+    <span class="tap-hint">Tap any name to get their contact info</span>
+  </div>
+  <div id="avail-list"></div>
+</div>
+
+<div class="panel" id="tab-request">
+  <div class="card cov-intro-card">
+    <div class="sec-label">Finding your coverage</div>
+    <div class="cov-intro-body">
+      If you can't make a clinic, it's on you to find another coach to cover. That's the standard at Legacy.<br><br>
+      Families build their week around court time. When a clinic is short-staffed, the experience drops, families notice, and your fellow pros are left scrambling to fill the gap.<br><br>
+      We work like a doubles team. Leave your half open with no plan and someone else has to sprint to cover. Plan it out, line up the sub, and hand off what the players are working on so the transition is seamless.<br><br>
+      Coaches who handle their coverage are the ones who earn the bigger clinics and private sessions. That's how we protect the player experience and the Legacy name.
+    </div>
+  </div>
+
+  <div class="req-stepper">
+    <div class="req-step" id="rs-1"><div class="rs-dot">1</div><div class="rs-label">Your info</div></div>
+    <div class="req-line"><div class="rl-fill" id="rl-1"></div></div>
+    <div class="req-step" id="rs-2"><div class="rs-dot">2</div><div class="rs-label">Coverage</div></div>
+    <div class="req-line"><div class="rl-fill" id="rl-2"></div></div>
+    <div class="req-step" id="rs-3"><div class="rs-dot">3</div><div class="rs-label">Notes</div></div>
+    <div class="req-line"><div class="rl-fill" id="rl-3"></div></div>
+    <div class="req-step" id="rs-4"><div class="rs-dot">✓</div><div class="rs-label">Submit</div></div>
+  </div>
+
+  <div class="card">
+    <div class="sec-label">Your info</div>
+    <div class="row2">
+      <div class="field">
+        <label class="fl">Your name <span class="req">*</span></label>
+        <select id="req-name" onchange="fillEmail()">
+          <option value="">Select your name...</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="fl">Email</label>
+        <input type="email" id="req-email" placeholder="auto-filled" readonly style="background:var(--gray-50);color:var(--gray-500)">
+      </div>
+    </div>
+    <div class="field">
+      <label class="fl">Request type <span class="req">*</span></label>
+      <div class="pill-group">
+        <div class="pill"><input type="radio" name="rtype" id="t1"><label for="t1">Vacation</label></div>
+        <div class="pill"><input type="radio" name="rtype" id="t2"><label for="t2">Sick day</label></div>
+        <div class="pill"><input type="radio" name="rtype" id="t3"><label for="t3">Coverage only</label></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sec-label">Day-by-day coverage</div>
+    <div class="hint" style="font-size:13px;color:var(--gray-700);margin-bottom:1rem;line-height:1.6">Add one block per day. Pick a date and available coaches appear automatically.</div>
+    <div id="days-container">
+      <div class="day-block" id="day-1" data-n="1">
+        <div class="day-header"><div class="day-num">1</div><span>Day 1</span></div>
+        <div class="sub-field">
+          <div class="sub-label">Date <span class="req">*</span></div>
+          <input type="date" onchange="onDateChange(1,this.value)">
+        </div>
+        <div class="sub-field" id="sessions-wrap-1">
+          <div class="sub-label">Sessions needing coverage</div>
+          <div id="sessions-list-1" class="sessions-list"></div>
+          <div id="session-picker-1" class="session-picker" style="display:none">
+            <select onchange="addSession(1,this.value);this.value=''">
+              <option value="">+ Add a session needing coverage...</option>
+            </select>
+          </div>
+          <div class="no-sessions" id="no-sessions-1">Pick a date to see sessions.</div>
+        </div>
+        <div class="warn" id="warn-1" style="display:none">Any session without coverage is subject to LEGACY's coverage policy. Please keep trying to fill gaps.</div>
+        <div class="private-section">
+          <div class="sub-label">Private lessons this day?</div>
+          <div class="pill-group">
+            <div class="pill"><input type="radio" name="hp1" id="hp1y" onchange="togglePrivate(1,'yes')"><label for="hp1y">Yes</label></div>
+            <div class="pill"><input type="radio" name="hp1" id="hp1n" onchange="togglePrivate(1,'no')"><label for="hp1n">No</label></div>
+          </div>
+          <div class="cbox" id="private-box-1">
+            <div class="sub-label" style="margin-top:.75rem">Did you cancel them?</div>
+            <div class="pill-group">
+              <div class="pill"><input type="radio" name="pc1" id="pc1y" onchange="toggleFD(1)"><label for="pc1y">Yes, all cancelled</label></div>
+              <div class="pill"><input type="radio" name="pc1" id="pc1n" onchange="toggleFD(1)"><label for="pc1n">No — need front desk help</label></div>
+            </div>
+            <div class="cbox" id="fd-box-1">
+              <div class="sub-label">Clients & times for front desk to cancel</div>
+              <textarea class="fd-textarea" placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
+              <div class="hint">Front desk will reach out via Club Automation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="add-day-btn" onclick="addDay()">+ Add another day</button>
+  </div>
+
+  <div class="card">
+    <div class="sec-label">Additional notes</div>
+    <textarea id="req-notes" placeholder="Anything else Kat or front desk should know..."></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-submit" onclick="submitForm()">Submit request</button>
+    <div class="policy">Submissions notify Kat Sorokoo and Sanjin Kunovac. Vacation requires 2 weeks notice.</div>
+  </div>
+  <div class="success-msg" id="success-msg">Request submitted. Sanjin, Kat and the front desk have been notified.</div>
+</div>
+
+<!-- ===== WHAT'S NEW TAB ===== -->
+<div class="panel" id="tab-news">
+  <div class="news-head">
+    <div class="news-title">What's new</div>
+    <div class="news-sub">Recent updates and announcements. Newest first.</div>
+  </div>
+
+  <div class="news-tabs" id="news-tabs">
+    <button class="ntab active" data-cat="alert">🚨 Alerts <span class="ntab-count" id="nt-c-alert">0</span></button>
+    <button class="ntab" data-cat="all">📰 All feeds <span class="ntab-count" id="nt-c-all">0</span></button>
+    <button class="ntab" data-cat="calendar">📅 Dates to remember <span class="ntab-count" id="nt-c-calendar">0</span></button>
+    <button class="ntab" data-cat="push">🔔 Push notifications</button>
+  </div>
+  <div id="news-list" class="news-list"></div>
+  <div id="news-empty" class="news-empty" style="display:none">No updates in this category yet.</div>
+
+  <div class="notif-prefs" id="notif-prefs" style="display:none;margin-top:.25rem">
+    <div class="np-head">
+      <span class="np-icon">🔔</span>
+      <div class="np-title-block">
+        <div class="np-title">Push notifications</div>
+        <div class="np-sub" id="np-status">Choose what you want a phone alert for</div>
+      </div>
+    </div>
+    <div style="margin:.6rem 0 .9rem">
+      <label style="font-size:12px;color:var(--gray-500);font-weight:600;display:block;margin-bottom:5px">Who are you? (so Sanjin can send updates just to you when needed)</label>
+      <select id="np-coach-picker" style="width:100%;padding:9px 12px;border:1px solid var(--gray-200);border-radius:8px;font-family:inherit;font-size:14px;background:#fff;color:var(--black)">
+        <option value="">— Select your name —</option>
+      </select>
+    </div>
+    <div class="np-options">
+      <label class="np-opt"><input type="checkbox" id="np-alerts" data-tag="sub_alerts" checked> <span class="np-opt-text"><b>🚨 Alerts</b> — urgent, time-sensitive (Gabe out, clinic cancelled, etc.)</span></label>
+      <label class="np-opt"><input type="checkbox" id="np-calendar" data-tag="sub_calendar"> <span class="np-opt-text"><b>📅 Dates to remember</b> — upcoming events Sanjin posts</span></label>
+      <label class="np-opt"><input type="checkbox" id="np-general" data-tag="sub_general"> <span class="np-opt-text"><b>📰 All feeds</b> — every update, including small ones</span></label>
+    </div>
+    <button class="np-btn" id="np-btn" onclick="savePushPrefs()">Save & enable notifications</button>
+    <button class="np-unsub" id="np-unsub" onclick="unsubscribePush()" style="display:none">Turn off all notifications</button>
+    <div class="np-foot" id="np-foot">If you don't see a permission prompt after tapping Save, make sure you opened the app from your Home Screen icon (not Safari). On iPhone, go to Settings → Notifications → LEGACY to enable.</div>
+  </div>
+</div>
+
+<script>
+const DAYS_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+const ALL_COACHES = [
+  {id:'jeremie',name:'Jeremie Casabon',abbr:'Jeremie C',phone:'267-606-8262',email:'Jcasabon123@gmail.com',type:'pro',level:'Full coverage'},
+  {id:'stevie',name:'Stevie Dandridge',abbr:'Stevie D',phone:'267-975-1954',email:'sdandridge@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'nick',name:'Nick Fulcher',abbr:'Nick F',phone:'210-925-2935',email:'nfulcher@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'gabe',name:'Gabe Knowles',abbr:'Gabe K',phone:'610-417-0843',email:'gknowles@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'laurence',name:'Laurence Primus',abbr:'Laurence P',phone:'646-852-2283',email:'lprimus@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'david',name:'David Schoshinski',abbr:'David S',phone:'703-915-0201',email:'dschoshinski@legacyyte.org',type:'pt',level:'Any clinic'},
+  {id:'andrew',name:'Andrew Weiss',abbr:'Andrew W',phone:'856-558-8061',email:'aweiss@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'kein',name:'Kein Wilson',abbr:'Kein W',phone:'215-936-7540',email:'kwilson@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'kris',name:'Kris Wilson',abbr:'Kris W',phone:'297-310-9271',email:'kristianw@legacyyte.org',type:'pro',level:'Full coverage'},
+  {id:'shevi',name:'Shevi A',abbr:'Shevi A',phone:'334-282-3063',email:'',type:'pro',level:'Full coverage'},
+  {id:'anna',name:'Anna Mamalat',abbr:'Anna M',phone:'215-900-9699',email:'amamalat@legacyyte.org',type:'pt',level:'Any clinic'},
+  {id:'ahmed',name:'Ahmed Aboseada',abbr:'Ahmed A',phone:'610-256-2650',email:'ahmedaboseada561@gmail.com',type:'pt',level:'Any clinic'},
+  {id:'bella',name:'Bella Nichilo',abbr:'Bella N',phone:'610-291-4359',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'max',name:'Max Olsen',abbr:'Max O',phone:'610-420-7972',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'jinay',name:'Jinay Sheth',abbr:'Jinay S',phone:'215-410-4473',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'levi',name:'Levi Santos',abbr:'Levi S',phone:'267-410-0665',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'L3 — all but TT1'},
+  {id:'flynn',name:'Flynn Hollinger',abbr:'Flynn H',phone:'610-717-8850',email:'',type:'jr',level:'L3 — full coverage incl. TT1'},
+  {id:'dean',name:'Dean Smith',abbr:'Dean S',phone:'215-688-8141',email:'deansmith@yahoo.com',type:'jr',level:'L2 — Munchkins, CC, Adults'},
+  {id:'amy',name:'Amy Georgescu',abbr:'Amy G',phone:'484-999-1779',email:'',type:'jr',level:'L2 — Munchkins, CC, Adults'},
+  {id:'sean',name:'Sean T',abbr:'Sean T',phone:'610-659-3715',email:'',type:'pt',level:'Any clinic'},
+];
+
+const SCHEDULE = {
+  Monday:[
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
+    {time:'12–1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Laurence P']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Gabe K','Stevie D','Jeremie C','Kein W','Flynn H']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Shevi A','Kris W','Sean T','Gabe K','Flynn H']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Jeremie C']},
+    {time:'8:30–10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Shevi A','Gabe K']},
+    {time:'8:30–10pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['Laurence P']},
+  ],
+  Tuesday:[
+    {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Laurence P']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Anna M','Flynn H','Kris W','Jeremie C','Stevie D','Gabe K','Andrew W']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Anna M','Laurence P','Gabe K','Sean T']},
+    {time:'7–8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Jeremie C','Flynn H']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',courts:1,coaches:['Gabe K','Kris W']},
+  ],
+  Wednesday:[
+    {time:'12–1:30pm',name:'Adult Adv Beginner',type:'adult',coaches:['Laurence P','David S']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Jeremie C','Andrew W','Laurence P','Flynn H','Gabe K']},
+    {time:'6–7pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Anna M','David S','Amy G','Shevi A','Bella N']},
+    {time:'7–9pm',name:'TT1',type:'tt',courts:8,coaches:['Sanjin K','Gabe K','Stevie D','Shevi A','Andrew W','Jeremie C','Anna M','Flynn H']},
+  ],
+  Thursday:[
+    {time:'4–5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','David S','Flynn H']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Stevie D','Jeremie C','Gabe K','Kris W','Flynn H','Andrew W']},
+    {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Laurence P','Anna M','Kris W','Flynn H','Bella N','Sean T']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Stevie D','Andrew W']},
+    {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Laurence P']},
+  ],
+  Friday:[
+    {time:'4–5:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Flynn H','Stevie D','Sean T','Kris W','Bella N']},
+    {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Ahmed A','Andrew W']},
+    {time:'5:30–6:30pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','Ahmed A','Flynn H']},
+    {time:'6:30–8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Flynn H','Sean T','Ahmed A','Bella N','Shevi A','Andrew W']},
+  ],
+  Saturday:[
+    {time:'8:30–10am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Ahmed A']},
+    {time:'10–11am',name:'Munchkins',type:'munch',courts:2,coaches:['Sean T','Ahmed A','Anna M','Bella N','Flynn H','Amy G']},
+    {time:'11am–12:30pm',name:'Comp Clinic',type:'comp',coaches:['Kris W','Shevi A','Ahmed A','Anna M','Sean T','Bella N','Flynn H','Amy G']},
+    {time:'1:30–3:30pm',name:'TT Comp',type:'comp',coaches:['Shevi A','Kris W','Sean T','Ahmed A','Bella N','Flynn H']},
+  ],
+  Sunday:[
+    {time:'7:30–9am',name:'Team United Clinic',type:'other',coaches:['Shevi A']},
+    {time:'8:30–10am',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Flynn H']},
+    {time:'11am–12pm',name:'Munchkins',type:'munch',courts:2,coaches:['Kein W','Anna M','Nick F','Laurence P','Shevi A','Jinay S','Sean T','Flynn H']},
+    {time:'12–1:30pm',name:'Comp Clinic',type:'comp',coaches:['Kein W','Shevi A','Nick F','Stevie D','Jinay S','Anna M','Sean T','Ahmed A']},
+    {time:'2:30–4pm',name:'TT Green 2 Y',type:'tt',courts:1,coaches:['Sean T','Bella N']},
+    {time:'2:30–4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Shevi A','Stevie D','Flynn H','Ahmed A','Andrew W']},
+    {time:'5:30–7pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Jinay S']},
+    {time:'5:30–7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W']},
+    {time:'5:30–7pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['TBD']},
+  ]
+};
+
+// ---- PUSH NOTIFICATION PREFS ----
+async function waitForOneSignal(){
+  return new Promise(r=>{
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(os=>r(os));
+  });
+}
+function populateCoachPicker(){
+  const sel = document.getElementById('np-coach-picker');
+  if(!sel || sel.options.length > 1) return;
+  const groups = [
+    ['Pros (Full coverage)', ALL_COACHES.filter(c=>c.type==='pro')],
+    ['Part-time', ALL_COACHES.filter(c=>c.type==='pt')],
+    ['Junior pros', ALL_COACHES.filter(c=>c.type==='jr')],
+  ];
+  groups.forEach(([label, list])=>{
+    if(!list.length) return;
+    const og = document.createElement('optgroup'); og.label = label;
+    list.forEach(c=>{
+      const o = document.createElement('option'); o.value = c.id; o.textContent = c.abbr;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  // Pre-select from Mine tab if already chosen
+  const saved = localStorage.getItem(MINE_KEY);
+  if(saved) sel.value = saved;
+  // Keep in sync with Mine
+  sel.addEventListener('change', ()=>{
+    if(sel.value) localStorage.setItem(MINE_KEY, sel.value);
+  });
+}
+
+async function refreshPushUI(){
+  const status=document.getElementById('np-status');
+  const btn=document.getElementById('np-btn');
+  const foot=document.getElementById('np-foot');
+  const unsub=document.getElementById('np-unsub');
+  if(!status||!btn) return;
+  if(unsub) unsub.style.display='none';
+  // Show iOS-Safari warning prominently when applicable
+  if(isIOS() && !isStandalone()){
+    status.textContent = "Add to Home Screen first — iPhone push won't work in Safari.";
+    status.classList.remove('subscribed');
+    btn.textContent = 'How to add to Home Screen';
+    btn.classList.remove('subscribed');
+    if(foot){ foot.innerHTML = "<b>iPhone steps:</b> Tap the Share button (square with up arrow) at the bottom of Safari → scroll → tap <b>Add to Home Screen</b> → tap Add. Open the new icon from your Home Screen and come back to this page."; }
+    return;
+  }
+  const os = await waitForOneSignal().catch(()=>null);
+  const optedIn = os && os.User && os.User.PushSubscription ? os.User.PushSubscription.optedIn : false;
+  if(optedIn && unsub) unsub.style.display='block';
+  if(optedIn){
+    status.textContent = "You're subscribed. Update what you want to be notified about below.";
+    status.classList.add('subscribed');
+    btn.textContent = 'Update preferences';
+    btn.classList.add('subscribed');
+    // Restore saved checkbox state
+    try {
+      const tags = await os.User.getTags();
+      ['sub_alerts','sub_calendar','sub_general'].forEach(t=>{
+        const cb = document.querySelector(`input[data-tag="${t}"]`);
+        if(cb) cb.checked = tags && tags[t]==='1';
+      });
+    } catch(e){ console.log('[push] getTags error', e); }
+  } else {
+    status.textContent = 'Choose what you want a phone alert for, then tap Save.';
+    status.classList.remove('subscribed');
+    btn.textContent = 'Save & enable notifications';
+    btn.classList.remove('subscribed');
+  }
+}
+function isIOS(){
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+function isStandalone(){
+  return window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches;
+}
+function withTimeout(promise, ms, label){
+  return Promise.race([
+    promise,
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error('Timeout: '+label)), ms))
+  ]);
+}
+// OneSignal v16 returns BOOLEAN for permission, native API returns STRING. Handle both.
+function permGranted(os){
+  const osPerm = os && os.Notifications && os.Notifications.permission;
+  const nativePerm = (typeof Notification !== 'undefined') ? Notification.permission : null;
+  return osPerm === true || nativePerm === 'granted';
+}
+
+async function savePushPrefs(){
+  const btn=document.getElementById('np-btn');
+  if(isIOS() && !isStandalone()){
+    alert("To get push notifications on iPhone, the app needs to be installed to your Home Screen first.\n\nSteps:\n1. Tap the Share button at the bottom of Safari (square with up arrow)\n2. Scroll and tap 'Add to Home Screen'\n3. Tap 'Add'\n4. Open the app from the new icon on your Home Screen\n5. Come back here and tap Save again");
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = 'Working…';
+  const resetBtn=()=>{ btn.disabled=false; refreshPushUI(); };
+  try {
+    const os = await withTimeout(waitForOneSignal(), 6000, 'OneSignal init');
+    dbgLog('savePushPrefs start, granted='+permGranted(os));
+    // 1. Request permission if not already granted
+    if(!permGranted(os)){
+      try { await withTimeout(os.Notifications.requestPermission(), 15000, 'permission'); } catch(e){ dbgLog('reqPerm err: '+e.message); }
+    }
+    if(!permGranted(os)){
+      alert("Notifications were blocked or dismissed.\n\nOn iPhone: open Settings → Notifications → scroll to LEGACY → toggle ON. Then come back and tap Save again.");
+      resetBtn(); return;
+    }
+    dbgLog('perm OK, forcing fresh subscribe');
+    // 2. Make sure the SW is registered (OneSignal sometimes fails this silently on GitHub Pages subpaths)
+    if(navigator.serviceWorker && !window._swRegistered){
+      try {
+        const reg = await navigator.serviceWorker.register('/Coaches-Schedule-/OneSignalSDKWorker.js', {scope:'/Coaches-Schedule-/'});
+        window._swRegistered = true;
+        dbgLog('SW registered: '+reg.scope);
+      } catch(e){ dbgLog('SW reg err: '+e.message); }
+    }
+    // 3. Force fresh subscription: optOut clears stale state, then optIn creates a real push token
+    try { await withTimeout(os.User.PushSubscription.optOut(), 8000, 'optOut'); dbgLog('optOut done'); }
+    catch(e){ dbgLog('optOut err: '+e.message); }
+    try { await withTimeout(os.User.PushSubscription.optIn(), 20000, 'optIn'); dbgLog('optIn resolved'); }
+    catch(e){ dbgLog('optIn err: '+e.message); }
+    try {
+      const sub = navigator.serviceWorker && await navigator.serviceWorker.ready.then(r=>r.pushManager.getSubscription());
+      dbgLog('pushManager.sub: '+(sub ? 'EXISTS endpoint='+sub.endpoint.slice(0,40) : 'null'));
+    } catch(e){ dbgLog('pushSub probe err: '+e.message); }
+    // 4. Identify the coach so Sanjin can send to one or two people instead of everyone
+    const coachId = localStorage.getItem(MINE_KEY) || document.getElementById('np-coach-picker')?.value || '';
+    const coach = ALL_COACHES.find(c=>c.id===coachId);
+    if(coach){
+      try { await withTimeout(os.login(coach.abbr.replace(/\s+/g,'_')), 6000, 'login'); dbgLog('login as '+coach.abbr); }
+      catch(e){ dbgLog('login err: '+e.message); }
+    }
+    // 5. Save tags reflecting preferences + coach identity
+    const tags = {};
+    document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{
+      tags[cb.dataset.tag] = cb.checked ? '1' : '0';
+    });
+    if(coach){
+      tags.coach_name = coach.abbr;
+      tags.coach_type = coach.type; // pro / pt / jr
+    }
+    try { await withTimeout(os.User.addTags(tags), 6000, 'addTags'); dbgLog('addTags done coach='+(coach?coach.abbr:'(none)')); }
+    catch(e){ dbgLog('addTags err: '+e.message); }
+    await refreshPushUI();
+    btn.disabled=false;
+    alert("You're subscribed. We'll send you a push for whatever you checked.");
+  } catch(e){
+    console.log('[push] save error', e);
+    btn.disabled=false;
+    btn.textContent='Save & enable notifications';
+    if(isIOS() && !isStandalone()){
+      alert("This needs the app to be installed to your Home Screen first. Tap Share → Add to Home Screen, then open from the new icon.");
+    } else {
+      alert("Couldn't enable notifications. Open Settings → Notifications → LEGACY and turn them on, then try again.");
+    }
+  }
+}
+
+async function unsubscribePush(){
+  if(!confirm("Turn off all push notifications? You can re-enable any time by tapping Save here.")) return;
+  const unsub=document.getElementById('np-unsub');
+  if(unsub){ unsub.disabled=true; unsub.textContent='Working…'; }
+  try {
+    const os = await waitForOneSignal();
+    try { await os.User.PushSubscription.optOut(); } catch(e){ console.log('[push] optOut err', e); }
+    // Clear preference tags so they're not stored against an unsubscribed user
+    try { await os.User.addTags({sub_alerts:'0', sub_calendar:'0', sub_general:'0'}); } catch(e){}
+    // Uncheck UI boxes
+    document.querySelectorAll('.np-opt input[type="checkbox"]').forEach(cb=>{ cb.checked = (cb.dataset.tag==='sub_alerts'); });
+    await refreshPushUI();
+    if(unsub){ unsub.disabled=false; unsub.textContent='Turn off all notifications'; }
+    alert("Notifications turned off. You can re-enable any time.");
+  } catch(e){
+    console.log('[push] unsub error', e);
+    if(unsub){ unsub.disabled=false; unsub.textContent='Turn off all notifications'; }
+    alert("Couldn't turn off notifications. As a fallback, open Settings → Notifications → LEGACY and toggle off.");
+  }
+}
+
+// ---- ADMIN (Sanjin only) ----
+// Activate with URL ?admin=Legacy2026 — persists in sessionStorage until tab is closed.
+const ADMIN_PASS = 'Legacy2026';
+function isAdmin(){
+  const url=new URLSearchParams(location.search);
+  if(url.get('admin')===ADMIN_PASS){ sessionStorage.setItem('lyte_admin','1'); }
+  return sessionStorage.getItem('lyte_admin')==='1';
+}
+function showAdminBar(){
+  if(!isAdmin()) return;
+  const bar=document.getElementById('admin-bar');
+  if(bar) bar.style.display='flex';
+}
+function exitAdmin(){
+  sessionStorage.removeItem('lyte_admin');
+  const bar=document.getElementById('admin-bar');
+  if(bar) bar.style.display='none';
+}
+function exportWeekJSON(){
+  const data={
+    session:SESSION_NUM, week:WEEK_NUM,
+    weekStart:WEEK_START.toISOString().slice(0,10),
+    weekRange:weekRangeText(),
+    teamNotes:TEAM_NOTES, schedule:SCHEDULE, exportedAt:new Date().toISOString()
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`legacy-week${WEEK_NUM}-${data.weekStart}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function printWeek(){
+  // Render all 7 days inline before printing, then restore
+  const tl=document.getElementById('timeline');
+  const original=tl.innerHTML;
+  let html='';
+  DAYS_ORDER.forEach((d,i)=>{
+    const dt=dateForDay(i);
+    html+=`<h2 style="font-family:Inter,sans-serif;margin:18px 0 8px;font-size:16px;border-bottom:2px solid #000;padding-bottom:4px">${d} — ${MONTHS_SHORT[dt.getMonth()]} ${dt.getDate()}</h2>`;
+    (ACTIVE_SCHEDULE[d]||[]).forEach(s=>{
+      const chips=s.coaches.join(', ');
+      const ct=(s.courts!=null)?s.courts:(DEFAULT_COURTS[s.type]||1);
+      html+=`<div style="margin:4px 0;font-size:12px;line-height:1.4"><b>${s.time}</b> &nbsp; ${s.name} <span style="color:#666">(${ct} courts, ${s.coaches.length} coaches)</span><br><span style="margin-left:1rem">${chips}</span></div>`;
+    });
+  });
+  // Header
+  const banner=`<div style="margin-bottom:12px"><h1 style="font-family:Inter,sans-serif;font-size:22px;margin:0">LEGACY YTE — Session ${SESSION_NUM} Week ${WEEK_NUM}</h1><div style="font-size:13px;color:#444">${weekRangeText()}</div></div>`;
+  tl.innerHTML=banner+html;
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{ tl.innerHTML=original; renderSchedule(todayDayName()); }, 500);
+  }, 100);
+}
+function showResetHelp(){
+  alert("To reset this week's schedule back to the recurring template (wipes any in-week coverage swaps), tell Sanjin's AI:\n\n\"Reset this week's schedule to the template\"\n\nThe AI will revert all 7 days to your standard recurring schedule and push the change. Takes ~30 seconds.");
+}
+
+function getScheduledAbbrs(dayName){
+  const d = ACTIVE_SCHEDULE[dayName]; if(!d) return new Set();
+  const s = new Set(); d.forEach(sess=>sess.coaches.forEach(c=>s.add(c))); return s;
+}
+
+function getAvailable(dayName){
+  const sched = getScheduledAbbrs(dayName);
+  return ALL_COACHES.filter(c=>!sched.has(c.abbr));
+}
+
+function chipCls(abbr){
+  const c = ALL_COACHES.find(x=>x.abbr===abbr);
+  if(!c) return 'chip-pro';
+  return c.type==='pro'?'chip-pro':c.type==='pt'?'chip-pt':'chip-jr';
+}
+
+// ---- COURTS (default per type, override via s.courts) ----
+const DEFAULT_COURTS = {comp:8, tt:4, adult:2, munch:4, other:1};
+function courtsFor(s){ return (s.courts!=null) ? s.courts : (DEFAULT_COURTS[s.type]||1); }
+function metaHtml(s){
+  const ct = courtsFor(s);
+  const cn = s.coaches.length;
+  const diff = cn - ct; // negative = short, 0 = perfect, positive = over
+  const short = diff < 0;
+  let cnCls = '';
+  if(diff > 0) cnCls = 'over';
+  else if(diff === 0) cnCls = 'perfect';
+  else if(diff === -1) cnCls = 'short1';
+  else cnCls = 'short2'; // -2 or worse
+  const courtsCls = short ? 'courts short' : 'courts';
+  const courtSvg = `<svg viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="18" height="10" rx="1"/><line x1="10" y1="1" x2="10" y2="11"/><line x1="1" y1="6" x2="19" y2="6" stroke-dasharray="1.2 1.2"/></svg>`;
+  return `<div class="t-meta">`
+    +`<span class="meta-pill ${courtsCls}" title="${ct} court${ct===1?'':'s'}"><span class="mi">${courtSvg}</span>${ct}</span>`
+    +`<span class="meta-pill coach ${cnCls}" title="${cn} coach${cn===1?'':'es'}"><span class="mi ppl">👥</span>${cn}</span>`
+    +`</div>`;
+}
+
+// ---- SCHEDULE ----
+function renderSchedule(day){
+  const tl = document.getElementById('timeline');
+  tl.innerHTML='';
+  (ACTIVE_SCHEDULE[day]||[]).forEach(s=>{
+    const row=document.createElement('div');
+    row.className='t-row';
+    const chips=s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
+    tl.appendChild(row);
+  });
+}
+
+// ---- WHAT'S NEW ---- (edit this list to add announcements)
+// type: 'alert' (red, urgent), 'info' (blue, general), 'calendar' (amber, dates to remember)
+// date: 'YYYY-MM-DD'  — when the entry was posted
+// eventDate (calendar only, optional): 'YYYY-MM-DD' — the actual event date
+const NEWS_ITEMS = [
+  {date:'2026-05-22', type:'alert', title:'Friday 5/22 coverage — Ahmed A in, Nathan D out',
+   body:"Today's Friday lineup updated. Ahmed A is in for all Friday clinics. Bella N is on for CC (4–5:30pm). Max O is on for Munchkins (5:30–6:30pm) and TT Comp (6:30–8:30pm). Nathan D is out for the day. Schedule is updated."},
+  {date:'2026-05-22', type:'info', title:'New: targeted notifications — tap to ID your phone',
+   body:"We added a new feature so Sanjin can send updates to just one or two coaches at a time (so you're not getting buzzed for things that don't apply to you). Open News → 🔔 Push notifications, pick your name from the new dropdown, then tap Save & enable. Takes 10 seconds. Thanks!"},
+  {date:'2026-05-21', type:'info', title:'Thursday recap (5/21) — Aleix C out, Shevi covered her CC',
+   body:"Update: Aleix C did not work yesterday (no coverage was arranged). Shevi A ended up working CC after all (Sean T did not cover). Schedule has been corrected to reflect what actually happened."},
+  {date:'2026-05-17', type:'alert', title:'Andrew W out next 2 weeks (5/18–5/31) — coverage update',
+   body:"Heads up team: Andrew W is away 5/18–5/31. Coverage locked in so far — Mon TT Comp: Anna M · Tue TT1: Nick F · Wed TT Comp: Nathan D · Wed TT1: Sanjin · Thu TT1 & TT Green: Stevie D. Friday slots (TT Orange 2 Green and TT Comp) still being arranged — if you can cover Fridays, text Sanjin."},
+  {date:'2026-05-13', type:'alert', title:'Ahmed A out today — coverage set',
+   body:"Heads up team: Ahmed A is out today (Wed 5/13). Coverage: Bella N is covering TT Comp (4–6pm). Munchkins is not needed tonight. The TT1 slot (7–9pm) is unfilled. Schedule is updated."},
+  {date:'2026-05-12', type:'alert', title:'Gabe K out today — coverage set',
+   body:"Heads up team: Gabe K is out today (Tue 5/12). Coverage: Anna M is covering Adult 3.5+, Bella N is covering Comp Clinic. The TT1 slot is unfilled — we won't need it tonight. Schedule is updated to reflect this."},
+  {date:'2026-05-11', type:'info', title:'New "What\'s New" tab is live',
+   body:"Team — after our meeting I took your feedback and added this section. From now on you can come here to see all updates and major announcements/changes in one place. We'll keep making improvements as we go!"},
+  {date:'2026-05-11', type:'info', title:'New: push notifications are live',
+   body:"You can now get push alerts from this app for urgent schedule changes, cancellations, and coverage needs. Make sure you tapped Allow when you opened the app. If you missed the prompt, check your phone Settings → Notifications → enable for LEGACY."},
+  {date:'2026-05-11', type:'info', title:'Schedule app launched',
+   body:"Welcome to the new Legacy coaches schedule app. Use it to see who's coaching, check who's free, request time off, and stay current on team updates. Text Sanjin with feedback."},
+];
+
+let _activeNewsCat = 'alert';
+
+function fmtNewsDate(s){
+  const ms=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const d=new Date(s+'T12:00:00');
+  return `${ms[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+}
+function thisWeekRange(){
+  const start=new Date(WEEK_START); start.setHours(0,0,0,0);
+  const end=new Date(WEEK_START); end.setDate(end.getDate()+6); end.setHours(23,59,59,999);
+  return {start,end};
+}
+function inThisWeek(dateStr){
+  const r=thisWeekRange();
+  const d=new Date(dateStr+'T12:00:00');
+  return d>=r.start && d<=r.end;
+}
+function newsForCategory(cat){
+  if(cat==='alert')   return NEWS_ITEMS.filter(n=>n.type==='alert' && inThisWeek(n.date));
+  if(cat==='calendar')return NEWS_ITEMS.filter(n=>n.type==='calendar');
+  /* all */           return [...NEWS_ITEMS];
+}
+function newsCounts(){
+  return {
+    alert: newsForCategory('alert').length,
+    all: NEWS_ITEMS.length,
+    calendar: newsForCategory('calendar').length,
+  };
+}
+function renderNews(){
+  const list=document.getElementById('news-list');
+  const empty=document.getElementById('news-empty');
+  const prefs=document.getElementById('notif-prefs');
+  if(!list) return;
+  const c=newsCounts();
+  ['alert','all','calendar'].forEach(cat=>{
+    const el=document.getElementById('nt-c-'+cat); if(el) el.textContent=c[cat];
+  });
+  if(_activeNewsCat==='push'){
+    list.innerHTML='';
+    if(empty) empty.style.display='none';
+    if(prefs) prefs.style.display='block';
+    return;
+  }
+  if(prefs) prefs.style.display='none';
+  const items=newsForCategory(_activeNewsCat);
+  if(!items.length){
+    list.innerHTML='';
+    if(empty){
+      empty.style.display='block';
+      empty.textContent = _activeNewsCat==='alert'
+        ? 'No alerts this week. All clear.'
+        : _activeNewsCat==='calendar'
+          ? 'No dates added yet. Sanjin will post them here as they come up.'
+          : 'No updates yet.';
+    }
+    return;
+  }
+  if(empty) empty.style.display='none';
+  // Calendar: sort by eventDate ascending (upcoming first). Others: newest post date first.
+  const sorted=[...items].sort((a,b)=>{
+    if(_activeNewsCat==='calendar'){
+      const ad=a.eventDate||a.date, bd=b.eventDate||b.date;
+      return ad.localeCompare(bd);
+    }
+    return b.date.localeCompare(a.date);
+  });
+  list.innerHTML=sorted.map(n=>{
+    const tagLabel = n.type==='alert'?'Alert':n.type==='calendar'?'Save the date':'Update';
+    const dateBit = (n.type==='calendar' && n.eventDate)
+      ? `<span class="news-date">📅 ${fmtNewsDate(n.eventDate)}</span>`
+      : `<span class="news-date">${fmtNewsDate(n.date)}</span>`;
+    return `<div class="news-item ${n.type}">
+      <div class="news-meta">
+        <span class="news-tag ${n.type}">${tagLabel}</span>
+        ${dateBit}
+      </div>
+      <div class="news-item-title">${n.title}</div>
+      <div class="news-item-body">${n.body}</div>
+    </div>`;
+  }).join('');
+}
+function wireNewsTabs(){
+  document.querySelectorAll('.ntab').forEach(t=>{
+    t.addEventListener('click',()=>{
+      document.querySelectorAll('.ntab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      _activeNewsCat=t.dataset.cat;
+      renderNews();
+    });
+  });
+}
+
+// ---- TEAM NOTES ---- (edit this list to update the banner)
+// note: { who:'Name', what:'on vacation' | 'away' | ..., start:'YYYY-MM-DD', end:'YYYY-MM-DD' }
+// Notes auto-hide after `end` passes.
+const TEAM_NOTES = [
+  {who:'Ahmed A',      what:'out today — Bella N covering TT Comp, Munchkins not needed, TT1 slot unfilled', start:'2026-05-13', end:'2026-05-13'},
+  {who:'Gabe K',       what:'out today — Anna M covering Adult 3.5+, Bella N covering Comp Clinic, TT1 slot not needed', start:'2026-05-12', end:'2026-05-12'},
+  // ^ renders as: "Gabe K 5/12 out today — Anna M covering ..."
+  {who:'Kat & Sanjin', what:'on vacation', start:'2026-05-14', end:'2026-05-18'},
+  {who:'Andrew W',     what:'out 5/18–5/31 — Tue TT1 Nick F, Wed TTC Nathan D, Wed TT1 Sanjin K, Thu TT1 + TTG Stevie D. Monday TTC + Friday slots still TBD.', start:'2026-05-18', end:'2026-05-31'},
+];
+
+function fmtNoteRange(s, e){
+  const sd=new Date(s+'T12:00:00'), ed=new Date(e+'T12:00:00');
+  if(s===e) return `${sd.getMonth()+1}/${sd.getDate()}`;
+  return `${sd.getMonth()+1}/${sd.getDate()} to ${ed.getMonth()+1}/${ed.getDate()}`;
+}
+function renderTeamNotes(){
+  const wrap=document.getElementById('team-notes');
+  const list=document.getElementById('tn-list');
+  if(!wrap||!list) return;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const active=TEAM_NOTES.filter(n=>new Date(n.end+'T23:59:59')>=today)
+    .sort((a,b)=>a.start.localeCompare(b.start));
+  if(!active.length){ wrap.style.display='none'; return; }
+  wrap.style.display='block';
+  list.innerHTML=active.map(n=>`<li><span class="tn-who">${n.who}</span> <span class="tn-date">${fmtNoteRange(n.start,n.end)}</span> ${n.what}</li>`).join('');
+}
+
+// Week of May 11, 2026 (Mon) — Session 3 Week 9
+// Auto-shifting week — anchored to Session 3 Week 9 (May 11, 2026 = Mon)
+// WEEK_START_BASE recomputes each load, so on Sun→Mon rollover the app auto-advances.
+const _WEEK_ANCHOR_DATE = new Date(2026, 4, 11);
+const _WEEK_ANCHOR_NUM = 9;
+function _thisMonday(){
+  const d=new Date(); d.setHours(0,0,0,0);
+  const dow=d.getDay();              // Sun=0..Sat=6
+  const shift=(dow===0)?-6:(1-dow);  // back to Monday
+  d.setDate(d.getDate()+shift);
+  return d;
+}
+const WEEK_START_BASE = _thisMonday();
+const SESSION_NUM = 3;
+const WEEK_NUM_BASE = _WEEK_ANCHOR_NUM + Math.round((WEEK_START_BASE - _WEEK_ANCHOR_DATE)/(7*24*3600*1000));
+let weekOffset = 0;
+let WEEK_START = new Date(WEEK_START_BASE);
+let WEEK_NUM = WEEK_NUM_BASE;
+let ACTIVE_SCHEDULE = SCHEDULE;
+function _cloneSched(src){const o={};for(const k in src){o[k]=src[k].map(s=>({...s,coaches:[...s.coaches]}));}return o;}
+const SCHEDULES = { 0: SCHEDULE, 1: _cloneSched(SCHEDULE) };
+function changeWeek(delta){
+  const next = Math.max(0, Math.min(1, weekOffset + delta));
+  if(next===weekOffset) return;
+  weekOffset = next;
+  WEEK_START = new Date(WEEK_START_BASE); WEEK_START.setDate(WEEK_START.getDate()+weekOffset*7);
+  WEEK_NUM = WEEK_NUM_BASE + weekOffset;
+  ACTIVE_SCHEDULE = SCHEDULES[weekOffset];
+  const label=document.getElementById('wn-label');
+  if(label){
+    label.querySelector('.wn-main').innerHTML = weekOffset===0
+      ? 'This week'
+      : 'Next week <span class="wn-draft">Draft</span>';
+    label.querySelector('.wn-sub').textContent = `Session ${SESSION_NUM} · Week ${WEEK_NUM} · ${weekRangeText()}`;
+  }
+  document.getElementById('wn-prev').disabled = weekOffset<=0;
+  document.getElementById('wn-next').disabled = weekOffset>=1;
+  const banner=document.getElementById('next-week-banner');
+  if(banner) banner.style.display = weekOffset===1 ? 'flex' : 'none';
+  const tn=document.getElementById('team-notes');
+  if(tn && weekOffset===1) tn.style.display='none';
+  setHeaderWeek();
+  buildSchedTabs();
+  const dayToShow = weekOffset===0 ? todayDayName() : 'Monday';
+  renderSchedule(dayToShow);
+  if(weekOffset===0 && typeof renderTeamNotes==='function') renderTeamNotes();
+  if(typeof buildAvailability==='function') buildAvailability();
+}
+function initWeekNav(){
+  const prev=document.getElementById('wn-prev'); if(prev) prev.disabled=true;
+  const sub=document.getElementById('wn-sub'); if(sub) sub.textContent=`Session ${SESSION_NUM} · Week ${WEEK_NUM} · ${weekRangeText()}`;
+}
+const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function dateForDay(i){ const d=new Date(WEEK_START); d.setDate(d.getDate()+i); return d; }
+function weekRangeText(){
+  const s=WEEK_START, e=dateForDay(6);
+  if(s.getMonth()===e.getMonth()) return `${MONTHS_SHORT[s.getMonth()]} ${s.getDate()}–${e.getDate()}, ${s.getFullYear()}`;
+  return `${MONTHS_SHORT[s.getMonth()]} ${s.getDate()} – ${MONTHS_SHORT[e.getMonth()]} ${e.getDate()}, ${s.getFullYear()}`;
+}
+function setHeaderWeek(){
+  const el=document.getElementById('header-week');
+  if(el) el.innerHTML=`Session ${SESSION_NUM} — Week ${WEEK_NUM}<span style="opacity:.6;font-weight:500;margin-left:8px">${weekRangeText()}</span>`;
+}
+
+function todayDayName(){
+  // getDay(): Sun=0..Sat=6. DAYS_ORDER is Mon..Sun (index 0..6).
+  const i=new Date().getDay();
+  return DAYS_ORDER[i===0?6:i-1];
+}
+
+function buildSchedTabs(){
+  const cont=document.getElementById('sched-day-tabs');
+  cont.innerHTML='';
+  const todayName=todayDayName();
+  const isFuture = weekOffset>0;
+  DAYS_ORDER.forEach((d,i)=>{
+    const t=document.createElement('div');
+    const activeDay = isFuture ? 'Monday' : todayName;
+    t.className='dtab'+(d===activeDay?' active':'')+(isFuture?' future':'');
+    const dt=dateForDay(i);
+    const nameLabel = isFuture ? `${MONTHS_SHORT[dt.getMonth()].toUpperCase()} ${d.slice(0,3)}` : d.slice(0,3);
+    t.innerHTML=`<span class="dt-name">${nameLabel}</span><span class="dt-date">${dt.getDate()}</span>`;
+    t.onclick=()=>{
+      document.querySelectorAll('#sched-day-tabs .dtab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      renderSchedule(d);
+    };
+    cont.appendChild(t);
+  });
+  setHeaderWeek();
+}
+
+// ---- AVAILABILITY ----
+let openFlyout = null;
+
+function buildAvailability(){
+  const list=document.getElementById('avail-list');
+  list.innerHTML='';
+  DAYS_ORDER.forEach(day=>{
+    const avail=getAvailable(day);
+    const pros=avail.filter(c=>c.type==='pro');
+    const pts=avail.filter(c=>c.type==='pt');
+    const jrs=avail.filter(c=>c.type==='jr');
+
+    const wrap=document.createElement('div');
+    wrap.className='day-avail';
+    wrap.innerHTML=`<div class="day-avail-header">${day} <span class="count">${avail.length} available</span></div>`;
+
+    function addGroup(coaches, label, cardClass){
+      if(!coaches.length) return;
+      const gl=document.createElement('div');
+      gl.className='group-label'; gl.textContent=label;
+      wrap.appendChild(gl);
+      const grid=document.createElement('div');
+      grid.className='coach-cards';
+      coaches.forEach(c=>{
+        const flyId=`fly-${day.toLowerCase()}-${c.id}`;
+        const card=document.createElement('div');
+        card.className=`coach-tap ${cardClass}`;
+        card.innerHTML=`<div class="tap-indicator">+</div><div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${c.level}</div>`;
+        card.onclick=()=>toggleFlyout(flyId,c,card);
+        grid.appendChild(card);
+
+        const fly=document.createElement('div');
+        fly.className='contact-flyout';
+        fly.id=flyId;
+        const hasPhone=c.phone&&c.phone.trim();
+        const hasEmail=c.email&&c.email.trim();
+        fly.innerHTML=`<div class="cf-name">${c.name}</div>
+          <div class="cf-level">${c.level}</div>
+          <div class="cf-actions">
+            ${hasPhone?`<a href="tel:${c.phone}" class="cf-btn cf-call">Call ${c.phone}</a>`:''}
+            ${hasPhone?`<a href="sms:${c.phone}" class="cf-btn cf-text">Text</a>`:''}
+            ${hasEmail?`<a href="mailto:${c.email}" class="cf-btn cf-email">Email</a>`:''}
+            ${!hasPhone&&!hasEmail?`<span class="cf-no-contact">No contact info on file — ask Kat</span>`:''}
+          </div>
+          <span class="cf-close" onclick="closeFlyout('${flyId}')">close</span>`;
+        grid.appendChild(fly);
+      });
+      wrap.appendChild(grid);
+    }
+
+    addGroup(pros,'Pro coaches — contact first','pro-card');
+    addGroup(pts,'Part-time coaches','pt-card');
+    addGroup(jrs,'Junior coaches','jr-card');
+
+    const sep=document.createElement('div');
+    sep.style.cssText='height:1px;background:var(--gray-200);margin:1.25rem 0';
+    wrap.appendChild(sep);
+    list.appendChild(wrap);
+  });
+}
+
+function toggleFlyout(flyId, coach, card){
+  const fly=document.getElementById(flyId);
+  if(openFlyout && openFlyout!==flyId){
+    const prev=document.getElementById(openFlyout);
+    if(prev){prev.classList.remove('open');}
+    document.querySelectorAll('.coach-tap').forEach(c=>{c.querySelector('.tap-indicator').textContent='+';});
+  }
+  const isOpen=fly.classList.contains('open');
+  fly.classList.toggle('open');
+  const ind=card.querySelector('.tap-indicator');
+  ind.textContent=isOpen?'+':'×';
+  openFlyout=isOpen?null:flyId;
+}
+
+function closeFlyout(flyId){
+  const fly=document.getElementById(flyId);
+  if(fly){fly.classList.remove('open');}
+  document.querySelectorAll('.coach-tap').forEach(c=>{const i=c.querySelector('.tap-indicator');if(i)i.textContent='+';});
+  openFlyout=null;
+}
+
+// ---- FORM ----
+function buildCoachDropdown(){
+  const sel=document.getElementById('req-name');
+  ALL_COACHES.filter(c=>c.type==='pro'||c.type==='pt').forEach(c=>{
+    const o=document.createElement('option');
+    o.value=c.id; o.textContent=c.name; sel.appendChild(o);
+  });
+}
+
+function fillEmail(){
+  const id=document.getElementById('req-name').value;
+  const c=ALL_COACHES.find(x=>x.id===id);
+  document.getElementById('req-email').value=c?(c.email||''):'';
+  updateStepper();
+}
+
+function updateStepper(){
+  const name=document.getElementById('req-name');
+  const rtype=document.querySelector('input[name="rtype"]:checked');
+  const step1Done=!!(name && name.value && rtype);
+  let step2Done=false;
+  document.querySelectorAll('.day-block input[type="date"]').forEach(d=>{ if(d.value) step2Done=true; });
+  const notes=document.getElementById('req-notes');
+  const step3Done=step1Done && step2Done && notes && notes.value.trim().length>0;
+  const step4Active=step1Done && step2Done;
+  const set=(id,done,active)=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.classList.toggle('done',!!done);
+    el.classList.toggle('active',!!active && !done);
+  };
+  set('rs-1', step1Done, !step1Done);
+  set('rs-2', step2Done, step1Done && !step2Done);
+  set('rs-3', step3Done, step1Done && step2Done && !step3Done);
+  set('rs-4', false, step4Active);
+  const fill=(id,done)=>{ const el=document.getElementById(id); if(el) el.style.width=done?'100%':'0'; };
+  fill('rl-1', step1Done);
+  fill('rl-2', step2Done);
+  fill('rl-3', step4Active);
+}
+
+function getDayName(dateStr){
+  if(!dateStr) return null;
+  const d=new Date(dateStr+'T12:00:00');
+  const idx=d.getDay();
+  return DAYS_ORDER[idx===0?6:idx-1];
+}
+
+function updateDayPanel(n,dateStr){
+  const day=getDayName(dateStr);
+  const cont=document.getElementById(`amp-${n}`);
+  if(!day||!ACTIVE_SCHEDULE[day]){cont.innerHTML='<div class="no-avail">Date not in schedule</div>';return;}
+  const avail=getAvailable(day);
+  if(!avail.length){cont.innerHTML='<div class="no-avail">All coaches scheduled this day</div>';return;}
+  const pros=avail.filter(c=>c.type==='pro');
+  const pts=avail.filter(c=>c.type==='pt');
+  const jrs=avail.filter(c=>c.type==='jr');
+  let h=`<div class="amp-header">Available on ${day} — call first</div>`;
+  function grp(list,label){
+    if(!list.length) return;
+    h+=`<div style="padding:4px 12px 2px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gray-500);font-weight:500;background:var(--gray-50)">${label}</div>`;
+    list.forEach(c=>{
+      const hp=c.phone&&c.phone.trim();
+      const he=c.email&&c.email.trim();
+      h+=`<div class="amp-row"><div><div class="amp-name">${c.name}</div><div class="amp-meta">${c.phone||'No phone on file'} · ${c.level}</div></div><div class="amp-btns">${hp?`<a href="tel:${c.phone}" class="amp-btn amp-call">Call</a>`:''} ${he?`<a href="mailto:${c.email}" class="amp-btn amp-email">Email</a>`:''}</div></div>`;
+    });
+  }
+  grp(pros,'Pro coaches');
+  grp(pts,'Part-time');
+  grp(jrs,'Junior coaches');
+  cont.innerHTML=h;
+}
+
+let dayCount=1;
+function addDay(){
+  dayCount++;
+  const n=dayCount;
+  const div=document.createElement('div');
+  div.className='day-block'; div.id=`day-${n}`; div.dataset.n=n;
+  div.innerHTML=`<div class="day-header"><div class="day-num">${n}</div><span>Day ${n}</span><button class="remove-btn" onclick="document.getElementById('day-${n}').remove()">Remove</button></div>
+    <div class="sub-field"><div class="sub-label">Date <span class="req">*</span></div><input type="date" onchange="onDateChange(${n},this.value)"></div>
+    <div class="sub-field" id="sessions-wrap-${n}">
+      <div class="sub-label">Sessions needing coverage</div>
+      <div id="sessions-list-${n}" class="sessions-list"></div>
+      <div id="session-picker-${n}" class="session-picker" style="display:none">
+        <select onchange="addSession(${n},this.value);this.value=''">
+          <option value="">+ Add a session needing coverage...</option>
+        </select>
+      </div>
+      <div class="no-sessions" id="no-sessions-${n}">Pick a date to see sessions.</div>
+    </div>
+    <div class="warn" id="warn-${n}" style="display:none">Any session without coverage is subject to LEGACY's coverage policy. Please keep trying to fill gaps.</div>
+    <div class="private-section">
+      <div class="sub-label">Private lessons this day?</div>
+      <div class="pill-group">
+        <div class="pill"><input type="radio" name="hp${n}" id="hp${n}y" onchange="togglePrivate(${n},'yes')"><label for="hp${n}y">Yes</label></div>
+        <div class="pill"><input type="radio" name="hp${n}" id="hp${n}n" onchange="togglePrivate(${n},'no')"><label for="hp${n}n">No</label></div>
+      </div>
+      <div class="cbox" id="private-box-${n}">
+        <div class="sub-label" style="margin-top:.75rem">Did you cancel them?</div>
+        <div class="pill-group">
+          <div class="pill"><input type="radio" name="pc${n}" id="pc${n}y" onchange="toggleFD(${n})"><label for="pc${n}y">Yes, all cancelled</label></div>
+          <div class="pill"><input type="radio" name="pc${n}" id="pc${n}n" onchange="toggleFD(${n})"><label for="pc${n}n">No — need front desk help</label></div>
+        </div>
+        <div class="cbox" id="fd-box-${n}">
+          <div class="sub-label">Clients & times for front desk to cancel</div>
+          <textarea class="fd-textarea" placeholder="e.g. John Smith 5pm, Sarah Lee 6pm..."></textarea>
+          <div class="hint">Front desk will reach out via Club Automation</div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('days-container').appendChild(div);
+}
+
+function onDateChange(n,dateStr){
+  updateStepper();
+  const day=getDayName(dateStr);
+  const picker=document.getElementById(`session-picker-${n}`);
+  const noMsg=document.getElementById(`no-sessions-${n}`);
+  const list=document.getElementById(`sessions-list-${n}`);
+  const warn=document.getElementById(`warn-${n}`);
+  list.innerHTML='';
+  warn.style.display='none';
+  const dayBlock=document.getElementById(`day-${n}`);
+  dayBlock.dataset.date=dateStr;
+  if(!day||!ACTIVE_SCHEDULE[day]){
+    picker.style.display='none';
+    noMsg.textContent='No sessions scheduled on that date.';
+    noMsg.style.display='block';
+    return;
+  }
+  const sel=picker.querySelector('select');
+  sel.innerHTML='<option value="">+ Add a session needing coverage...</option>';
+  ACTIVE_SCHEDULE[day].forEach((s,idx)=>{
+    const opt=document.createElement('option');
+    opt.value=idx;
+    opt.textContent=`${s.time} · ${s.name}`;
+    sel.appendChild(opt);
+  });
+  picker.style.display='block';
+  noMsg.style.display='none';
+}
+
+function addSession(n,sessionIdx){
+  if(sessionIdx===''||sessionIdx==null) return;
+  const dayBlock=document.getElementById(`day-${n}`);
+  const dateStr=dayBlock.dataset.date;
+  const day=getDayName(dateStr);
+  if(!day) return;
+  const session=ACTIVE_SCHEDULE[day][parseInt(sessionIdx)];
+  if(!session) return;
+  const list=document.getElementById(`sessions-list-${n}`);
+  const avail=getAvailable(day);
+  const pros=avail.filter(c=>c.type==='pro');
+  const pts=avail.filter(c=>c.type==='pt');
+  const jrs=avail.filter(c=>c.type==='jr');
+  let opts='<option value="">🔍 Still looking for coverage...</option>';
+  function group(list,label){
+    if(!list.length) return '';
+    let s=`<optgroup label="${label}">`;
+    list.forEach(c=>{ s+=`<option value="${c.abbr}">${c.name}${c.phone?` · ${c.phone}`:''}</option>`; });
+    return s+'</optgroup>';
+  }
+  // Eligibility rules — Jr Pros are not allowed to cover TT1
+  const sessionName=(session.name||'').toUpperCase();
+  const jrIneligible = sessionName === 'TT1' || sessionName.includes('TT1');
+  const eligibleJrs = jrIneligible ? [] : jrs;
+  opts+=group(pros,'Pro coaches (contact first)');
+  opts+=group(pts,'Part-time coaches');
+  opts+=group(eligibleJrs, jrIneligible ? 'Junior coaches (not eligible for TT1)' : 'Junior coaches');
+  const row=document.createElement('div');
+  row.className='session-row';
+  row.innerHTML=`
+    <div class="session-meta">
+      <div class="session-title">${session.time} · ${session.name}</div>
+      <button type="button" class="session-remove" onclick="removeSession(${n},this)">Remove</button>
+    </div>
+    <select class="session-cover" onchange="updateCoverStatus(${n},this)">${opts}</select>
+    <div class="cover-status pending">Still looking — please keep trying</div>
+  `;
+  list.appendChild(row);
+  document.getElementById(`warn-${n}`).style.display='block';
+}
+
+function removeSession(n,btn){
+  btn.closest('.session-row').remove();
+  const list=document.getElementById(`sessions-list-${n}`);
+  if(!list.children.length){ document.getElementById(`warn-${n}`).style.display='none'; }
+}
+
+function updateCoverStatus(n,sel){
+  const row=sel.closest('.session-row');
+  const status=row.querySelector('.cover-status');
+  if(sel.value){
+    const txt=sel.options[sel.selectedIndex].text;
+    status.className='cover-status covered';
+    status.textContent=`✓ Covered by ${txt.split(' · ')[0]}`;
+  }else{
+    status.className='cover-status pending';
+    status.textContent='Still looking — please keep trying';
+  }
+  // Refresh warn state: any uncovered session keeps warning visible
+  const list=document.getElementById(`sessions-list-${n}`);
+  const anyPending=[...list.querySelectorAll('.session-cover')].some(s=>!s.value);
+  document.getElementById(`warn-${n}`).style.display=anyPending?'block':'none';
+}
+function togglePrivate(n,val){document.getElementById(`private-box-${n}`).classList.toggle('on',val==='yes');}
+function toggleFD(n){document.getElementById(`fd-box-${n}`).classList.toggle('on',document.getElementById(`pc${n}n`).checked);}
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tabbar-item').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll(`.tab[onclick="switchTab('${name}')"]`).forEach(el=>el.classList.add('active'));
+  const bb=document.querySelector(`.tabbar-item[data-tab="${name}"]`);
+  if(bb) bb.classList.add('active');
+  document.getElementById(`tab-${name}`).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+// Formspree endpoint — receives time-off requests, forwards to recipient email
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xvzlqzvp';
+
+function gatherRequest(){
+  const nameSel=document.getElementById('req-name');
+  const name=nameSel.value ? nameSel.options[nameSel.selectedIndex].text : '';
+  const email=document.getElementById('req-email').value||'';
+  let rtype='';
+  if(document.getElementById('t1').checked) rtype='Vacation';
+  else if(document.getElementById('t2').checked) rtype='Sick day';
+  else if(document.getElementById('t3').checked) rtype='Coverage only';
+  const notes=document.getElementById('req-notes').value||'';
+  const days=[...document.querySelectorAll('.day-block')].map(db=>{
+    const n=db.dataset.n;
+    const date=db.dataset.date||'';
+    const sessions=[...db.querySelectorAll('.session-row')].map(row=>{
+      const title=row.querySelector('.session-title').textContent;
+      const sel=row.querySelector('.session-cover');
+      const cover=sel.value ? sel.options[sel.selectedIndex].text : '';
+      return {session:title, coveredBy:cover||'still looking'};
+    });
+    const hadPrivates=document.getElementById(`hp${n}y`)?.checked ? 'yes'
+      : document.getElementById(`hp${n}n`)?.checked ? 'no' : '';
+    const cancelled=document.getElementById(`pc${n}y`)?.checked ? 'all cancelled'
+      : document.getElementById(`pc${n}n`)?.checked ? 'needs front desk' : '';
+    const fdNotes=db.querySelector('.fd-textarea')?.value||'';
+    return {date, sessions, privates:{hadPrivates, cancelled, fdNotes}};
+  });
+  return {name, email, requestType:rtype, days, notes, submittedAt:new Date().toISOString()};
+}
+
+function validateRequest(d){
+  if(!d.name) return 'Please pick your name.';
+  if(!d.requestType) return 'Please pick a request type.';
+  if(!d.days.length||!d.days[0].date) return 'Please add at least one date.';
+  return null;
+}
+
+function fmtDateLong(iso){
+  if(!iso) return 'Date TBD';
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'});
+}
+function fmtDateShort(iso){
+  if(!iso) return '';
+  const d=new Date(iso+'T00:00:00');
+  return d.toLocaleDateString('en-US',{month:'short', day:'numeric'});
+}
+function buildCoverageBody(d){
+  const lines=[];
+  d.days.forEach((day,i)=>{
+    if(i>0) lines.push('');
+    lines.push(fmtDateLong(day.date).toUpperCase());
+    lines.push('─'.repeat(38));
+    if(day.sessions && day.sessions.length){
+      day.sessions.forEach(s=>{
+        lines.push(`• ${s.session}`);
+        lines.push(`    Covered by: ${s.coveredBy}`);
+      });
+    } else {
+      lines.push('(no sessions listed)');
+    }
+    const p=day.privates||{};
+    if(p.hadPrivates==='yes'){
+      const status = p.cancelled==='all cancelled' ? 'All privates cancelled'
+        : p.cancelled==='needs front desk' ? 'Front desk to reschedule' : 'pending';
+      lines.push('');
+      lines.push(`Private lessons: ${status}`);
+      if(p.fdNotes) lines.push(`Note for front desk: ${p.fdNotes}`);
+    } else if(p.hadPrivates==='no'){
+      lines.push('');
+      lines.push('Private lessons: none this day');
+    }
+  });
+  return lines.join('\n');
+}
+
+async function submitForm(){
+  const btn=document.querySelector('.btn-submit');
+  const data=gatherRequest();
+  const err=validateRequest(data);
+  if(err){ alert(err); return; }
+  btn.disabled=true;
+  const orig=btn.textContent;
+  btn.textContent='Submitting...';
+  try{
+    if(FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')){
+      console.warn('Formspree endpoint not configured — logging payload only', data);
+    } else {
+      const firstDate=data.days[0]?.date||'';
+      const subject=`Time off — ${data.name} — ${data.requestType}${firstDate?' — '+fmtDateShort(firstDate):''}`;
+      const fd=new FormData();
+      fd.append('Coach', data.name);
+      fd.append('Email', data.email);
+      fd.append('Request type', data.requestType);
+      fd.append('Coverage details', buildCoverageBody(data));
+      if(data.notes) fd.append('Notes', data.notes);
+      fd.append('_subject', subject);
+      if(data.email) fd.append('_replyto', data.email);
+      const res=await fetch(FORMSPREE_ENDPOINT,{
+        method:'POST',
+        headers:{'Accept':'application/json'},
+        body:fd
+      });
+      if(!res.ok) throw new Error(`Formspree returned ${res.status}`);
+    }
+    document.getElementById('success-msg').style.display='block';
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  }catch(e){
+    alert('Submission failed: '+e.message+'\nPlease text Kat directly.');
+    btn.disabled=false;
+    btn.textContent=orig;
+  }
+}
+
+// ---- MY SCHEDULE ----
+const MINE_KEY = 'legacy_my_coach';
+
+function renderMinePicker(){
+  const list=document.getElementById('mine-picker-list');
+  list.innerHTML='';
+  function grp(label, coaches, cls){
+    if(!coaches.length) return;
+    const gl=document.createElement('div');
+    gl.className='group-label'; gl.textContent=label;
+    list.appendChild(gl);
+    const grid=document.createElement('div');
+    grid.className='coach-cards';
+    coaches.forEach(c=>{
+      const card=document.createElement('div');
+      card.className=`coach-tap ${cls}`;
+      card.innerHTML=`<div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${c.level}</div>`;
+      card.onclick=()=>setMine(c.id);
+      grid.appendChild(card);
+    });
+    list.appendChild(grid);
+  }
+  grp('Pro coaches', ALL_COACHES.filter(c=>c.type==='pro'), 'pro-card');
+  grp('Part-time coaches', ALL_COACHES.filter(c=>c.type==='pt'), 'pt-card');
+  grp('Junior coaches', ALL_COACHES.filter(c=>c.type==='jr'), 'jr-card');
+}
+
+function setMine(id){
+  localStorage.setItem(MINE_KEY, id);
+  showMine();
+}
+
+function clearMine(){
+  localStorage.removeItem(MINE_KEY);
+  showMine();
+}
+
+function showMine(){
+  const id=localStorage.getItem(MINE_KEY);
+  const coach=id?ALL_COACHES.find(c=>c.id===id):null;
+  const picker=document.getElementById('mine-picker');
+  const view=document.getElementById('mine-view');
+  if(!coach){
+    picker.style.display='block';
+    view.style.display='none';
+    renderMinePicker();
+    return;
+  }
+  picker.style.display='none';
+  view.style.display='block';
+  document.getElementById('mine-name').innerHTML=`${coach.name} <span class="count">${coach.level}</span>`;
+  const list=document.getElementById('mine-list');
+  list.innerHTML='';
+  let totalSessions=0;
+  DAYS_ORDER.forEach(day=>{
+    const sessions=(ACTIVE_SCHEDULE[day]||[]).filter(s=>s.coaches.some(c=>c===coach.abbr || c.startsWith(coach.abbr+' (')));
+    if(!sessions.length) return;
+    totalSessions+=sessions.length;
+    const wrap=document.createElement('div');
+    wrap.className='day-avail';
+    wrap.innerHTML=`<div class="day-avail-header">${day} <span class="count">${sessions.length} session${sessions.length>1?'s':''}</span></div>`;
+    const tl=document.createElement('div');
+    tl.className='timeline';
+    sessions.forEach(s=>{
+      const row=document.createElement('div');
+      row.className='t-row';
+      const myChip=s.coaches.find(c=>c===coach.abbr || c.startsWith(coach.abbr+' ('));
+      const noteMatch=myChip&&myChip.match(/\((.+)\)/);
+      const note=noteMatch?` <span style="font-size:11px;color:var(--red);font-weight:500">· ${noteMatch[1]}</span>`:'';
+      const others=s.coaches.filter(c=>c!==myChip).map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+      row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name}${note}</div>${metaHtml(s)}<div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
+      tl.appendChild(row);
+    });
+    wrap.appendChild(tl);
+    list.appendChild(wrap);
+  });
+  if(totalSessions===0){
+    list.innerHTML='<div class="avail-intro" style="text-align:center">No sessions scheduled this week.</div>';
+  }
+}
+
+// Auto-update check — pings the live HTML every 5 min and offers a refresh if a new version is deployed
+const APP_VERSION = document.querySelector('meta[name="app-version"]')?.content || '';
+async function checkForUpdate(){
+  try {
+    const r = await fetch(location.pathname + '?cb=' + Date.now(), {cache:'no-store'});
+    const t = await r.text();
+    const m = t.match(/meta name="app-version" content="([^"]+)"/);
+    if(m && m[1] && m[1] !== APP_VERSION){
+      if(confirm('A new version of the app is available. Refresh now?')){
+        location.reload(true);
+      }
+    }
+  } catch(e){}
+}
+setInterval(checkForUpdate, 5*60*1000);
+
+showAdminBar();
+refreshPushUI();
+wireNewsTabs();
+renderNews();
+renderTeamNotes();
+initWeekNav();
+buildSchedTabs();
+renderSchedule(todayDayName());
+buildAvailability();
+buildCoachDropdown();
+populateCoachPicker();
+showMine();
+
+// Force-refresh button — busts iOS PWA cache (service worker + caches API + reload)
+async function hardReload(){
+  const btn = document.getElementById('hard-reload');
+  if(btn){ btn.disabled = true; btn.textContent = '⟳'; btn.style.animation = 'spin 0.8s linear infinite'; }
+  try {
+    // 1. Clear all caches (Cache Storage API)
+    if(window.caches && caches.keys){
+      const keys = await caches.keys();
+      await Promise.all(keys.filter(k => !k.includes('OneSignal')).map(k => caches.delete(k)));
+    }
+    // 2. Unregister non-OneSignal service workers (keep push worker alive)
+    if(navigator.serviceWorker && navigator.serviceWorker.getRegistrations){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(const r of regs){
+        if(!String(r.scope || '').includes('OneSignal') && !String(r.active && r.active.scriptURL || '').includes('OneSignal')){
+          // Skip OneSignal SW; only clear our own
+        }
+      }
+    }
+  } catch(e){ console.log('hardReload err', e); }
+  // 3. Reload with cache-busting query param
+  const url = new URL(location.href);
+  url.searchParams.set('_r', Date.now());
+  location.replace(url.toString());
+}
+document.querySelectorAll('input[name="rtype"]').forEach(r=>r.addEventListener('change',updateStepper));
+const _notes=document.getElementById('req-notes'); if(_notes) _notes.addEventListener('input',updateStepper);
+updateStepper();
+</script>
+</body>
+</html>
