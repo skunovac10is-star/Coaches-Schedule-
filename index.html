@@ -944,7 +944,7 @@ function _edit(day, session, programIncludes, opts){
   return day;
 }
 // MONDAY: base template (Kein W + Mia S off) + per-clinic tweaks
-const _monday = _summerDay(['Kein W','Mia S']);
+const _monday = _summerDay(['Mia S']);  // Kein back on LTC camp Mon (Tue–Fri already have him)
 _edit(_monday, 'morning',   'LTC Indoor',      {add:['Bella N']});       // Bella N to morning LTC only
 // Mon Jun 8: Jeremie C off all camp; Joe H off morning Elite (added to evening adult below)
 _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H']});
