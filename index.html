@@ -914,7 +914,7 @@ function _summerDay(removeNames){
 const _ADULT = {
   Monday:[
     {session:'adult', slot:'midday',  program:'Adv Beginner', courts:'11:30am–12:30pm', campers:0,  type:'adult', coaches:['David S']},
-    {session:'adult', slot:'evening', program:'3.5+',         courts:'6:30–8:00pm',     campers:5,  type:'adult', coaches:['Laurence P','Shevi A']},
+    {session:'adult', slot:'evening', program:'3.5+',         courts:'6:30–8:00pm',     campers:5,  type:'adult', coaches:['Laurence P','Shevi A','Joe H']},
   ],
   Tuesday:[
     {session:'adult', slot:'evening', program:'2.5–3.0',      courts:'6:30–8:00pm',     campers:17, type:'adult', coaches:['Shevi A','Laurence P','Joe H','Julian C']},
@@ -950,6 +950,9 @@ _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Flynn H']}); // m
 _edit(_monday, 'morning',   'LTC Indoor',      {add:['Flynn H']});        // ...to morning LTC camp
 _edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Flynn H']}); // Flynn out of afternoon Elite...
 _edit(_monday, 'afternoon', 'LTC Indoor',      {add:['Flynn H']});        // ...into afternoon LTC camp
+// Mon Jun 8: Jeremie C off all camp; Joe H off morning Elite (added to evening adult below)
+_edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H']});
+_edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Jeremie C']});
 const SUMMER_SCHEDULE = {
   Monday:    [..._monday,                        ..._ADULT.Monday],
   Tuesday:   [..._summerDay(['Kein W']),         ..._ADULT.Tuesday],
