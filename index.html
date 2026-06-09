@@ -234,6 +234,7 @@ body{padding-left:240px;padding-top:58px}
 .summer-card.indoor{border-left-color:#EA8C2B;background:#FFF8F0}
 .summer-card.elite1{border-left-color:#2563EB;background:#F3F7FE}
 .summer-card.elite2{border-left-color:#16A34A;background:#F1FBF4}
+.summer-card.ltcyellow{border-left-color:#E0B53A;background:#FFFBEC}
 .summer-card.elite{border-left-color:var(--red)}
 .summer-card-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:8px}
 .summer-card-title{font-size:14px;font-weight:700;color:var(--black);letter-spacing:.2px;display:flex;align-items:center;gap:8px}
@@ -245,6 +246,7 @@ body{padding-left:240px;padding-top:58px}
 .cball-orange{background:#EA8C2B}
 .cball-blue{background:#2563EB}
 .cball-green{background:#16A34A}
+.cball-yellow{background:#E0B53A}
 .cball-purple{background:#7C3AED}
 .summer-card.adult{border-left-color:#7C3AED;background:#F7F3FE}
 .sc-unstaffed{font-size:11.5px;font-weight:600;color:#9333EA;background:#F3E8FF;border:1px dashed #C9A6F0;padding:3px 9px;border-radius:8px}
@@ -461,6 +463,7 @@ body{background:var(--lp-bg) !important}
 .summer-card.indoor{border-left-color:#EA8C2B !important;background:#FFF8F0 !important}
 .summer-card.elite1{border-left-color:#2563EB !important;background:#F3F7FE !important}
 .summer-card.elite2{border-left-color:#16A34A !important;background:#F1FBF4 !important}
+.summer-card.ltcyellow{border-left-color:#E0B53A !important;background:#FFFBEC !important}
 .summer-card.adult{border-left-color:#7C3AED !important;background:#F7F3FE !important}
 .news-item{border-radius:12px !important;box-shadow:var(--lp-shadow) !important}
 .team-notes,.notif-prefs{border-radius:12px !important;box-shadow:var(--lp-shadow) !important}
@@ -979,10 +982,19 @@ function _summerWeek2(){
   Object.values(wk).forEach(day=>day.forEach(s=>{
     if(!s.program) return;
     if(s.program.indexOf('Munchkins')>-1)      s.campers=8;
-    else if(s.program==='LTC Indoor')          s.campers=31;
+    else if(s.program==='LTC Indoor')          s.campers=21;  // reduced by 10 (10 moved to LTC Yellow)
     else if(s.program.indexOf('Group 1')>-1){  s.courts='6 courts · Jefferson';   s.campers=18; }
     else if(s.program.indexOf('Group 2')>-1){  s.courts='Courts 12-16 · at LEGACY'; s.campers=22; }
   }));
+  // New group: LTC Yellow (Courts 9-12, 10 campers) — add a morning + afternoon card to each camp weekday
+  ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{
+    const idx = wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor');
+    const yel=[
+      {session:'morning',   program:'LTC Yellow', time:'9–11:30am', courts:'Courts 9-12', campers:10, type:'comp', coaches:[]},
+      {session:'afternoon', program:'LTC Yellow', time:'12:30–3pm', courts:'Courts 9-12', campers:10, type:'comp', coaches:[]},
+    ];
+    wk[d].push(...yel);
+  });
   // Wk2 coach swap: Sean T out, Gideon K in
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.map(c=> c==='Sean T' ? 'Gideon K' : c); }));
   // Wk2: add Zszuzi P to LTC Indoor (morning + afternoon)
@@ -1361,6 +1373,7 @@ function renderSchedule(day){
 
 function _programClass(p){
   if(p.indexOf('Munchkins')>-1) return 'munch';
+  if(p.indexOf('Yellow')>-1) return 'ltcyellow';
   if(p.indexOf('Group 1')>-1) return 'elite1';
   if(p.indexOf('Group 2')>-1) return 'elite2';
   if(p.indexOf('Elite')>-1) return 'elite';
@@ -1368,6 +1381,7 @@ function _programClass(p){
 }
 function _programIcon(p){
   if(p.indexOf('Munchkins')>-1) return '<span class="cball cball-red"></span>';
+  if(p.indexOf('Yellow')>-1) return '<span class="cball cball-yellow"></span>';
   if(p.indexOf('Group 1')>-1) return '<span class="cball cball-blue"></span>';
   if(p.indexOf('Group 2')>-1) return '<span class="cball cball-green"></span>';
   if(p.indexOf('Elite')>-1) return '<span class="cball cball-blue"></span>';
@@ -1457,6 +1471,10 @@ function renderSummerDayByGroup(tl, slots){
   renderGroupBlock(tl, 'LTC Indoor', 'indoor', '<span class="cball cball-orange"></span>', [
     {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program==='LTC Indoor')},
     {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program==='LTC Indoor')},
+  ]);
+  renderGroupBlock(tl, 'LTC Yellow', 'ltcyellow', '<span class="cball cball-yellow"></span>', [
+    {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program==='LTC Yellow')},
+    {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program==='LTC Yellow')},
   ]);
   renderGroupBlock(tl, 'LTC Elite — Group 1', 'elite1', '<span class="cball cball-blue"></span>', [
     {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program.indexOf('Group 1')>-1)},
