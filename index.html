@@ -995,7 +995,7 @@ function _summerWeek2(){
   Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Gideon K'&&c!=='Nick F'); }));
   // New group: LTC Yellow (Courts 9-12, 10 campers) — inserted right below LTC Indoor each camp weekday
   ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{
-    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 9-12', campers:10, type:'comp', coaches:['Gideon K','Samir M','Nick F']});
+    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 9-11', campers:10, type:'comp', coaches:['Gideon K','Samir M','Nick F']});
     const mi=wk[d].findIndex(s=>s.session==='morning'   && s.program==='LTC Indoor'); if(mi>-1) wk[d].splice(mi+1,0,yel('morning'));
     const ai=wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor'); if(ai>-1) wk[d].splice(ai+1,0,yel('afternoon'));
   });
