@@ -890,6 +890,7 @@ const ALL_COACHES = [
   {id:'joe',name:'Joe Heckley',abbr:'Joe H',phone:'',email:'',type:'pt',level:'Summer camp'},
   {id:'gideon',name:'Gideon Knowles',abbr:'Gideon K',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'zszuzi',name:'Zszuzi P',abbr:'Zszuzi P',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'samir',name:'Samir M',abbr:'Samir M',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -986,14 +987,13 @@ function _summerWeek2(){
     else if(s.program.indexOf('Group 1')>-1){  s.courts='6 courts · Jefferson';   s.campers=18; }
     else if(s.program.indexOf('Group 2')>-1){  s.courts='Courts 12-16 · at LEGACY'; s.campers=22; }
   }));
-  // New group: LTC Yellow (Courts 9-12, 10 campers) — add a morning + afternoon card to each camp weekday
+  // LTC Yellow staff also work LTC Indoor's time slot — move them off Indoor to avoid double-booking
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Gideon K'&&c!=='Nick F'); }));
+  // New group: LTC Yellow (Courts 9-12, 10 campers) — inserted right below LTC Indoor each camp weekday
   ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{
-    const idx = wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor');
-    const yel=[
-      {session:'morning',   program:'LTC Yellow', time:'9–11:30am', courts:'Courts 9-12', campers:10, type:'comp', coaches:[]},
-      {session:'afternoon', program:'LTC Yellow', time:'12:30–3pm', courts:'Courts 9-12', campers:10, type:'comp', coaches:[]},
-    ];
-    wk[d].push(...yel);
+    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 9-12', campers:10, type:'comp', coaches:['Gideon K','Samir M','Nick F']});
+    const mi=wk[d].findIndex(s=>s.session==='morning'   && s.program==='LTC Indoor'); if(mi>-1) wk[d].splice(mi+1,0,yel('morning'));
+    const ai=wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor'); if(ai>-1) wk[d].splice(ai+1,0,yel('afternoon'));
   });
   // Wk2 coach swap: Sean T out, Gideon K in
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.map(c=> c==='Sean T' ? 'Gideon K' : c); }));
