@@ -951,13 +951,36 @@ _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H
 _edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Jeremie C']});
 const SUMMER_SCHEDULE = {
   Monday:    [..._monday,                        ..._ADULT.Monday],
-  Tuesday:   [..._summerDay(['Kein W']),         ..._ADULT.Tuesday],
+  Tuesday:   [..._summerDay(),                   ..._ADULT.Tuesday],
   Wednesday: [..._summerDay(),                   ..._ADULT.Wednesday],
   Thursday:  [..._summerDay(),                   ..._ADULT.Thursday],
   Friday:    [..._summerDay(),                   ..._ADULT.Friday],
   Saturday:  [],
   Sunday:    [..._ADULT.Sunday],
 };
+
+// ===== SUMMER CAMP — WEEK 2 (Jun 15+) =====
+// Starts as a clean copy of the standard weekly lineup (no this-week daily exceptions).
+// Change for Wk2: LTC Elite Group 1 → Jefferson (6 courts); Group 2 → at center, Courts 12-16.
+function _summerWeek2(){
+  const adult=d=>(_ADULT[d]||[]).map(s=>({...s, coaches:[...s.coaches]}));
+  const wk={
+    Monday:    [..._summerDay(), ...adult('Monday')],
+    Tuesday:   [..._summerDay(), ...adult('Tuesday')],
+    Wednesday: [..._summerDay(), ...adult('Wednesday')],
+    Thursday:  [..._summerDay(), ...adult('Thursday')],
+    Friday:    [..._summerDay(), ...adult('Friday')],
+    Saturday:  [],
+    Sunday:    [...adult('Sunday')],
+  };
+  Object.values(wk).forEach(day=>day.forEach(s=>{
+    if(!s.program) return;
+    if(s.program.indexOf('Group 1')>-1) s.courts='6 courts · Jefferson';
+    if(s.program.indexOf('Group 2')>-1) s.courts='Courts 12-16 · at LEGACY';
+  }));
+  return wk;
+}
+const SUMMER_W2 = _summerWeek2();
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -1591,6 +1614,7 @@ function renderTeamNotes(){
 // WEEK_START_BASE recomputes each load, so on Sun→Mon rollover the app auto-advances.
 const _SCHOOL_ANCHOR = new Date(2026, 4, 11);   // Session 3 Week 9 = Mon May 11
 const SUMMER_START   = new Date(2026, 5, 8);    // Summer Camp Week 1 = Mon Jun 8
+const SUMMER_W2_START= new Date(2026, 5, 15);   // Summer Camp Week 2 = Mon Jun 15
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1602,7 +1626,9 @@ const WEEK_START_BASE = _thisMonday();
 // Pick schedule + label by the week's Monday: Jun 8+ = Summer Camp, before = Session 3 (school year)
 function weekMeta(ws){
   if(ws.getTime() >= SUMMER_START.getTime()){
-    return {schedule: SUMMER_SCHEDULE, label:'Summer Camp', num: 1 + Math.round((ws - SUMMER_START)/(7*864e5)), summer:true};
+    const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
+    const schedule = ws.getTime() >= SUMMER_W2_START.getTime() ? SUMMER_W2 : SUMMER_SCHEDULE;
+    return {schedule, label:'Summer Camp', num, summer:true};
   }
   return {schedule: SCHOOL_SCHEDULE, label:'Session 3', num: 9 + Math.round((ws - _SCHOOL_ANCHOR)/(7*864e5)), summer:false};
 }
