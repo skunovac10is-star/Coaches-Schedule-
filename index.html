@@ -973,10 +973,13 @@ function _summerWeek2(){
     Saturday:  [],
     Sunday:    [...adult('Sunday')],
   };
+  // Week 2 court relocations + registration counts
   Object.values(wk).forEach(day=>day.forEach(s=>{
     if(!s.program) return;
-    if(s.program.indexOf('Group 1')>-1) s.courts='6 courts · Jefferson';
-    if(s.program.indexOf('Group 2')>-1) s.courts='Courts 12-16 · at LEGACY';
+    if(s.program.indexOf('Munchkins')>-1)      s.campers=8;
+    else if(s.program==='LTC Indoor')          s.campers=31;
+    else if(s.program.indexOf('Group 1')>-1){  s.courts='6 courts · Jefferson';   s.campers=18; }
+    else if(s.program.indexOf('Group 2')>-1){  s.courts='Courts 12-16 · at LEGACY'; s.campers=22; }
   }));
   return wk;
 }
