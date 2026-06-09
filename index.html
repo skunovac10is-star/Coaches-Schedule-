@@ -891,6 +891,7 @@ const ALL_COACHES = [
   {id:'gideon',name:'Gideon Knowles',abbr:'Gideon K',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'zszuzi',name:'Zszuzi P',abbr:'Zszuzi P',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'samir',name:'Samir M',abbr:'Samir M',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'betsy',name:'Betsy A',abbr:'Betsy A',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -989,8 +990,8 @@ function _summerWeek2(){
   }));
   // Wk2 coach swap: Sean T out, Gideon K in
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.map(c=> c==='Sean T' ? 'Gideon K' : c); }));
-  // Wk2: add Zszuzi P to LTC Indoor (morning + afternoon)
-  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Zszuzi P')) s.coaches.push('Zszuzi P'); }));
+  // Wk2: add Zszuzi P + Betsy A to LTC Indoor (morning + afternoon)
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor'){ ['Zszuzi P','Betsy A'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
   // LTC Yellow staff (Gideon K, Nick F) also run LTC Indoor's time slot — move them off Indoor to avoid double-booking
   Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Gideon K'&&c!=='Nick F'); }));
   // New group: LTC Yellow (Courts 9-12, 10 campers) — inserted right below LTC Indoor each camp weekday
