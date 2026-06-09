@@ -886,6 +886,7 @@ const ALL_COACHES = [
   {id:'monet',name:'Monet W',abbr:'Monet W',phone:'',email:'',type:'pt',level:'Summer camp'},
   {id:'joe',name:'Joe Heckley',abbr:'Joe H',phone:'',email:'',type:'pt',level:'Summer camp'},
   {id:'gideon',name:'Gideon Knowles',abbr:'Gideon K',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'zszuzi',name:'Zszuzi P',abbr:'Zszuzi P',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -984,6 +985,8 @@ function _summerWeek2(){
   }));
   // Wk2 coach swap: Sean T out, Gideon K in
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.map(c=> c==='Sean T' ? 'Gideon K' : c); }));
+  // Wk2: add Zszuzi P to LTC Indoor (morning + afternoon)
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Zszuzi P')) s.coaches.push('Zszuzi P'); }));
   return wk;
 }
 const SUMMER_W2 = _summerWeek2();
