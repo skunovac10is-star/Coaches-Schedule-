@@ -956,11 +956,14 @@ _edit(_monday, 'morning',   'LTC Indoor',      {add:['Bella N']});       // Bell
 // Mon Jun 8: Jeremie C off all camp; Joe H off morning Elite (added to evening adult below)
 _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H']});
 _edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Jeremie C']});
+// THURSDAY (Jun 11): Kamryn B starts at 10am
+const _thursday = _summerDay();
+_edit(_thursday, 'allday', 'Munchkins', {remove:['Kamryn B'], add:['Kamryn B (from 10am)']});
 const SUMMER_SCHEDULE = {
   Monday:    [..._monday,                        ..._ADULT.Monday],
   Tuesday:   [..._summerDay(),                   ..._ADULT.Tuesday],
   Wednesday: [..._summerDay(),                   ..._ADULT.Wednesday],
-  Thursday:  [..._summerDay(),                   ..._ADULT.Thursday],
+  Thursday:  [..._thursday,                      ..._ADULT.Thursday],
   Friday:    [..._summerDay(),                   ..._ADULT.Friday],
   Saturday:  [],
   Sunday:    [..._ADULT.Sunday],
