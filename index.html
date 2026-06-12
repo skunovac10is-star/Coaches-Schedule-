@@ -989,7 +989,7 @@ function _summerWeek2(){
     if(!s.program) return;
     if(s.program.indexOf('Munchkins')>-1)      s.campers=8;
     else if(s.program==='LTC Indoor')          s.campers=21;  // reduced by 10 (10 moved to LTC Yellow)
-    else if(s.program.indexOf('Group 1')>-1){  s.courts='6 courts · Jefferson';   s.campers=18; }
+    else if(s.program.indexOf('Group 1')>-1){  s.courts='Courts 9-14';   s.campers=18; }
     else if(s.program.indexOf('Group 2')>-1){  s.courts='Courts 12-16 · at LEGACY'; s.campers=22; }
   }));
   // Wk2 coach swap: Sean T out, Gideon K in
@@ -1001,7 +1001,7 @@ function _summerWeek2(){
   Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Nick F'); }));
   // New group: LTC Yellow (Courts 9-11, 10 campers) — inserted right below LTC Indoor each camp weekday
   ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{
-    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 9-11', campers:10, type:'comp', coaches:['Samir M','Nick F']});
+    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 15-16', campers:10, type:'comp', coaches:['Samir M','Nick F']});
     const mi=wk[d].findIndex(s=>s.session==='morning'   && s.program==='LTC Indoor'); if(mi>-1) wk[d].splice(mi+1,0,yel('morning'));
     const ai=wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor'); if(ai>-1) wk[d].splice(ai+1,0,yel('afternoon'));
   });
