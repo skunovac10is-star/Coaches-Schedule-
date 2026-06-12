@@ -997,11 +997,11 @@ function _summerWeek2(){
   // Wk2: LTC Indoor gets Zszuzi P + Kamryn B; Munchkins gets Betsy A (Kamryn moves to LTC, Betsy to Munchkins)
   Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor'){ ['Zszuzi P','Kamryn B'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
   Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program && s.program.indexOf('Munchkins')>-1){ s.coaches=s.coaches.filter(c=>c!=='Kamryn B' && c!=='Gulia S'); ['Betsy A','Nathalie P'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
-  // LTC Yellow staff (Gideon K, Nick F) also run LTC Indoor's time slot — move them off Indoor to avoid double-booking
-  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Gideon K'&&c!=='Nick F'); }));
-  // New group: LTC Yellow (Courts 9-12, 10 campers) — inserted right below LTC Indoor each camp weekday
+  // LTC Yellow staff (Nick F) also run LTC Indoor's time slot — move off Indoor to avoid double-booking. Gideon K stays on LTC Indoor.
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Nick F'); }));
+  // New group: LTC Yellow (Courts 9-11, 10 campers) — inserted right below LTC Indoor each camp weekday
   ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{
-    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 9-11', campers:10, type:'comp', coaches:['Gideon K','Samir M','Nick F']});
+    const yel=sess=>({session:sess, program:'LTC Yellow', time: sess==='morning'?'9–11:30am':'12:30–3pm', courts:'Courts 9-11', campers:10, type:'comp', coaches:['Samir M','Nick F']});
     const mi=wk[d].findIndex(s=>s.session==='morning'   && s.program==='LTC Indoor'); if(mi>-1) wk[d].splice(mi+1,0,yel('morning'));
     const ai=wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor'); if(ai>-1) wk[d].splice(ai+1,0,yel('afternoon'));
   });
