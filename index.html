@@ -958,15 +958,14 @@ _edit(_monday, 'morning',   'LTC Indoor',      {add:['Bella N']});       // Bell
 _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H']});
 _edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Jeremie C']});
 // THURSDAY (Jun 11): Kamryn B starts at 10am
-const _thursday = _summerDay(['Mia S']);
+const _thursday = _summerDay();
 _edit(_thursday, 'allday', 'Munchkins', {remove:['Kamryn B'], add:['Kamryn B (from 10am)']});
-// Mia S out all this week
 const SUMMER_SCHEDULE = {
   Monday:    [..._monday,                        ..._ADULT.Monday],
-  Tuesday:   [..._summerDay(['Mia S']),          ..._ADULT.Tuesday],
-  Wednesday: [..._summerDay(['Mia S']),          ..._ADULT.Wednesday],
+  Tuesday:   [..._summerDay(),                   ..._ADULT.Tuesday],
+  Wednesday: [..._summerDay(),                   ..._ADULT.Wednesday],
   Thursday:  [..._thursday,                      ..._ADULT.Thursday],
-  Friday:    [..._summerDay(['Mia S']),          ..._ADULT.Friday],
+  Friday:    [..._summerDay(),                   ..._ADULT.Friday],
   Saturday:  [],
   Sunday:    [..._ADULT.Sunday],
 };
@@ -1006,6 +1005,8 @@ function _summerWeek2(){
     const mi=wk[d].findIndex(s=>s.session==='morning'   && s.program==='LTC Indoor'); if(mi>-1) wk[d].splice(mi+1,0,yel('morning'));
     const ai=wk[d].findIndex(s=>s.session==='afternoon' && s.program==='LTC Indoor'); if(ai>-1) wk[d].splice(ai+1,0,yel('afternoon'));
   });
+  // Wk2: Mia S off all week
+  Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Mia S'); }));
   return wk;
 }
 const SUMMER_W2 = _summerWeek2();
