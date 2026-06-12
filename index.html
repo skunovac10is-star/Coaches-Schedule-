@@ -958,14 +958,15 @@ _edit(_monday, 'morning',   'LTC Indoor',      {add:['Bella N']});       // Bell
 _edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H']});
 _edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Jeremie C']});
 // THURSDAY (Jun 11): Kamryn B starts at 10am
-const _thursday = _summerDay();
+const _thursday = _summerDay(['Mia S']);
 _edit(_thursday, 'allday', 'Munchkins', {remove:['Kamryn B'], add:['Kamryn B (from 10am)']});
+// Mia S out all this week
 const SUMMER_SCHEDULE = {
   Monday:    [..._monday,                        ..._ADULT.Monday],
-  Tuesday:   [..._summerDay(),                   ..._ADULT.Tuesday],
-  Wednesday: [..._summerDay(),                   ..._ADULT.Wednesday],
+  Tuesday:   [..._summerDay(['Mia S']),          ..._ADULT.Tuesday],
+  Wednesday: [..._summerDay(['Mia S']),          ..._ADULT.Wednesday],
   Thursday:  [..._thursday,                      ..._ADULT.Thursday],
-  Friday:    [..._summerDay(),                   ..._ADULT.Friday],
+  Friday:    [..._summerDay(['Mia S']),          ..._ADULT.Friday],
   Saturday:  [],
   Sunday:    [..._ADULT.Sunday],
 };
