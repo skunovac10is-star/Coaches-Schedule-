@@ -893,6 +893,8 @@ const ALL_COACHES = [
   {id:'samir',name:'Samir M',abbr:'Samir M',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'betsy',name:'Betsy A',abbr:'Betsy A',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'nathalie',name:'Nathalie P',abbr:'Nathalie P',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'taliac',name:'Talia Czarny',abbr:'Talia C',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'juliac',name:'Julia C',abbr:'Julia C',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -994,9 +996,10 @@ function _summerWeek2(){
   }));
   // Wk2 coach swap: Sean T out, Gideon K in
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.map(c=> c==='Sean T' ? 'Gideon K' : c); }));
-  // Wk2: LTC Indoor gets Zszuzi P + Kamryn B; Munchkins gets Betsy A (Kamryn moves to LTC, Betsy to Munchkins)
-  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor'){ ['Zszuzi P','Kamryn B'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
-  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program && s.program.indexOf('Munchkins')>-1){ s.coaches=s.coaches.filter(c=>c!=='Kamryn B' && c!=='Gulia S'); ['Betsy A','Nathalie P'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
+  // Wk2: LTC Indoor gets Zszuzi P + Kamryn B + Betsy A
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor'){ ['Zszuzi P','Kamryn B','Betsy A'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
+  // Wk2: Munchkins = Nathalie P + Talia C (Kamryn→LTC, Gulia out, Betsy→LTC)
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program && s.program.indexOf('Munchkins')>-1){ s.coaches=s.coaches.filter(c=>!['Kamryn B','Gulia S','Betsy A'].includes(c)); ['Nathalie P','Talia C'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }));
   // LTC Yellow staff (Nick F) also run LTC Indoor's time slot — move off Indoor to avoid double-booking. Gideon K stays on LTC Indoor.
   Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Nick F'); }));
   // New group: LTC Yellow (Courts 9-11, 10 campers) — inserted right below LTC Indoor each camp weekday
@@ -1007,6 +1010,13 @@ function _summerWeek2(){
   });
   // Wk2: Mia S off all week
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Mia S'); }));
+  // Wk2: morning Elite Group 1 — Gabe K out, Julia C in (afternoon unchanged)
+  Object.values(wk).forEach(day=>day.forEach(s=>{ if(s.session==='morning' && s.program.indexOf('Group 1')>-1){ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); if(!s.coaches.includes('Julia C')) s.coaches.push('Julia C'); } }));
+  // Wk2: rename Elite groups → LTC E Jefferson / LTC E Center Base
+  Object.values(wk).forEach(day=>day.forEach(s=>{
+    if(s.program==='LTC Elite — Group 1') s.program='LTC E Jefferson';
+    else if(s.program==='LTC Elite — Group 2') s.program='LTC E Center Base';
+  }));
   return wk;
 }
 const SUMMER_W2 = _summerWeek2();
@@ -1382,16 +1392,16 @@ function renderSchedule(day){
 function _programClass(p){
   if(p.indexOf('Munchkins')>-1) return 'munch';
   if(p.indexOf('Yellow')>-1) return 'ltcyellow';
-  if(p.indexOf('Group 1')>-1) return 'elite1';
-  if(p.indexOf('Group 2')>-1) return 'elite2';
+  if(p.indexOf('Group 1')>-1 || p.indexOf('Jefferson')>-1) return 'elite1';
+  if(p.indexOf('Group 2')>-1 || p.indexOf('Center')>-1) return 'elite2';
   if(p.indexOf('Elite')>-1) return 'elite';
   return 'indoor';
 }
 function _programIcon(p){
   if(p.indexOf('Munchkins')>-1) return '<span class="cball cball-red"></span>';
   if(p.indexOf('Yellow')>-1) return '<span class="cball cball-yellow"></span>';
-  if(p.indexOf('Group 1')>-1) return '<span class="cball cball-blue"></span>';
-  if(p.indexOf('Group 2')>-1) return '<span class="cball cball-green"></span>';
+  if(p.indexOf('Group 1')>-1 || p.indexOf('Jefferson')>-1) return '<span class="cball cball-blue"></span>';
+  if(p.indexOf('Group 2')>-1 || p.indexOf('Center')>-1) return '<span class="cball cball-green"></span>';
   if(p.indexOf('Elite')>-1) return '<span class="cball cball-blue"></span>';
   return '<span class="cball cball-orange"></span>'; // LTC Indoor
 }
@@ -1484,14 +1494,14 @@ function renderSummerDayByGroup(tl, slots){
     {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program==='LTC Yellow')},
     {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program==='LTC Yellow')},
   ]);
-  renderGroupBlock(tl, 'LTC Elite — Group 1', 'elite1', '<span class="cball cball-blue"></span>', [
-    {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program.indexOf('Group 1')>-1)},
-    {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program.indexOf('Group 1')>-1)},
-  ]);
-  renderGroupBlock(tl, 'LTC Elite — Group 2', 'elite2', '<span class="cball cball-green"></span>', [
-    {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program.indexOf('Group 2')>-1)},
-    {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program.indexOf('Group 2')>-1)},
-  ]);
+  const e1m=slots.find(s=>s.session==='morning'   && (s.program.indexOf('Group 1')>-1||s.program.indexOf('Jefferson')>-1));
+  const e1a=slots.find(s=>s.session==='afternoon' && (s.program.indexOf('Group 1')>-1||s.program.indexOf('Jefferson')>-1));
+  renderGroupBlock(tl, (e1m||e1a||{}).program||'LTC Elite — Group 1', 'elite1', '<span class="cball cball-blue"></span>',
+    [{label:'Morning', s:e1m},{label:'Afternoon', s:e1a}]);
+  const e2m=slots.find(s=>s.session==='morning'   && (s.program.indexOf('Group 2')>-1||s.program.indexOf('Center')>-1));
+  const e2a=slots.find(s=>s.session==='afternoon' && (s.program.indexOf('Group 2')>-1||s.program.indexOf('Center')>-1));
+  renderGroupBlock(tl, (e2m||e2a||{}).program||'LTC Elite — Group 2', 'elite2', '<span class="cball cball-green"></span>',
+    [{label:'Morning', s:e2m},{label:'Afternoon', s:e2a}]);
   const adults = slots.filter(s=>s.session==='adult');
   if(adults.length){
     renderSummerSection(tl, 'Adult Clinics', '<span class="cball cball-purple"></span>', '', adults);
