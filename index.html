@@ -894,6 +894,7 @@ const ALL_COACHES = [
   {id:'betsy',name:'Betsy A',abbr:'Betsy A',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'nathalie',name:'Nathalie P',abbr:'Nathalie P',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'taliac',name:'Talia Czarny',abbr:'Talia C',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'bella',name:'Bella Nichilo',abbr:'Bella N',phone:'610-291-4359',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1027,6 +1028,8 @@ SUMMER_W2.Monday.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Ind
 SUMMER_W2.Wednesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
 // Wk2: Gabe K out all day Monday–Thursday (on Friday)
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
+// Wk2: morning Center Base — Bella N instead of Shevi A (whole week)
+Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ if(s.session==='morning' && (s.program.indexOf('Center')>-1||s.program.indexOf('Group 2')>-1)) s.coaches=s.coaches.map(c=>c==='Shevi A'?'Bella N':c); }));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
