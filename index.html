@@ -990,8 +990,8 @@ function _summerWeek2(){
     if(!s.program) return;
     if(s.program.indexOf('Munchkins')>-1)      s.campers=8;
     else if(s.program==='LTC Indoor')          s.campers=21;  // reduced by 10 (10 moved to LTC Yellow)
-    else if(s.program.indexOf('Group 1')>-1){  s.courts='at Jefferson';   s.campers=18; }
-    else if(s.program.indexOf('Group 2')>-1){  s.courts='Courts 9-14 · at LEGACY'; s.campers=22; }
+    else if(s.program.indexOf('Group 1')>-1){  s.courts='at Jefferson';   s.campers=20; }
+    else if(s.program.indexOf('Group 2')>-1){  s.courts='Courts 9-14 · at LEGACY'; s.campers=25; }
   }));
   // Wk2 coach swap: Sean T out, Gideon K in
   Object.values(wk).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.map(c=> c==='Sean T' ? 'Gideon K' : c); }));
@@ -1025,6 +1025,8 @@ const SUMMER_W2 = _summerWeek2();
 SUMMER_W2.Monday.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
 // Wk2 Wed: Zszuzi P did not work (all day)
 SUMMER_W2.Wednesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
+// Wk2: Gabe K out all day Monday–Thursday (on Friday)
+['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
