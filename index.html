@@ -1039,11 +1039,15 @@ SUMMER_W2.Monday.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Ind
 ['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }); });
 // Mon Jun 22: Andrew W out all day
 SUMMER_W2.Monday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Andrew W'); });
-// Mon Jun 22: Julian C moved to Jefferson afternoon (off Center Base afternoon)
+// Mon Jun 22: Julian C — morning Center Base (LEGACY), afternoon Jefferson
 SUMMER_W2.Monday.forEach(s=>{
-  if(s.session!=='afternoon') return;
-  if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Julian C');
-  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Julian C')) s.coaches.push('Julian C');
+  if(s.session==='morning'){
+    if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Julian C');
+    if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Julian C')) s.coaches.push('Julian C');
+  } else if(s.session==='afternoon'){
+    if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Julian C');
+    if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Julian C')) s.coaches.push('Julian C');
+  }
 });
 // Gabe K out Mon–Thu (on Friday)
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
@@ -1521,14 +1525,15 @@ function renderSummerDayByGroup(tl, slots){
     {label:'Morning',   s:slots.find(s=>s.session==='morning'   && s.program==='LTC Yellow')},
     {label:'Afternoon', s:slots.find(s=>s.session==='afternoon' && s.program==='LTC Yellow')},
   ]);
-  const e1m=slots.find(s=>s.session==='morning'   && (s.program.indexOf('Group 1')>-1||s.program.indexOf('Jefferson')>-1));
-  const e1a=slots.find(s=>s.session==='afternoon' && (s.program.indexOf('Group 1')>-1||s.program.indexOf('Jefferson')>-1));
-  renderGroupBlock(tl, (e1m||e1a||{}).program||'LTC Elite — Group 1', 'elite1', '<span class="cball cball-blue"></span>',
-    [{label:'Morning', s:e1m},{label:'Afternoon', s:e1a}]);
+  // Center Base (Group 2) shown ahead of Jefferson (Group 1)
   const e2m=slots.find(s=>s.session==='morning'   && (s.program.indexOf('Group 2')>-1||s.program.indexOf('Center')>-1));
   const e2a=slots.find(s=>s.session==='afternoon' && (s.program.indexOf('Group 2')>-1||s.program.indexOf('Center')>-1));
   renderGroupBlock(tl, (e2m||e2a||{}).program||'LTC Elite — Group 2', 'elite2', '<span class="cball cball-green"></span>',
     [{label:'Morning', s:e2m},{label:'Afternoon', s:e2a}]);
+  const e1m=slots.find(s=>s.session==='morning'   && (s.program.indexOf('Group 1')>-1||s.program.indexOf('Jefferson')>-1));
+  const e1a=slots.find(s=>s.session==='afternoon' && (s.program.indexOf('Group 1')>-1||s.program.indexOf('Jefferson')>-1));
+  renderGroupBlock(tl, (e1m||e1a||{}).program||'LTC Elite — Group 1', 'elite1', '<span class="cball cball-blue"></span>',
+    [{label:'Morning', s:e1m},{label:'Afternoon', s:e1a}]);
   const adults = slots.filter(s=>s.session==='adult');
   if(adults.length){
     renderSummerSection(tl, 'Adult Clinics', '<span class="cball cball-purple"></span>', '', adults);
