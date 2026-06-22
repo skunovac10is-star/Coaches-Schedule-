@@ -1028,6 +1028,8 @@ const SUMMER_W2 = _summerWeek2();
 SUMMER_W2.Monday.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
 // Wk2 Wed: Zszuzi P did not work (all day)
 SUMMER_W2.Wednesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
+// Wk2: Zszuzi P off Thursday + Friday (all day)
+['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }); });
 // Wk2: Gabe K out all day Monday–Thursday (on Friday)
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
 // Wk2: morning Center Base — Bella N instead of Shevi A (whole week)
