@@ -1030,6 +1030,14 @@ SUMMER_W2.Monday.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Ind
 SUMMER_W2.Wednesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
 // Wk2: Zszuzi P off Thursday + Friday (all day)
 ['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }); });
+// Wk2 Mon: Andrew W out all day
+SUMMER_W2.Monday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Andrew W'); });
+// Wk2 Mon: move Julian C to Jefferson afternoon (off Center Base afternoon)
+SUMMER_W2.Monday.forEach(s=>{
+  if(s.session!=='afternoon') return;
+  if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Julian C');
+  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Julian C')) s.coaches.push('Julian C');
+});
 // Wk2: Gabe K out all day Monday–Thursday (on Friday)
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
 // Wk2: morning Center Base — Bella N instead of Shevi A (whole week)
