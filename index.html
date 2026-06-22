@@ -1023,29 +1023,30 @@ function _summerWeek2(){
   }));
   return wk;
 }
-const SUMMER_W2 = _summerWeek2();
-// Wk2 Mon: Zszuzi P did not work the afternoon
+// ===== SUMMER_STD = clean standard week (Jun 29+ / next week). Structural changes that carry every week. =====
+const SUMMER_STD = _summerWeek2();
+// morning Center Base — Bella N instead of Shevi A
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.session==='morning' && (s.program.indexOf('Center')>-1||s.program.indexOf('Group 2')>-1)) s.coaches=s.coaches.map(c=>c==='Shevi A'?'Bella N':c); }));
+// Nathan D on LTC Jefferson morning
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.session==='morning' && (s.program.indexOf('Jefferson')>-1||s.program.indexOf('Group 1')>-1) && !s.coaches.includes('Nathan D')) s.coaches.push('Nathan D'); }));
+// Julian C on Center Base afternoon
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.session==='afternoon' && (s.program.indexOf('Center')>-1||s.program.indexOf('Group 2')>-1) && !s.coaches.includes('Julian C')) s.coaches.push('Julian C'); }));
+
+// ===== SUMMER_W2 = CURRENT week (Jun 22-28) = standard + this-week's daily attendance edits =====
+const SUMMER_W2 = JSON.parse(JSON.stringify(SUMMER_STD));
+// Zszuzi P: off Mon afternoon, Wed all day, Thu + Fri all day
 SUMMER_W2.Monday.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
-// Wk2 Wed: Zszuzi P did not work (all day)
-SUMMER_W2.Wednesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); });
-// Wk2: Zszuzi P off Thursday + Friday (all day)
-['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }); });
-// Wk2 Mon: Andrew W out all day
+['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }); });
+// Mon Jun 22: Andrew W out all day
 SUMMER_W2.Monday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Andrew W'); });
-// Wk2 Mon: move Julian C to Jefferson afternoon (off Center Base afternoon)
+// Mon Jun 22: Julian C moved to Jefferson afternoon (off Center Base afternoon)
 SUMMER_W2.Monday.forEach(s=>{
   if(s.session!=='afternoon') return;
   if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Julian C');
   if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Julian C')) s.coaches.push('Julian C');
 });
-// Wk2: Gabe K out all day Monday–Thursday (on Friday)
+// Gabe K out Mon–Thu (on Friday)
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
-// Wk2: morning Center Base — Bella N instead of Shevi A (whole week)
-Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ if(s.session==='morning' && (s.program.indexOf('Center')>-1||s.program.indexOf('Group 2')>-1)) s.coaches=s.coaches.map(c=>c==='Shevi A'?'Bella N':c); }));
-// Wk2: add Nathan D to LTC Jefferson morning (whole week)
-Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ if(s.session==='morning' && (s.program.indexOf('Jefferson')>-1||s.program.indexOf('Group 1')>-1) && !s.coaches.includes('Nathan D')) s.coaches.push('Nathan D'); }));
-// Wk2: add Julian C to LTC E Center Base afternoon (he's on Jefferson in the morning)
-Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ if(s.session==='afternoon' && (s.program.indexOf('Center')>-1||s.program.indexOf('Group 2')>-1) && !s.coaches.includes('Julian C')) s.coaches.push('Julian C'); }));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -1686,6 +1687,7 @@ function renderTeamNotes(){
 const _SCHOOL_ANCHOR = new Date(2026, 4, 11);   // Session 3 Week 9 = Mon May 11
 const SUMMER_START   = new Date(2026, 5, 8);    // Summer Camp Week 1 = Mon Jun 8
 const SUMMER_W2_START= new Date(2026, 5, 15);   // Summer Camp Week 2 = Mon Jun 15
+const SUMMER_STD_START= new Date(2026, 5, 29);  // Jun 29+ uses the clean standard week (next-week planning)
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1698,7 +1700,9 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
-    const schedule = ws.getTime() >= SUMMER_W2_START.getTime() ? SUMMER_W2 : SUMMER_SCHEDULE;
+    const schedule = ws.getTime() >= SUMMER_STD_START.getTime() ? SUMMER_STD
+                   : ws.getTime() >= SUMMER_W2_START.getTime() ? SUMMER_W2
+                   : SUMMER_SCHEDULE;
     return {schedule, label:'Summer Camp', num, summer:true};
   }
   return {schedule: SCHOOL_SCHEDULE, label:'Session 3', num: 9 + Math.round((ws - _SCHOOL_ANCHOR)/(7*864e5)), summer:false};
