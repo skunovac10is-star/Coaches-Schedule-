@@ -897,6 +897,7 @@ const ALL_COACHES = [
   {id:'bella',name:'Bella Nichilo',abbr:'Bella N',phone:'610-291-4359',email:'',type:'jr',level:'Summer camp'},
   {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'Summer camp'},
   {id:'julianc',name:'Julian Casoban',abbr:'Julian C',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'sean',name:'Sean T',abbr:'Sean T',phone:'610-659-3715',email:'',type:'pt',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1051,6 +1052,12 @@ SUMMER_W2.Monday.forEach(s=>{
 });
 // Gabe K out Mon–Thu (on Friday)
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }); });
+// Mon Jun 22: dissolve LTC Yellow — Nick F → LTC Indoor, Samir M + Sean T → Center Base
+SUMMER_W2.Monday = SUMMER_W2.Monday.filter(s=>s.program!=='LTC Yellow');
+SUMMER_W2.Monday.forEach(s=>{
+  if(s.program==='LTC Indoor' && !s.coaches.includes('Nick F')) s.coaches.push('Nick F');
+  if(s.program.indexOf('Center')>-1){ ['Samir M','Sean T'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); }
+});
 
 const SCHOOL_SCHEDULE = {
   Monday:[
