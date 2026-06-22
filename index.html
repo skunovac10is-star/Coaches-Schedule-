@@ -1058,6 +1058,12 @@ SUMMER_W2.Monday.forEach(s=>{
   if(s.program==='LTC Indoor' && !s.coaches.includes('Nick F')) s.coaches.push('Nick F');
   if(s.program.indexOf('Center')>-1){ ['Samir M','Sean T'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); }
 });
+// This week registration update: Center Base 32, LTC Indoor 27
+Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{
+  if(!s.program) return;
+  if(s.program.indexOf('Center')>-1) s.campers=32;
+  else if(s.program==='LTC Indoor') s.campers=27;
+}));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
