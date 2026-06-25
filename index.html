@@ -898,6 +898,8 @@ const ALL_COACHES = [
   {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'Summer camp'},
   {id:'julianc',name:'Julian Casoban',abbr:'Julian C',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'sean',name:'Sean T',abbr:'Sean T',phone:'610-659-3715',email:'',type:'pt',level:'Summer camp'},
+  {id:'shane',name:'Shane B',abbr:'Shane B',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'namir',name:'Namir Smith',abbr:'Namir S',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1064,6 +1066,16 @@ Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Center')>-1) s.campers=32;
   else if(s.program==='LTC Indoor') s.campers=27;
 }));
+// This week — Scotty S off all week
+Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Scotty S'); }));
+// Thu + Fri: Krispy (Kris W) out all day
+['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
+// Thu: Gideon K morning half-day only (off afternoon)
+SUMMER_W2.Thursday.forEach(s=>{ if(s.session==='afternoon') s.coaches=s.coaches.filter(c=>c!=='Gideon K'); });
+// Shane B (new): LTC Indoor morning only, Thu + Fri
+['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ if(s.session==='morning' && s.program==='LTC Indoor' && !s.coaches.includes('Shane B')) s.coaches.push('Shane B'); }); });
+// Namir Smith: LTC Indoor full day Wed/Thu/Fri (clinic assumed — confirm)
+['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Namir S')) s.coaches.push('Namir S'); }); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
