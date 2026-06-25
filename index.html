@@ -1077,6 +1077,31 @@ SUMMER_W2.Thursday.forEach(s=>{ if(s.session==='afternoon') s.coaches=s.coaches.
 // Namir Smith: LTC Indoor full day Wed/Thu/Fri (clinic assumed — confirm)
 ['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Namir S')) s.coaches.push('Namir S'); }); });
 
+// ===== NEXT WEEK (Jun 29+, SUMMER_STD) — applied after the SUMMER_W2 clone so this week is unaffected =====
+// Combine LTC Yellow into LTC Indoor (one group), then drop the Yellow cards
+Object.values(SUMMER_STD).forEach(day=>{
+  day.filter(s=>s.program==='LTC Yellow').forEach(y=>{
+    const ind=day.find(s=>s.program==='LTC Indoor' && s.session===y.session);
+    if(ind) y.coaches.forEach(c=>{ if(!ind.coaches.includes(c)) ind.coaches.push(c); });
+  });
+  for(let i=day.length-1;i>=0;i--) if(day[i].program==='LTC Yellow') day.splice(i,1);
+});
+// Registration: LTC Indoor 35, Center Base 20, Jefferson 16
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
+  if(s.program==='LTC Indoor') s.campers=35;
+  else if(s.program.indexOf('Center')>-1) s.campers=20;
+  else if(s.program.indexOf('Jefferson')>-1) s.campers=16;
+}));
+// Move Julian C → LTC E Center Base (off Jefferson)
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Julian C');
+  if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Julian C')) s.coaches.push('Julian C');
+}));
+// Gabe K on LTC E Jefferson all day
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Gabe K')) s.coaches.push('Gabe K');
+}));
+
 const SCHOOL_SCHEDULE = {
   Monday:[
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
