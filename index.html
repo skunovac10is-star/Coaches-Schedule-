@@ -1101,6 +1101,8 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Gabe K')) s.coaches.push('Gabe K');
 }));
+// Next week: Brady C off the whole week
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Brady C'); }));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
