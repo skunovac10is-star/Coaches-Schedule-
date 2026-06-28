@@ -1068,8 +1068,8 @@ Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{
 }));
 // This week — Scotty S off all week
 Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Scotty S'); }));
-// Mon, Tue, Thu, Fri: Krispy (Kris W) out all day
-['Monday','Tuesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
+// Thu + Fri: Krispy (Kris W) out all day (Jun 22 week)
+['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
 // Thu: Gideon K morning half-day only (off afternoon)
 SUMMER_W2.Thursday.forEach(s=>{ if(s.session==='afternoon') s.coaches=s.coaches.filter(c=>c!=='Gideon K'); });
 // Shane B (new): LTC Indoor morning only, Thu + Fri
@@ -1114,6 +1114,8 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filt
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }));
 // Next week: add Sean T to LTC Indoor (morning + afternoon)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Sean T')) s.coaches.push('Sean T'); }));
+// Next week (upcoming): Kris W (Krispy) out Monday + Tuesday
+['Monday','Tuesday'].forEach(d=>{ SUMMER_STD[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
