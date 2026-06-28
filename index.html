@@ -1114,6 +1114,8 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
   if(s.program.indexOf('Munchkins')>-1 && !s.coaches.includes('Kamryn B')) s.coaches.push('Kamryn B');
 }));
+// Next week: Talia C off Munchkins
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program.indexOf('Munchkins')>-1) s.coaches=s.coaches.filter(c=>c!=='Talia C'); }));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
