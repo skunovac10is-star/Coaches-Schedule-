@@ -1076,6 +1076,11 @@ SUMMER_W2.Thursday.forEach(s=>{ if(s.session==='afternoon') s.coaches=s.coaches.
 ['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ if(s.session==='morning' && s.program==='LTC Indoor' && !s.coaches.includes('Shane B')) s.coaches.push('Shane B'); }); });
 // Namir Smith: LTC Indoor full day Wed/Thu/Fri (clinic assumed — confirm)
 ['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Namir S')) s.coaches.push('Namir S'); }); });
+// This week: Betsy A → Munchkins (off LTC Indoor, both all-day)
+Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{
+  if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Betsy A');
+  if(s.program.indexOf('Munchkins')>-1 && !s.coaches.includes('Betsy A')) s.coaches.push('Betsy A');
+}));
 
 // ===== NEXT WEEK (Jun 29+, SUMMER_STD) — applied after the SUMMER_W2 clone so this week is unaffected =====
 // Combine LTC Yellow into LTC Indoor (one group), then drop the Yellow cards
