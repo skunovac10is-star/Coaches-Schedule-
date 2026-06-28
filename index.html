@@ -1068,8 +1068,8 @@ Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{
 }));
 // This week — Scotty S off all week
 Object.values(SUMMER_W2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Scotty S'); }));
-// Thu + Fri: Krispy (Kris W) out all day
-['Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
+// Mon, Tue, Thu, Fri: Krispy (Kris W) out all day
+['Monday','Tuesday','Thursday','Friday'].forEach(d=>{ SUMMER_W2[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
 // Thu: Gideon K morning half-day only (off afternoon)
 SUMMER_W2.Thursday.forEach(s=>{ if(s.session==='afternoon') s.coaches=s.coaches.filter(c=>c!=='Gideon K'); });
 // Shane B (new): LTC Indoor morning only, Thu + Fri
