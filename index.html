@@ -1107,6 +1107,8 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filt
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Monet W'); }));
 // Next week: Zszuzi P off the whole week
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Zszuzi P'); }));
+// Next week: add Sean T to LTC Indoor (morning + afternoon)
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Sean T')) s.coaches.push('Sean T'); }));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
