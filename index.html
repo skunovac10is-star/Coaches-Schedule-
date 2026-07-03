@@ -1116,6 +1116,8 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filt
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Sean T')) s.coaches.push('Sean T'); }));
 // Next week (upcoming): Kris W (Krispy) out Monday + Tuesday
 ['Monday','Tuesday'].forEach(d=>{ SUMMER_STD[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
+// Current/upcoming week: Gideon K out of the schedule (all days)
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gideon K'); }));
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
