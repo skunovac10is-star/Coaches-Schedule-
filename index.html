@@ -1116,8 +1116,10 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filt
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Sean T')) s.coaches.push('Sean T'); }));
 // Next week (upcoming): Kris W (Krispy) out Monday + Tuesday
 ['Monday','Tuesday'].forEach(d=>{ SUMMER_STD[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kris W'); }); });
-// Current/upcoming week: Gideon K out of the schedule (all days)
-Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gideon K'); }));
+// SUMMER_STD2 = the week of Jul 6 onward. Starts as a copy of this week, with "moving forward" changes.
+const SUMMER_STD2 = JSON.parse(JSON.stringify(SUMMER_STD));
+// Gideon K worked this week but is off from next week (Jul 6) forward
+Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gideon K'); }));
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
@@ -1766,7 +1768,8 @@ function renderTeamNotes(){
 const _SCHOOL_ANCHOR = new Date(2026, 4, 11);   // Session 3 Week 9 = Mon May 11
 const SUMMER_START   = new Date(2026, 5, 8);    // Summer Camp Week 1 = Mon Jun 8
 const SUMMER_W2_START= new Date(2026, 5, 15);   // Summer Camp Week 2 = Mon Jun 15
-const SUMMER_STD_START= new Date(2026, 5, 29);  // Jun 29+ uses the clean standard week (next-week planning)
+const SUMMER_STD_START= new Date(2026, 5, 29);  // Jun 29–Jul 5 = current standard week
+const SUMMER_STD2_START= new Date(2026, 6, 6);  // Jul 6+ = next standard week (moving-forward changes)
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1779,7 +1782,8 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
-    const schedule = ws.getTime() >= SUMMER_STD_START.getTime() ? SUMMER_STD
+    const schedule = ws.getTime() >= SUMMER_STD2_START.getTime() ? SUMMER_STD2
+                   : ws.getTime() >= SUMMER_STD_START.getTime() ? SUMMER_STD
                    : ws.getTime() >= SUMMER_W2_START.getTime() ? SUMMER_W2
                    : SUMMER_SCHEDULE;
     return {schedule, label:'Summer Camp', num, summer:true};
