@@ -1125,6 +1125,18 @@ Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
   if(s.program.indexOf('Munchkins')>-1 && !s.coaches.includes('Kamryn B')) s.coaches.push('Kamryn B');
 }));
+// Jul 6+: remove Talia C from the schedule
+Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Talia C'); }));
+// Jul 6 week: Flynn H + Nathan D off LTC E Jefferson Mon–Wed (back Thu–Fri)
+['Monday','Tuesday','Wednesday'].forEach(d=>{ SUMMER_STD2[d].forEach(s=>{ if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Flynn H'&&c!=='Nathan D'); }); });
+// Jul 6+: registration — Munchkins 6, LTC Indoor 32, Center Base 25, Jefferson 20
+Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{
+  if(!s.program) return;
+  if(s.program.indexOf('Munchkins')>-1) s.campers=6;
+  else if(s.program==='LTC Indoor') s.campers=32;
+  else if(s.program.indexOf('Center')>-1) s.campers=25;
+  else if(s.program.indexOf('Jefferson')>-1) s.campers=20;
+}));
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
