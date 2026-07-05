@@ -1120,6 +1120,11 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indo
 const SUMMER_STD2 = JSON.parse(JSON.stringify(SUMMER_STD));
 // Gideon K worked this week but is off from next week (Jul 6) forward
 Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gideon K'); }));
+// Jul 6+: Kamryn B → Munchkins (off LTC Indoor)
+Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{
+  if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
+  if(s.program.indexOf('Munchkins')>-1 && !s.coaches.includes('Kamryn B')) s.coaches.push('Kamryn B');
+}));
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
