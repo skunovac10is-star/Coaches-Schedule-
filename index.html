@@ -1135,7 +1135,7 @@ Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Munchkins')>-1) s.campers=6;
   else if(s.program==='LTC Indoor') s.campers=32;
   else if(s.program.indexOf('Center')>-1) s.campers=25;
-  else if(s.program.indexOf('Jefferson')>-1) s.campers=20;
+  else if(s.program.indexOf('Jefferson')>-1) s.campers=16;
 }));
 // Next-week (wk of Jul 20): remove Betsy A all week
 Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Betsy A'); }));
