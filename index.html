@@ -1144,6 +1144,8 @@ Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{ if(s.program.indexOf('J
 ['Monday','Tuesday'].forEach(d=>{ SUMMER_STD2[d].forEach(s=>{ if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Flynn H')) s.coaches.push('Flynn H'); }); });
 // Add Brady C to LTC Indoor camp — morning only, whole week
 ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_STD2[d].forEach(s=>{ if(s.session==='morning' && s.program==='LTC Indoor' && !s.coaches.includes('Brady C')) s.coaches.push('Brady C'); }); });
+// This week only: add Namir S to LTC Indoor (full day)
+Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Namir S')) s.coaches.push('Namir S'); }));
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
