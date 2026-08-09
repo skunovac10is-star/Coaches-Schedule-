@@ -1199,6 +1199,10 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
 Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Kris W')) s.coaches.push('Kris W');
 }));
+// Aug 10: Joe H → LTC E Jefferson, Tuesday through Friday (still off Monday)
+['Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{
+  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Joe H')) s.coaches.push('Joe H');
+}); });
 
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
