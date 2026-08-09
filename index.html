@@ -1208,6 +1208,8 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
 Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Munchkins')>-1 && !s.coaches.includes('Quill')) s.coaches.push('Quill');
 }));
+// Aug 10: Namir S off Friday (Kieran already off Friday)
+SUMMER_AUG10.Friday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Namir S'); });
 // Aug 10: Shevi A covers Jefferson Monday only, then back to LTC E Legacy (Center Base) Tue–Fri
 ['Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{
   if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Shevi A');
