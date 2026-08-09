@@ -1175,6 +1175,14 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
 }));
 // Aug 10: Laurence P no longer on LTC Indoor afternoon (1–3pm)
 SUMMER_AUG10 && Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ if(s.session==='afternoon' && s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Laurence P'); }));
+// Aug 10 registration: Munchkins 10, LTC Camp 51, Elite 37 total (Jefferson 16 + Center Base 21)
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
+  if(!s.program) return;
+  if(s.program.indexOf('Munchkins')>-1)      s.campers=10;
+  else if(s.program==='LTC Indoor')          s.campers=51;
+  else if(s.program.indexOf('Jefferson')>-1) s.campers=16;
+  else if(s.program.indexOf('Center')>-1)    s.campers=21;
+}));
 
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
