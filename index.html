@@ -1183,6 +1183,18 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
   else if(s.program.indexOf('Jefferson')>-1) s.campers=16;
   else if(s.program.indexOf('Center')>-1)    s.campers=21;
 }));
+// Aug 10: Jeremie C out the whole week
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C'); }));
+// Aug 10: Andrew W → LTC E Jefferson (off Center Base)
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Andrew W');
+  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Andrew W')) s.coaches.push('Andrew W');
+}));
+// Aug 10: Samir M → LTC E Center Base / Legacy (off LTC Indoor)
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
+  if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Samir M');
+  if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Samir M')) s.coaches.push('Samir M');
+}));
 
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
