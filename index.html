@@ -900,6 +900,9 @@ const ALL_COACHES = [
   {id:'sean',name:'Sean T',abbr:'Sean T',phone:'610-659-3715',email:'',type:'pt',level:'Summer camp'},
   {id:'shane',name:'Shane B',abbr:'Shane B',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'namir',name:'Namir Smith',abbr:'Namir S',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'kacey',name:'Kacey',abbr:'Kacey',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'kieran',name:'Kieran',abbr:'Kieran',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'leya',name:'Leya',abbr:'Leya',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1146,6 +1149,22 @@ Object.values(SUMMER_STD2).forEach(day=>day.forEach(s=>{ if(s.program.indexOf('J
 ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_STD2[d].forEach(s=>{ if(s.session==='morning' && s.program==='LTC Indoor' && !s.coaches.includes('Brady C')) s.coaches.push('Brady C'); }); });
 // This week only: add Namir S to LTC Indoor (full day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Namir S')) s.coaches.push('Namir S'); }));
+
+// ===== AUG 10–16 (SUMMER_AUG10) — its own week. Clone of current schedule (keeps all coaches) + Aug-10 changes. =====
+const SUMMER_AUG10 = JSON.parse(JSON.stringify(SUMMER_STD2));
+// Not available: Brady C (hard courts), Zszuzi P (gone)
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Brady C' && c!=='Zszuzi P'); }));
+// Flynn H: LTC E Jefferson Tue–Fri (off Mon)
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Flynn H'); }));
+['Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Flynn H')) s.coaches.push('Flynn H'); }); });
+// Julian C: off Thu + Fri (works Mon–Wed)
+['Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Julian C'); }); });
+// Joe H: off Mon + Tue (works Wed–Fri)
+['Monday','Tuesday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Joe H'); }); });
+// LTC Indoor adds: Namir S + Kacey + Leya (full week), Kieran (Mon–Thu, off Fri)
+['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ if(s.program==='LTC Indoor'){ ['Namir S','Kacey','Leya'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }); });
+['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Kieran')) s.coaches.push('Kieran'); }); });
+
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
@@ -1798,6 +1817,7 @@ const SUMMER_START   = new Date(2026, 5, 8);    // Summer Camp Week 1 = Mon Jun 
 const SUMMER_W2_START= new Date(2026, 5, 15);   // Summer Camp Week 2 = Mon Jun 15
 const SUMMER_STD_START= new Date(2026, 5, 29);  // Jun 29–Jul 5 = current standard week
 const SUMMER_STD2_START= new Date(2026, 6, 6);  // Jul 6+ = next standard week (moving-forward changes)
+const SUMMER_AUG10_START= new Date(2026, 7, 10); // Aug 10+ = the Aug 10-16 week
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1810,7 +1830,8 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
-    const schedule = ws.getTime() >= SUMMER_STD2_START.getTime() ? SUMMER_STD2
+    const schedule = ws.getTime() >= SUMMER_AUG10_START.getTime() ? SUMMER_AUG10
+                   : ws.getTime() >= SUMMER_STD2_START.getTime() ? SUMMER_STD2
                    : ws.getTime() >= SUMMER_STD_START.getTime() ? SUMMER_STD
                    : ws.getTime() >= SUMMER_W2_START.getTime() ? SUMMER_W2
                    : SUMMER_SCHEDULE;
