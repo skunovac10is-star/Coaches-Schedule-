@@ -1164,6 +1164,15 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ if(s.program.indexOf('
 // LTC Indoor adds: Namir S + Kacey + Leya (full week), Kieran (Mon–Thu, off Fri)
 ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ if(s.program==='LTC Indoor'){ ['Namir S','Kacey','Leya'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }); });
 ['Monday','Tuesday','Wednesday','Thursday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ if(s.program==='LTC Indoor' && !s.coaches.includes('Kieran')) s.coaches.push('Kieran'); }); });
+// Aug 10: Julian C out the whole week
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Julian C'); }));
+// Aug 10: Monet W → LTC E Jefferson, mornings only
+['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{ if(s.session==='morning' && s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Monet W')) s.coaches.push('Monet W'); }); });
+// Aug 10: Shevi A → LTC E Jefferson whole day (off Center Base)
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Shevi A');
+  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Shevi A')) s.coaches.push('Shevi A');
+}));
 
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
