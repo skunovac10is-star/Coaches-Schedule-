@@ -1195,6 +1195,10 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Samir M');
   if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Samir M')) s.coaches.push('Samir M');
 }));
+// Aug 10: Kris W → LTC E Center Base / Legacy, all week all day
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Kris W')) s.coaches.push('Kris W');
+}));
 
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
