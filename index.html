@@ -903,6 +903,7 @@ const ALL_COACHES = [
   {id:'kacey',name:'Kacey',abbr:'Kacey',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'kieran',name:'Kieran',abbr:'Kieran',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'leya',name:'Leya',abbr:'Leya',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'quill',name:'Quill',abbr:'Quill',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1203,6 +1204,10 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
 ['Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG10[d].forEach(s=>{
   if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Joe H')) s.coaches.push('Joe H');
 }); });
+// Aug 10: Quill → Munchkins, all week
+Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Munchkins')>-1 && !s.coaches.includes('Quill')) s.coaches.push('Quill');
+}));
 
 // Tue Jul 21: Jeremie C + Julian C out all day
 SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
