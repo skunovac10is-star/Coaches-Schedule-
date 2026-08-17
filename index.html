@@ -904,6 +904,8 @@ const ALL_COACHES = [
   {id:'kieran',name:'Kieran',abbr:'Kieran',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'leya',name:'Leya',abbr:'Leya',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'quill',name:'Quill',abbr:'Quill',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'charlie',name:'Charlie Atkins',abbr:'Charlie A',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'eita',name:'Eita M',abbr:'Eita M',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1225,6 +1227,24 @@ Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
 }));
 // Next week: Talia C off Munchkins
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{ if(s.program.indexOf('Munchkins')>-1) s.coaches=s.coaches.filter(c=>c!=='Talia C'); }));
+
+// ===== AUG 17-23 (SUMMER_AUG17) — its own week. Clone of Aug 10 + this week's changes. =====
+const SUMMER_AUG17 = JSON.parse(JSON.stringify(SUMMER_AUG10));
+// Gabe K no longer works at Legacy — off this week and forward
+Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Gabe K'); }));
+// OUT this week: Flynn H, Nathan D, Bella N, Julian C, Zszuzi P
+['Flynn H','Nathan D','Bella N','Julian C','Zszuzi P'].forEach(name=>{
+  Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); }));
+});
+// Brady C back on LTC Indoor, Mon-Fri (last day Fri 8/21)
+['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG17[d].forEach(s=>{
+  if(s.program==='LTC Indoor' && !s.coaches.includes('Brady C')) s.coaches.push('Brady C'); }); });
+// Charlie Atkins + Eita M — new, LTC Indoor Mon-Fri 9am-3pm (both sessions)
+['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG17[d].forEach(s=>{
+  if(s.program==='LTC Indoor'){ ['Charlie A','Eita M'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } }); });
+// Kamryn B — Mon + Tue only (last day Tue 8/18)
+['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG17[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kamryn B'); }); });
+// Namir S + Kieran unconfirmed — left on Mon-Thu as-is pending confirmation
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -1869,6 +1889,7 @@ const SUMMER_W2_START= new Date(2026, 5, 15);   // Summer Camp Week 2 = Mon Jun 
 const SUMMER_STD_START= new Date(2026, 5, 29);  // Jun 29–Jul 5 = current standard week
 const SUMMER_STD2_START= new Date(2026, 6, 6);  // Jul 6+ = next standard week (moving-forward changes)
 const SUMMER_AUG10_START= new Date(2026, 7, 10); // Aug 10+ = the Aug 10-16 week
+const SUMMER_AUG17_START= new Date(2026, 7, 17); // Aug 17+ = the Aug 17-23 week
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1881,7 +1902,8 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
-    const schedule = ws.getTime() >= SUMMER_AUG10_START.getTime() ? SUMMER_AUG10
+    const schedule = ws.getTime() >= SUMMER_AUG17_START.getTime() ? SUMMER_AUG17
+                   : ws.getTime() >= SUMMER_AUG10_START.getTime() ? SUMMER_AUG10
                    : ws.getTime() >= SUMMER_STD2_START.getTime() ? SUMMER_STD2
                    : ws.getTime() >= SUMMER_STD_START.getTime() ? SUMMER_STD
                    : ws.getTime() >= SUMMER_W2_START.getTime() ? SUMMER_W2
