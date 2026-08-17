@@ -1245,6 +1245,18 @@ Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.fi
 // Kamryn B — Mon + Tue only (last day Tue 8/18)
 ['Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG17[d].forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kamryn B'); }); });
 // Namir S + Kieran unconfirmed — left on Mon-Thu as-is pending confirmation
+// Aug 17: Namir S + Leya out for the week
+['Namir S','Leya'].forEach(name=>{
+  Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); }));
+});
+// Aug 17: Joe H on LTC E Jefferson the whole week
+['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG17[d].forEach(s=>{
+  if(s.program.indexOf('Jefferson')>-1 && !s.coaches.includes('Joe H')) s.coaches.push('Joe H'); }); });
+// Aug 17: Shevi A → LTC E Legacy (Center Base), off Jefferson
+Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Shevi A');
+  if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Shevi A')) s.coaches.push('Shevi A');
+}));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
