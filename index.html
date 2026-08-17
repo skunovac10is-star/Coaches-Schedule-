@@ -1257,6 +1257,14 @@ Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Shevi A');
   if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Shevi A')) s.coaches.push('Shevi A');
 }));
+// Aug 17 registration: LTC Camp 44, Munchkins 16, LTC E Legacy 24, Jefferson 14
+Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
+  if(!s.program) return;
+  if(s.program.indexOf('Munchkins')>-1)      s.campers=16;
+  else if(s.program==='LTC Indoor')          s.campers=44;
+  else if(s.program.indexOf('Jefferson')>-1) s.campers=14;
+  else if(s.program.indexOf('Center')>-1)    s.campers=24;
+}));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
