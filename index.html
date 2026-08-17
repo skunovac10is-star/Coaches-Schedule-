@@ -1257,6 +1257,8 @@ Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Jefferson')>-1) s.coaches=s.coaches.filter(c=>c!=='Shevi A');
   if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Shevi A')) s.coaches.push('Shevi A');
 }));
+// Aug 17: Kieran out the whole week
+Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Kieran'); }));
 // Aug 17 registration: LTC Camp 44, Munchkins 16, LTC E Legacy 24, Jefferson 14
 Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
   if(!s.program) return;
