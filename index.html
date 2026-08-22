@@ -906,6 +906,7 @@ const ALL_COACHES = [
   {id:'quill',name:'Quill',abbr:'Quill',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'charlie',name:'Charlie Atkins',abbr:'Charlie A',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'eita',name:'Eita M',abbr:'Eita M',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'jr',level:'Summer camp'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1267,6 +1268,40 @@ Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
   else if(s.program.indexOf('Jefferson')>-1) s.campers=14;
   else if(s.program.indexOf('Center')>-1)    s.campers=24;
 }));
+
+// ===== AUG 24-28 (SUMMER_AUG24) — its own week. Clone of Aug 17 + this week's availability. =====
+const SUMMER_AUG24 = JSON.parse(JSON.stringify(SUMMER_AUG17));
+// Off roster / unavailable for this week
+['Jeremie C','Brady C','Samir M','Kamryn B','Flynn H','Bella N','Namir S','Kieran','Gabe K','Julian C','Zszuzi P','Eita M','Leya','Kacey','Quill','Nathalie P','Talia C','Betsy A','Gulia S','Mia S','Scotty S2']
+  .forEach(name=>{ Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); })); });
+// --- Rebuild camp staffing from the confirmed availability list ---
+const _A24_DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+const _a24add=(day,progMatch,sess,names)=>{ SUMMER_AUG24[day].forEach(s=>{
+  if(!s.program) return;
+  const hit = progMatch==='LTC Indoor' ? s.program==='LTC Indoor' : s.program.indexOf(progMatch)>-1;
+  if(hit && (!sess || s.session===sess)) names.forEach(n=>{ if(!s.coaches.includes(n)) s.coaches.push(n); });
+}); };
+_A24_DAYS.forEach(d=>{
+  // LTC Camp — full-day crew
+  _a24add(d,'LTC Indoor',null,['Scotty S','Sean T','Kein W','Laurence P','Nick F']);
+  // Nathan D — mornings only (LTCO lead group)
+  _a24add(d,'LTC Indoor','morning',['Nathan D']);
+  // Monet W — mornings only
+  _a24add(d,'Jefferson','morning',['Monet W']);
+  // LTC E Legacy / Center Base — full-day crew
+  _a24add(d,'Center',null,['Stevie D','Shevi A','Kris W','Ahmed A','Anna M']);
+  // LTC E Jefferson
+  _a24add(d,'Jefferson',null,['Andrew W','Joe H']);
+  // Munchkins — Laurence also covers Munchkins
+  _a24add(d,'Munchkins',null,['Laurence P']);
+});
+// Charlie Atkins — Tue/Thu/Fri full days, Mon + Wed half (mornings only)
+_A24_DAYS.forEach(d=>{ _a24add(d,'LTC Indoor','morning',['Charlie A']); });
+['Tuesday','Thursday','Friday'].forEach(d=>{ _a24add(d,'LTC Indoor','afternoon',['Charlie A']); });
+// Andrew W off Friday (vacation 8/28-9/4)
+SUMMER_AUG24.Friday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Andrew W'); });
+// Anna M off Thursday 8/27
+SUMMER_AUG24.Thursday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Anna M'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -1912,6 +1947,7 @@ const SUMMER_STD_START= new Date(2026, 5, 29);  // Jun 29–Jul 5 = current stan
 const SUMMER_STD2_START= new Date(2026, 6, 6);  // Jul 6+ = next standard week (moving-forward changes)
 const SUMMER_AUG10_START= new Date(2026, 7, 10); // Aug 10+ = the Aug 10-16 week
 const SUMMER_AUG17_START= new Date(2026, 7, 17); // Aug 17+ = the Aug 17-23 week
+const SUMMER_AUG24_START= new Date(2026, 7, 24); // Aug 24+ = the Aug 24-28 week
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1924,7 +1960,8 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
-    const schedule = ws.getTime() >= SUMMER_AUG17_START.getTime() ? SUMMER_AUG17
+    const schedule = ws.getTime() >= SUMMER_AUG24_START.getTime() ? SUMMER_AUG24
+                   : ws.getTime() >= SUMMER_AUG17_START.getTime() ? SUMMER_AUG17
                    : ws.getTime() >= SUMMER_AUG10_START.getTime() ? SUMMER_AUG10
                    : ws.getTime() >= SUMMER_STD2_START.getTime() ? SUMMER_STD2
                    : ws.getTime() >= SUMMER_STD_START.getTime() ? SUMMER_STD
