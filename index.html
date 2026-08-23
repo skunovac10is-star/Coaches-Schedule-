@@ -907,6 +907,7 @@ const ALL_COACHES = [
   {id:'charlie',name:'Charlie Atkins',abbr:'Charlie A',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'eita',name:'Eita M',abbr:'Eita M',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'jr',level:'Summer camp'},
+  {id:'eunice',name:'Eunice Fadjoh',abbr:'Eunice F',phone:'',email:'',type:'jr',level:'Munchkins lead'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1302,6 +1303,28 @@ _A24_DAYS.forEach(d=>{ _a24add(d,'LTC Indoor','morning',['Charlie A']); });
 SUMMER_AUG24.Friday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Andrew W'); });
 // Anna M off Thursday 8/27
 SUMMER_AUG24.Thursday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Anna M'); });
+// Aug 24: all LTC E is at LEGACY this week — fold Jefferson into Center Base, drop Jefferson cards
+Object.values(SUMMER_AUG24).forEach(day=>{
+  day.filter(s=>s.program.indexOf('Jefferson')>-1).forEach(j=>{
+    const cb=day.find(s=>s.program.indexOf('Center')>-1 && s.session===j.session);
+    if(cb) j.coaches.forEach(c=>{ if(!cb.coaches.includes(c)) cb.coaches.push(c); });
+  });
+  for(let i=day.length-1;i>=0;i--) if(day[i].program.indexOf('Jefferson')>-1) day.splice(i,1);
+});
+// Aug 24: Munchkins — Eunice Fadjoh leads all week, Laurence P off Munchkins
+Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
+  if(s.program.indexOf('Munchkins')>-1){
+    s.coaches=s.coaches.filter(c=>c!=='Laurence P');
+    if(!s.coaches.includes('Eunice F')) s.coaches.push('Eunice F');
+  }
+}));
+// Aug 24 registration: Munchkins 15, LTC Camp 32, LTC E (all at Legacy) 30
+Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
+  if(!s.program) return;
+  if(s.program.indexOf('Munchkins')>-1)   s.campers=15;
+  else if(s.program==='LTC Indoor')       s.campers=32;
+  else if(s.program.indexOf('Center')>-1) s.campers=30;
+}));
 
 const SCHOOL_SCHEDULE = {
   Monday:[
