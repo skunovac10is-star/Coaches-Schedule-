@@ -1321,6 +1321,10 @@ Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
 // Aug 24: Shane B → LTC Indoor, mornings only
 ['Monday','Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{ SUMMER_AUG24[d].forEach(s=>{
   if(s.session==='morning' && s.program==='LTC Indoor' && !s.coaches.includes('Shane B')) s.coaches.push('Shane B'); }); });
+// Aug 24: LTC E has courts 9-16 all week
+Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
+  if(s.program && s.program.indexOf('Center')>-1) s.courts='Courts 9-16 · at LEGACY';
+}));
 // Aug 24 registration: Munchkins 15, LTC Camp 32, LTC E (all at Legacy) 30
 Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
   if(!s.program) return;
