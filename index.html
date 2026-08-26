@@ -1334,8 +1334,9 @@ Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
   else if(s.program.indexOf('Center')>-1) s.campers=30;
 }));
 
-// ===== FALL RETURN — week of Mon Aug 31, 2026. School-year clinic format (timeline layout). =====
-const FALL_AUG31 = {
+// ===== FALL BASE TEMPLATE — school-year clinic format. Every fall week starts from this. =====
+// Week-specific changes are layered on top below (see FALL_WK1). Edit FALL_BASE to change all weeks.
+const FALL_BASE = {
   Monday:[
     {time:'9:30-11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Lorie','Stevie D','Nick F']},
     {time:'12-1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
@@ -1391,6 +1392,12 @@ const FALL_AUG31 = {
     {time:'5:30-7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W','Sean T']},
   ]
 };
+
+// FALL WEEK 1 (Aug 31) — Andrew W and Jeremie C are out this week only
+const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
+['Andrew W','Jeremie C'].forEach(name=>{
+  Object.values(FALL_WK1).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); }));
+});
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -2049,7 +2056,8 @@ const WEEK_START_BASE = _thisMonday();
 // Pick schedule + label by the week's Monday: Jun 8+ = Summer Camp, before = Session 3 (school year)
 function weekMeta(ws){
   if(ws.getTime() >= FALL_START.getTime()){
-    return {schedule: FALL_AUG31, label:'Fall', num: 1 + Math.round((ws - FALL_START)/(7*864e5)), summer:false};
+    const fnum = 1 + Math.round((ws - FALL_START)/(7*864e5));
+    return {schedule: (fnum===1 ? FALL_WK1 : FALL_BASE), label:'Fall', num: fnum, summer:false};
   }
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
