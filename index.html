@@ -908,6 +908,7 @@ const ALL_COACHES = [
   {id:'eita',name:'Eita M',abbr:'Eita M',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'eunice',name:'Eunice Fadjoh',abbr:'Eunice F',phone:'',email:'',type:'jr',level:'Munchkins lead'},
+  {id:'lorie',name:'Lorie',abbr:'Lorie',phone:'',email:'',type:'pro',level:'Full coverage'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1332,6 +1333,64 @@ Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{
   else if(s.program==='LTC Indoor')       s.campers=32;
   else if(s.program.indexOf('Center')>-1) s.campers=30;
 }));
+
+// ===== FALL RETURN — week of Mon Aug 31, 2026. School-year clinic format (timeline layout). =====
+const FALL_AUG31 = {
+  Monday:[
+    {time:'9:30-11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Lorie','Stevie D','Nick F']},
+    {time:'12-1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
+    {time:'4-5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Nick F']},
+    {time:'4-6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Stevie D','Jeremie C','Joe H','Lorie','Anna M']},
+    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Lorie','Kris W','Jeremie C','Anna M','Sean T']},
+    {time:'7-8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Joe H','Nick F']},
+    {time:'8:30-10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Lorie','Anna M','Joe H']},
+  ],
+  Tuesday:[
+    {time:'9:30-11am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Laurence P']},
+    {time:'5-7pm',name:'TT1',type:'tt',courts:8,coaches:['Kris W','Jeremie C','Andrew W','Joe H','Stevie D','Monet W','Lorie']},
+    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Joe H','Jeremie C','Lorie','Sean T','Anna M']},
+    {time:'7-8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Shevi A','Nick F']},
+    {time:'8:30-10pm',name:'Adult 3.5+',type:'adult',courts:1,coaches:['Joe H','Kris W','Nick F']},
+  ],
+  Wednesday:[
+    {time:'12-1:30pm',name:'Adult Adv Beg',type:'adult',coaches:['Laurence P','David S']},
+    {time:'4-6pm',name:'TT Comp',type:'comp',coaches:['Jeremie C','Andrew W','Laurence P','Shevi A','Joe H','Ahmed A','Anna M','Lorie']},
+    {time:'6-7pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Anna M','David S','Ahmed A','Sean T']},
+    {time:'7-9pm',name:'TT1',type:'tt',courts:8,coaches:['Monet W','Joe H','Shevi A','Andrew W','Jeremie C','Ahmed A','Lorie','Anna M']},
+  ],
+  Thursday:[
+    {time:'4-5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','David S']},
+    {time:'5-7pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Jeremie C','Kris W','Monet W','Joe H','Lorie']},
+    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Laurence P','Kris W','Kein W','Jeremie C','Sean T']},
+    {time:'7-8:30pm',name:'Green 2 Yellow',type:'tt',courts:2,coaches:['Andrew W','Joe H']},
+    {time:'8:30-10pm',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Sean T']},
+  ],
+  Friday:[
+    {time:'4-5:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Ahmed A','Stevie D','Joe H','Shevi A','Kein W','Sean T']},
+    {time:'4-5:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Nick F','Andrew W']},
+    {time:'5:30-6:30pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','Ahmed A','Shevi A','Jr Pro']},
+    {time:'6:30-8:30pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Ahmed A','Andrew W','Joe H','Kein W','Nick F','Shevi A','Anna M']},
+    {time:'8:30-10pm',name:'College Pathway Clinic',type:'other',coaches:['Andrew W','Joe H']},
+  ],
+  Saturday:[
+    {time:'7:30-9am',name:'Team United',type:'other',coaches:['Shevi A']},
+    {time:'8-10am',name:'Board Members (court reserved)',type:'other',coaches:[]},
+    {time:'8:30-10am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Ahmed A']},
+    {time:'10-11am',name:'Munchkins',type:'munch',courts:2,coaches:['Sean T','Ahmed A','Anna M','Amy G','Jr Pro','Kein W','Shevi A','Nick F']},
+    {time:'11am-12:30pm',name:'Comp Clinic',type:'comp',coaches:['Kris W','Shevi A','Ahmed A','Anna M','Sean T','Nick F','Kein W','Stevie D']},
+    {time:'1:30-3:30pm',name:'TT Comp',type:'comp',coaches:['Kris W','Ahmed A','Anna M','Nick F','Kein W','Stevie D','Sean T']},
+  ],
+  Sunday:[
+    {time:'7:30-9am',name:'Team United',type:'other',coaches:['Monet W']},
+    {time:'8:30-10am',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Shevi A']},
+    {time:'11am-12pm',name:'Munchkins',type:'munch',courts:2,coaches:['Anna M','Laurence P','Shevi A','Jinay S','Sean T','Kein W','Lorie']},
+    {time:'12-1:30pm',name:'Comp Clinic',type:'comp',coaches:['Shevi A','Nick F','Stevie D','Kein W','Anna M','Jeremie C','Sean T']},
+    {time:'2:30-4pm',name:'TT Green 2 Y',type:'tt',courts:1,coaches:['Nick F','Sean T']},
+    {time:'2:30-4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Shevi A','Stevie D','Jeremie C','Joe H','Lorie']},
+    {time:'5:30-7pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Jinay S']},
+    {time:'5:30-7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W','Sean T']},
+  ]
+};
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -1978,6 +2037,7 @@ const SUMMER_STD2_START= new Date(2026, 6, 6);  // Jul 6+ = next standard week (
 const SUMMER_AUG10_START= new Date(2026, 7, 10); // Aug 10+ = the Aug 10-16 week
 const SUMMER_AUG17_START= new Date(2026, 7, 17); // Aug 17+ = the Aug 17-23 week
 const SUMMER_AUG24_START= new Date(2026, 7, 24); // Aug 24+ = the Aug 24-28 week
+const FALL_START = new Date(2026, 7, 31); // Aug 31+ = fall return, school-year clinic format
 function _thisMonday(){
   const d=new Date(); d.setHours(0,0,0,0);
   const dow=d.getDay();
@@ -1988,6 +2048,9 @@ function _thisMonday(){
 const WEEK_START_BASE = _thisMonday();
 // Pick schedule + label by the week's Monday: Jun 8+ = Summer Camp, before = Session 3 (school year)
 function weekMeta(ws){
+  if(ws.getTime() >= FALL_START.getTime()){
+    return {schedule: FALL_AUG31, label:'Fall', num: 1 + Math.round((ws - FALL_START)/(7*864e5)), summer:false};
+  }
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
     const schedule = ws.getTime() >= SUMMER_AUG24_START.getTime() ? SUMMER_AUG24
