@@ -1398,8 +1398,8 @@ const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
 ['Andrew W','Jeremie C','Lorie'].forEach(name=>{
   Object.values(FALL_WK1).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); }));
 });
-// Week 1: add Ahmed A and Kein W to Monday TT Comp
-FALL_WK1.Monday.forEach(s=>{ if(s.name==='TT Comp'){ ['Ahmed A','Kein W'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } });
+// Week 1: add Ahmed A, Kein W and Laurence P to Monday TT Comp (4-6pm)
+FALL_WK1.Monday.forEach(s=>{ if(s.name==='TT Comp'){ ['Ahmed A','Kein W','Laurence P'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
