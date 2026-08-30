@@ -877,7 +877,6 @@ const ALL_COACHES = [
   {id:'jeremie',name:'Jeremie Casabon',abbr:'Jeremie C',phone:'267-606-8262',email:'Jcasabon123@gmail.com',type:'pro',level:'Full coverage'},
   {id:'stevie',name:'Stevie Dandridge',abbr:'Stevie D',phone:'267-975-1954',email:'sdandridge@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'nick',name:'Nick Fulcher',abbr:'Nick F',phone:'210-925-2935',email:'nfulcher@legacyyte.org',type:'pro',level:'Full coverage'},
-  {id:'gabe',name:'Gabe Knowles',abbr:'Gabe K',phone:'610-417-0843',email:'gknowles@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'laurence',name:'Laurence Primus',abbr:'Laurence P',phone:'646-852-2283',email:'lprimus@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'david',name:'David Schoshinski',abbr:'David S',phone:'703-915-0201',email:'dschoshinski@legacyyte.org',type:'pt',level:'Any clinic'},
   {id:'andrew',name:'Andrew Weiss',abbr:'Andrew W',phone:'856-558-8061',email:'aweiss@legacyyte.org',type:'pro',level:'Full coverage'},
@@ -888,26 +887,10 @@ const ALL_COACHES = [
   {id:'ahmed',name:'Ahmed Aboseada',abbr:'Ahmed A',phone:'610-256-2650',email:'ahmedaboseada561@gmail.com',type:'pt',level:'Any clinic'},
   {id:'monet',name:'Monet Stuckey-Willis',abbr:'Monet W',phone:'',email:'',type:'pro',level:'Level 2 Staff Pro'},
   {id:'joe',name:'Joe Heckley',abbr:'Joe H',phone:'',email:'',type:'pro',level:'Level 2 Staff Pro'},
-  {id:'gideon',name:'Gideon Knowles',abbr:'Gideon K',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'zszuzi',name:'Zszuzi P',abbr:'Zszuzi P',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'samir',name:'Samir M',abbr:'Samir M',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'betsy',name:'Betsy A',abbr:'Betsy A',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'nathalie',name:'Nathalie P',abbr:'Nathalie P',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'taliac',name:'Talia Czarny',abbr:'Talia C',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'bella',name:'Bella Nichilo',abbr:'Bella N',phone:'610-291-4359',email:'',type:'jr',level:'Summer camp'},
-  {id:'nathan',name:'Nathan Dolgushev',abbr:'Nathan D',phone:'267-300-5739',email:'',type:'jr',level:'Summer camp'},
-  {id:'julianc',name:'Julian Casoban',abbr:'Julian C',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'sean',name:'Sean T',abbr:'Sean T',phone:'610-659-3715',email:'',type:'pt',level:'Summer camp'},
-  {id:'shane',name:'Shane B',abbr:'Shane B',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'namir',name:'Namir Smith',abbr:'Namir S',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'kacey',name:'Kacey',abbr:'Kacey',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'kieran',name:'Kieran',abbr:'Kieran',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'leya',name:'Leya',abbr:'Leya',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'quill',name:'Quill',abbr:'Quill',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'charlie',name:'Charlie Atkins',abbr:'Charlie A',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'eita',name:'Eita M',abbr:'Eita M',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'jr',level:'Summer camp'},
-  {id:'eunice',name:'Eunice Fadjoh',abbr:'Eunice F',phone:'',email:'',type:'jr',level:'Munchkins lead'},
   {id:'lorie',name:'Lorie',abbr:'Lorie',phone:'',email:'',type:'pro',level:'Full coverage'},
 ];
 
@@ -1392,6 +1375,12 @@ const FALL_BASE = {
     {time:'5:30-7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W','Sean T']},
   ]
 };
+
+// Fall: coaches no longer at LEGACY / off the roster — strip from every fall week
+const _FALL_STRIP = ['Amy G','Bella N','Betsy A','Charlie A','Eita M','Eunice F','Gabe K','Gideon K','Jinay S','Jr Pro','Julian C','Kacey','Kieran','Leya','Nathalie P','Nathan D','Quill','Samir M','Shane B','Talia C'];
+Object.values(FALL_BASE).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.filter(c=>!_FALL_STRIP.includes(c)); }));
+// Fall base: add Sean T to Wednesday TT Comp
+FALL_BASE.Wednesday.forEach(s=>{ if(s.name==='TT Comp' && !s.coaches.includes('Sean T')) s.coaches.push('Sean T'); });
 
 // FALL WEEK 1 (Aug 31) — Andrew W and Jeremie C are out this week only
 const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
