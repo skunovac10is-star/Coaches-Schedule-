@@ -2623,7 +2623,9 @@ function renderMinePicker(){
     coaches.forEach(c=>{
       const card=document.createElement('div');
       card.className=`coach-tap ${cls}`;
-      card.innerHTML=`<div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${c.level}</div>`;
+      // Only Jr pros show a subtitle (what they can cover). Staff pros show name only.
+      const sub = c.type==='jr' ? `<div class="coach-tap-level">${coverageFor(c)}</div>` : '';
+      card.innerHTML=`<div class="coach-tap-name">${c.name}</div>${sub}`;
       card.onclick=()=>setMine(c.id);
       grid.appendChild(card);
     });
