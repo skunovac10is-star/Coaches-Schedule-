@@ -1432,6 +1432,8 @@ FALL_WK1.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.co
   if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); }); });
 // Week 1: Scotty S can now work Wednesday TT Comp 4-6pm
 FALL_WK1.Wednesday.forEach(x=>{ if(x.name==='TT Comp' && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
+// Week 1 only: Nick F on Thursday TT1 (5-7pm) + Green 2 Yellow (7-8:30pm)
+FALL_WK1.Thursday.forEach(x=>{ if((x.name==='TT1'||x.name==='Green 2 Yellow') && !x.coaches.includes('Nick F')) x.coaches.push('Nick F'); });
 // Week 1: no College Pathway Clinic this week
 FALL_WK1.Friday = FALL_WK1.Friday.filter(x=>x.name.indexOf('College Pathway')===-1);
 
