@@ -1406,6 +1406,19 @@ Object.entries(FALL_ENROLLMENT).forEach(([day,map])=>{
   (FALL_BASE[day]||[]).forEach(s=>{ if(map[s.name]!=null) s.kids=map[s.name]; });
 });
 
+// Fall base: Ahmed A on Monday Comp Clinic
+FALL_BASE.Monday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Ahmed A')) x.coaches.push('Ahmed A'); });
+// Fall base: Sanjin K on Wednesday + Thursday TT1
+['Wednesday','Thursday'].forEach(d=>{ FALL_BASE[d].forEach(x=>{
+  if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); }); });
+// Fall base: Friday — move Joe H from Comp Clinic to TT Orange 2 Green
+FALL_BASE.Friday.forEach(x=>{
+  if(x.name==='Comp Clinic') x.coaches=x.coaches.filter(c=>c!=='Joe H');
+  if(x.name==='TT Orange 2 Green' && !x.coaches.includes('Joe H')) x.coaches.push('Joe H');
+});
+// Fall base: drop the Saturday Board Members court reservation from the schedule
+FALL_BASE.Saturday = FALL_BASE.Saturday.filter(x=>x.name.indexOf('Board Members')===-1);
+
 // FALL WEEK 1 (Aug 31) — Andrew W and Jeremie C are out this week only
 const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
 ['Andrew W','Jeremie C','Lorie'].forEach(name=>{
@@ -1413,6 +1426,17 @@ const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
 });
 // Week 1: add Ahmed A, Kein W and Laurence P to Monday TT Comp (4-6pm)
 FALL_WK1.Monday.forEach(s=>{ if(s.name==='TT Comp'){ ['Ahmed A','Kein W','Laurence P'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } });
+// Week 1: Stevie D on Wednesday TT Comp + TT1
+FALL_WK1.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
+// Week 1: no College Pathway Clinic this week
+FALL_WK1.Friday = FALL_WK1.Friday.filter(x=>x.name.indexOf('College Pathway')===-1);
+
+// FALL WEEK 2 (Sep 7) — starts from the base, then week-2 specifics
+const FALL_WK2 = JSON.parse(JSON.stringify(FALL_BASE));
+// Week 2: Stevie D on Wednesday TT Comp + TT1 (second of the two weeks)
+FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
+// Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
+FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -2026,6 +2050,7 @@ function wireNewsTabs(){
 // note: { who:'Name', what:'on vacation' | 'away' | ..., start:'YYYY-MM-DD', end:'YYYY-MM-DD' }
 // Notes auto-hide after `end` passes.
 const TEAM_NOTES = [
+  {who:'Scotty S',     what:'cannot work Wednesday 9/2. Back the following Wednesday 9/9, working 4-7pm.', start:'2026-08-31', end:'2026-09-09'},
   {who:'Ahmed A',      what:'out today — Bella N covering TT Comp, Munchkins not needed, TT1 slot unfilled', start:'2026-05-13', end:'2026-05-13'},
   {who:'Gabe K',       what:'out today — Anna M covering Adult 3.5+, Bella N covering Comp Clinic, TT1 slot not needed', start:'2026-05-12', end:'2026-05-12'},
   // ^ renders as: "Gabe K 5/12 out today — Anna M covering ..."
@@ -2074,7 +2099,7 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= FALL_START.getTime()){
     const fnum = 1 + Math.round((ws - FALL_START)/(7*864e5));
-    return {schedule: (fnum===1 ? FALL_WK1 : FALL_BASE), label:'Fall', num: fnum, summer:false};
+    return {schedule: (fnum===1 ? FALL_WK1 : fnum===2 ? FALL_WK2 : FALL_BASE), label:'Fall', num: fnum, summer:false};
   }
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
