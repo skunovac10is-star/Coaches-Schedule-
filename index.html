@@ -2725,12 +2725,14 @@ initWeekNav();
 buildSchedTabs();
 renderSchedule(todayDayName());
 buildAvailability();
-// Pre-rollout: if this week is still school-year but next week is Summer Camp,
-// land coaches on the Summer week by default (school-year week still 1 tap back).
+// Season rollover: if the current week belongs to a different season than next week
+// (e.g. the last summer week while Fall starts Monday), land everyone on the NEW season's
+// week by default. The old week is still one tap back on the arrow.
 (function(){
   try{
     const nextMon=new Date(WEEK_START_BASE); nextMon.setDate(nextMon.getDate()+7);
-    if(!weekMeta(WEEK_START_BASE).summer && weekMeta(nextMon).summer){ changeWeek(1); }
+    const nowMeta=weekMeta(WEEK_START_BASE), nextMeta=weekMeta(nextMon);
+    if(nowMeta.label !== nextMeta.label){ changeWeek(1); }
   }catch(e){}
 })();
 buildCoachDropdown();
