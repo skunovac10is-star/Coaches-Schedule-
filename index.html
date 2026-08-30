@@ -1430,6 +1430,8 @@ FALL_WK1.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.co
 // Week 1 only: Sanjin K covers Wed + Thu TT1 (Jeremie C and Andrew W are out)
 ['Wednesday','Thursday'].forEach(d=>{ FALL_WK1[d].forEach(x=>{
   if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); }); });
+// Week 1: Scotty S can now work Wednesday TT Comp 4-6pm
+FALL_WK1.Wednesday.forEach(x=>{ if(x.name==='TT Comp' && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
 // Week 1: no College Pathway Clinic this week
 FALL_WK1.Friday = FALL_WK1.Friday.filter(x=>x.name.indexOf('College Pathway')===-1);
 
@@ -1939,26 +1941,8 @@ function renderSummerDayByGroup(tl, slots){
 // type: 'alert' (red, urgent), 'info' (blue, general), 'calendar' (amber, dates to remember)
 // date: 'YYYY-MM-DD'  — when the entry was posted
 // eventDate (calendar only, optional): 'YYYY-MM-DD' — the actual event date
-const NEWS_ITEMS = [
-  {date:'2026-05-22', type:'alert', title:'Friday 5/22 coverage — Ahmed A in, Nathan D out',
-   body:"Today's Friday lineup updated. Ahmed A is in for all Friday clinics. Bella N is on for CC (4–5:30pm). Max O is on for Munchkins (5:30–6:30pm) and TT Comp (6:30–8:30pm). Nathan D is out for the day. Schedule is updated."},
-  {date:'2026-05-22', type:'info', title:'New: targeted notifications — tap to ID your phone',
-   body:"We added a new feature so Sanjin can send updates to just one or two coaches at a time (so you're not getting buzzed for things that don't apply to you). Open News → 🔔 Push notifications, pick your name from the new dropdown, then tap Save & enable. Takes 10 seconds. Thanks!"},
-  {date:'2026-05-21', type:'info', title:'Thursday recap (5/21) — Aleix C out, Shevi covered her CC',
-   body:"Update: Aleix C did not work yesterday (no coverage was arranged). Shevi A ended up working CC after all (Sean T did not cover). Schedule has been corrected to reflect what actually happened."},
-  {date:'2026-05-17', type:'alert', title:'Andrew W out next 2 weeks (5/18–5/31) — coverage update',
-   body:"Heads up team: Andrew W is away 5/18–5/31. Coverage locked in so far — Mon TT Comp: Anna M · Tue TT1: Nick F · Wed TT Comp: Nathan D · Wed TT1: Sanjin · Thu TT1 & TT Green: Stevie D. Friday slots (TT Orange 2 Green and TT Comp) still being arranged — if you can cover Fridays, text Sanjin."},
-  {date:'2026-05-13', type:'alert', title:'Ahmed A out today — coverage set',
-   body:"Heads up team: Ahmed A is out today (Wed 5/13). Coverage: Bella N is covering TT Comp (4–6pm). Munchkins is not needed tonight. The TT1 slot (7–9pm) is unfilled. Schedule is updated."},
-  {date:'2026-05-12', type:'alert', title:'Gabe K out today — coverage set',
-   body:"Heads up team: Gabe K is out today (Tue 5/12). Coverage: Anna M is covering Adult 3.5+, Bella N is covering Comp Clinic. The TT1 slot is unfilled — we won't need it tonight. Schedule is updated to reflect this."},
-  {date:'2026-05-11', type:'info', title:'New "What\'s New" tab is live',
-   body:"Team — after our meeting I took your feedback and added this section. From now on you can come here to see all updates and major announcements/changes in one place. We'll keep making improvements as we go!"},
-  {date:'2026-05-11', type:'info', title:'New: push notifications are live',
-   body:"You can now get push alerts from this app for urgent schedule changes, cancellations, and coverage needs. Make sure you tapped Allow when you opened the app. If you missed the prompt, check your phone Settings → Notifications → enable for LEGACY."},
-  {date:'2026-05-11', type:'info', title:'Schedule app launched',
-   body:"Welcome to the new Legacy coaches schedule app. Use it to see who's coaching, check who's free, request time off, and stay current on team updates. Text Sanjin with feedback."},
-];
+// Alerts / announcements. Team notes below are auto-added here so every note is also an alert.
+const NEWS_ITEMS = [];
 
 let _activeNewsCat = 'alert';
 
@@ -2057,13 +2041,20 @@ function wireNewsTabs(){
 // note: { who:'Name', what:'on vacation' | 'away' | ..., start:'YYYY-MM-DD', end:'YYYY-MM-DD' }
 // Notes auto-hide after `end` passes.
 const TEAM_NOTES = [
-  {who:'Scotty S',     what:'cannot work Wednesday 9/2. Back the following Wednesday 9/9, working 4-7pm.', start:'2026-08-31', end:'2026-09-09'},
-  {who:'Ahmed A',      what:'out today — Bella N covering TT Comp, Munchkins not needed, TT1 slot unfilled', start:'2026-05-13', end:'2026-05-13'},
-  {who:'Gabe K',       what:'out today — Anna M covering Adult 3.5+, Bella N covering Comp Clinic, TT1 slot not needed', start:'2026-05-12', end:'2026-05-12'},
-  // ^ renders as: "Gabe K 5/12 out today — Anna M covering ..."
-  {who:'Kat & Sanjin', what:'on vacation', start:'2026-05-14', end:'2026-05-18'},
-  {who:'Andrew W',     what:'out 5/18–5/31 — Tue TT1 Nick F, Wed TTC Nathan D, Wed TT1 Sanjin K, Thu TT1 + TTG Stevie D. Monday TTC + Friday slots still TBD.', start:'2026-05-18', end:'2026-05-31'},
+  {who:'Center closed', what:'Labor Day — LEGACY is closed Monday September 7. No clinics that day.', start:'2026-09-07', end:'2026-09-07'},
+  {who:'Andrew W',      what:'out until Tuesday October 8', start:'2026-08-30', end:'2026-10-08'},
 ];
+// Every team note is mirrored into What's New as an Alert so nothing gets lost.
+(function(){
+  const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const f=d=>{const x=new Date(d+'T12:00:00');return `${x.getMonth()+1}/${x.getDate()}`;};
+  TEAM_NOTES.forEach(n=>{
+    const range = n.start===n.end ? f(n.start) : `${f(n.start)} to ${f(n.end)}`;
+    NEWS_ITEMS.push({date:n.start, type:'alert',
+      title:`${n.who} — ${n.what}`,
+      body:`${n.who}: ${n.what}  (${range})`});
+  });
+})();
 
 function fmtNoteRange(s, e){
   const sd=new Date(s+'T12:00:00'), ed=new Date(e+'T12:00:00');
