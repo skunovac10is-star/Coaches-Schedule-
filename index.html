@@ -303,6 +303,7 @@ body{padding-left:240px;padding-top:58px}
 .chip-pro{background:#E6F1FB;color:#0C447C}
 .chip-pt{background:#FAEEDA;color:#633806}
 .chip-jr{background:#EAF3DE;color:#27500A}
+.chip-mine{background:#1F8A4C;color:#fff;font-weight:800;border-color:#1F8A4C}
 
 /* ==================== AVAILABILITY TAB ==================== */
 .avail-intro{font-size:13px;color:var(--gray-700);margin-bottom:1.25rem;line-height:1.6;background:#fff;border:1px solid var(--gray-200);border-radius:var(--rlg);padding:1rem}
@@ -1408,9 +1409,7 @@ Object.entries(FALL_ENROLLMENT).forEach(([day,map])=>{
 
 // Fall base: Ahmed A on Monday Comp Clinic
 FALL_BASE.Monday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Ahmed A')) x.coaches.push('Ahmed A'); });
-// Fall base: Sanjin K on Wednesday + Thursday TT1
-['Wednesday','Thursday'].forEach(d=>{ FALL_BASE[d].forEach(x=>{
-  if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); }); });
+// (Sanjin K covers Wed/Thu TT1 in Week 1 only - see FALL_WK1. Permanent pair is Jeremie C + Andrew W.)
 // Fall base: Friday — move Joe H from Comp Clinic to TT Orange 2 Green
 FALL_BASE.Friday.forEach(x=>{
   if(x.name==='Comp Clinic') x.coaches=x.coaches.filter(c=>c!=='Joe H');
@@ -1428,6 +1427,9 @@ const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
 FALL_WK1.Monday.forEach(s=>{ if(s.name==='TT Comp'){ ['Ahmed A','Kein W','Laurence P'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } });
 // Week 1: Stevie D on Wednesday TT Comp + TT1
 FALL_WK1.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
+// Week 1 only: Sanjin K covers Wed + Thu TT1 (Jeremie C and Andrew W are out)
+['Wednesday','Thursday'].forEach(d=>{ FALL_WK1[d].forEach(x=>{
+  if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); }); });
 // Week 1: no College Pathway Clinic this week
 FALL_WK1.Friday = FALL_WK1.Friday.filter(x=>x.name.indexOf('College Pathway')===-1);
 
@@ -1747,6 +1749,11 @@ function getAvailable(dayName){
   return ALL_COACHES.filter(c=>!sched.has(c.abbr));
 }
 
+// What clinics a coach can cover (shown on My schedule). Pay level stays in c.level for reporting.
+function coverageFor(c){
+  if(c.coverage) return c.coverage;                 // per-coach override if set
+  return c.type==='jr' ? 'All clinics except TT1' : 'All clinics';
+}
 function chipCls(abbr){
   const c = ALL_COACHES.find(x=>x.abbr===abbr);
   if(!c) return 'chip-pro';
@@ -2659,7 +2666,7 @@ function showMine(){
   }
   picker.style.display='none';
   view.style.display='block';
-  document.getElementById('mine-name').innerHTML=`${coach.name} <span class="count">${coach.level}</span>`;
+  document.getElementById('mine-name').innerHTML=`${coach.name} <span class="count">${coverageFor(coach)}</span>`;
   const list=document.getElementById('mine-list');
   list.innerHTML='';
   let totalSessions=0;
@@ -2678,7 +2685,10 @@ function showMine(){
       const myChip=s.coaches.find(c=>c===coach.abbr || c.startsWith(coach.abbr+' ('));
       const noteMatch=myChip&&myChip.match(/\((.+)\)/);
       const note=noteMatch?` <span style="font-size:11px;color:var(--red);font-weight:500">· ${noteMatch[1]}</span>`:'';
-      const others=s.coaches.filter(c=>c!==myChip).map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+      // include the viewing coach so the chips match the coach count; highlight them in green
+      const others=s.coaches.map(c=> c===myChip
+        ? `<span class="chip chip-mine">${c}</span>`
+        : `<span class="chip ${chipCls(c)}">${c}</span>`).join('');
       row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}${note}</div>${metaHtml(s)}<div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
       tl.appendChild(row);
     });
