@@ -195,9 +195,9 @@ body{padding-left:240px;padding-top:58px}
 .sl-dot.short1{background:#E0863A}
 .sl-dot.short2{background:#D04545}
 .sl-chip{font-size:10px;padding:2px 8px;border-radius:9px;font-weight:700;flex-shrink:0;letter-spacing:.2px}
-.sl-chip.pro{background:#DDEBFA;color:#0C447C}
+.sl-chip.pro{background:#2F6FB5;color:#fff}
 .sl-chip.pt{background:#FAEEDA;color:#7A4A0C}
-.sl-chip.jr{background:#E5F0D8;color:#1F6B2A}
+.sl-chip.jr{background:#2E8B4F;color:#fff}
 
 .legend{display:flex;gap:14px;margin-bottom:1.25rem;flex-wrap:wrap;align-items:center}
 .leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray-700)}
@@ -288,7 +288,10 @@ body{padding-left:240px;padding-top:58px}
 .meta-pill.ratio.warn{background:#FCE9D2;color:#8A4B0E}
 .meta-pill.ratio.bad{background:#FAD7D7;color:#9B1C1C}
 .meta-pill.short{background:#FFF5D6;color:#6B4B00}
-.t-chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;flex-shrink:0;max-width:60%;margin-left:auto}
+.t-chips{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-start;flex:1 1 100%;max-width:100%;margin-left:0;margin-top:8px;min-width:0}
+.t-block{flex-wrap:wrap}
+.t-name{flex:1 1 auto;min-width:0}
+.t-meta{flex:0 0 auto;margin-left:auto}
 @media (max-width:640px){
   .t-meta{gap:4px}
   .meta-pill{font-size:10px;padding:2px 7px}
@@ -640,8 +643,7 @@ body{background:var(--lp-bg) !important}
       <div class="sl-row"><span class="sl-ic">👥</span>Coaches</div>
     </div>
     <div class="sl-section">
-      <div class="sl-row"><span class="sl-chip pro">Pro</span>Full-time</div>
-      <div class="sl-row"><span class="sl-chip pt">Pro</span>Part-time</div>
+      <div class="sl-row"><span class="sl-chip pro">Pro</span>Staff pro</div>
       <div class="sl-row"><span class="sl-chip jr">Jr</span>Junior pro</div>
     </div>
     <div class="sl-section">
@@ -1382,6 +1384,16 @@ const FALL_BASE = {
   ]
 };
 
+// Fall base: Ahmed A on Monday TT Comp
+FALL_BASE.Monday.forEach(s=>{ if(s.name==='TT Comp' && !s.coaches.includes('Ahmed A')) s.coaches.push('Ahmed A'); });
+// Fall base: Scotty S assignments
+const _SCOTTY=[['Thursday','Munchkins'],['Thursday','Comp Clinic'],
+               ['Friday','Comp Clinic'],['Friday','Munchkins'],
+               ['Saturday','Munchkins'],['Saturday','Comp Clinic'],['Saturday','TT Comp'],
+               ['Sunday','Munchkins'],['Sunday','Comp Clinic'],['Sunday','Adult 2.5-3.0']];
+_SCOTTY.forEach(([d,nm])=>{ (FALL_BASE[d]||[]).forEach(s=>{
+  if(s.name===nm && !s.coaches.includes('Scotty S')) s.coaches.push('Scotty S'); }); });
+
 // Fall: coaches no longer at LEGACY / off the roster — strip from every fall week
 const _FALL_STRIP = ['Amy G','Bella N','Betsy A','Charlie A','Eita M','Eunice F','Gabe K','Gideon K','Jinay S','Jr Pro','Julian C','Kacey','Kieran','Leya','Nathalie P','Nathan D','Quill','Samir M','Shane B','Talia C'];
 Object.values(FALL_BASE).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.filter(c=>!_FALL_STRIP.includes(c)); }));
@@ -1714,7 +1726,7 @@ function getAvailable(dayName){
 function chipCls(abbr){
   const c = ALL_COACHES.find(x=>x.abbr===abbr);
   if(!c) return 'chip-pro';
-  return c.type==='pro'?'chip-pro':c.type==='pt'?'chip-pt':'chip-jr';
+  return c.type==='jr' ? 'chip-jr' : 'chip-pro';   // FT + PT pros share a colour; Jr pros differ
 }
 
 // ---- COURTS (default per type, override via s.courts) ----
@@ -1732,21 +1744,11 @@ function metaHtml(s){
   else cnCls = 'short2'; // -2 or worse
   const courtsCls = short ? 'courts short' : 'courts';
   const courtSvg = `<svg viewBox="0 0 20 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="18" height="10" rx="1"/><line x1="10" y1="1" x2="10" y2="11"/><line x1="1" y1="6" x2="19" y2="6" stroke-dasharray="1.2 1.2"/></svg>`;
-  // kids enrolled + kids-per-coach ratio (when enrollment is known)
-  let kidsPill='', ratioPill='';
-  if(s.kids != null){
-    kidsPill = `<span class="meta-pill kids" title="${s.kids} kids enrolled"><span class="mi ppl">🧒</span>${s.kids}</span>`;
-    if(cn > 0){
-      const r = s.kids / cn;
-      const rCls = r <= 5 ? 'ok' : (r < 7 ? 'warn' : 'bad');
-      ratioPill = `<span class="meta-pill ratio ${rCls}" title="${s.kids} kids per ${cn} coaches">1:${r.toFixed(1).replace(/\.0$/,'')}</span>`;
-    }
-  }
+  // NOTE: s.kids (enrollment) is kept in the data for planning/ratio reports,
+  // but intentionally NOT displayed in the app.
   return `<div class="t-meta">`
-    +kidsPill
     +`<span class="meta-pill ${courtsCls}" title="${ct} court${ct===1?'':'s'}"><span class="mi">${courtSvg}</span>${ct}</span>`
     +`<span class="meta-pill coach ${cnCls}" title="${cn} coach${cn===1?'':'es'}"><span class="mi ppl">👥</span>${cn}</span>`
-    +ratioPill
     +`</div>`;
 }
 
