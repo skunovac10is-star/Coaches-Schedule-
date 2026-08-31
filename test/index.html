@@ -489,6 +489,20 @@ body{background:var(--lp-bg) !important}
 
 /* Summer section headers: stronger */
 .summer-section-head .ss-title{color:#16151A !important}
+
+/* TEST BUILD — shift states */
+.t-block.st-open{background:#fff6f5;border-color:#f0b9b3;border-left-color:#b3261e !important;box-shadow:0 0 0 1px rgba(179,38,30,.08)}
+.t-block.st-short{background:#fffaf2;border-color:#f0d9b0}
+.t-block.st-pending{background:#fffaf2;border-color:#f0d9b0;border-left-style:dashed}
+.st-badge{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;padding:3px 7px;border-radius:4px;margin-left:8px;white-space:nowrap}
+.st-b-open{background:#b3261e;color:#fff}
+.st-b-short{background:#f5e0bd;color:#8a5000}
+.t-name .st-b-pending{background:#f5e0bd;color:#8a5000;text-transform:none;letter-spacing:.2px;font-weight:700;font-size:10.5px}
+.st-b-over{background:#e9edf0;color:#6b7680}
+.st-nobody{font-size:11.5px;color:#b3261e;font-weight:700;font-style:italic;align-self:center}
+.st-claim{margin-left:8px;background:#0b7a4b;color:#fff;border:none;border-radius:6px;padding:6px 11px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}
+.st-claim:hover{background:#096a41}
+#demo-btn{width:100%;margin:0 0 12px;padding:9px 12px;border:1px dashed #b0bcc6;background:#fff;border-radius:8px;font-size:12.5px;font-weight:700;color:#3c4a55;cursor:pointer;font-family:inherit}
 </style>
 
 <!-- OneSignal Web Push -->
@@ -1770,7 +1784,7 @@ function courtsFor(s){ return (s.courts!=null) ? s.courts : (DEFAULT_COURTS[s.ty
 function metaHtml(s){
   const ct = courtsFor(s);
   const cn = s.coaches.length;
-  const diff = cn - ct; // negative = short, 0 = perfect, positive = over
+  const diff = cn - (typeof needsFor==='function' ? needsFor(s) : ct); // vs. what the clinic needs
   const short = diff < 0;
   let cnCls = '';
   if(diff > 0) cnCls = 'over';
@@ -1810,11 +1824,36 @@ function renderSchedule(day){
     return;
   }
   // Default school-year timeline layout
-  slots.forEach(s=>{
+  // TEST BUILD: demo mode paints the first three slots of the day as
+  // open / pending / short so the states can be seen without faking data.
+  let _shortIdx = -1;
+  if(_demoStates) _shortIdx = slots.findIndex((s,i)=>i>1 && s.coaches.length>=3);
+  const view = slots.map((s,i)=>{
+    if(!_demoStates) return s;
+    const c = Object.assign({}, s);
+    if(i===0){ c.coaches=[]; c.needs = needsFor(s) || 2; }
+    else if(i===1){ c._pending = 'Joe H'; }
+    else if(i===_shortIdx){ c.coaches = s.coaches.slice(0, s.coaches.length-2); c.needs = s.coaches.length; }
+    return c;
+  });
+  // Anything unstaffed floats to the top of the day. You should not have to hunt for it.
+  const ordered = view.filter(s=>slotState(s)==='open').concat(view.filter(s=>slotState(s)!=='open'));
+  ordered.forEach(s=>{
+    const state = slotState(s);
     const row=document.createElement('div');
     row.className='t-row';
-    const chips=s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
-    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
+    const chips = s.coaches.length
+      ? s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('')
+      : `<span class="st-nobody">Nobody assigned</span>`;
+    const action = (state==='open' || state==='short')
+      ? `<button class="st-claim" onclick="alert('In the real build this claims the shift, notifies Sanjin, and writes a line to the log.')">I can cover this</button>`
+      : '';
+    row.innerHTML=`<div class="t-time">${s.time}</div>`
+      + `<div class="t-block ${s.type} st-${state}">`
+      +   `<div class="t-name">${s.name||s.program||""}${stateBadge(s,state)}</div>`
+      +   metaHtml(s)
+      +   `<div class="t-chips">${chips}${action}</div>`
+      + `</div>`;
     tl.appendChild(row);
   });
 }
@@ -2752,6 +2791,7 @@ function _csvParse(text){
 }
 
 const _REQ_COLS = ['Week','Day','Time','Clinic','Type','Courts','Kids','Coaches'];
+const _OPT_COLS = ['Needs'];
 const _VALID_TYPES = ['adult','tt','comp','munch','other'];
 const _TIME_RE = /^\d{1,2}(:\d{2})?(am|pm)?-\d{1,2}(:\d{2})?(am|pm)$/i;
 
@@ -2762,7 +2802,7 @@ function _validateSchedule(rows){
   const head = rows[0].map(h=>String(h).trim());
   const missing = _REQ_COLS.filter(c=>head.indexOf(c)===-1);
   if(missing.length) return {ok:false, errors:['Missing column(s): '+missing.join(', ')]};
-  const idx = {}; _REQ_COLS.forEach(c=>idx[c]=head.indexOf(c));
+  const idx = {}; _REQ_COLS.concat(_OPT_COLS).forEach(c=>idx[c]=head.indexOf(c));
 
   const known = ALL_COACHES.map(c=>c.abbr);
   const weeks = {BASE:{}, '1':{}, '2':{}};
@@ -2773,7 +2813,8 @@ function _validateSchedule(rows){
     const g = c => String(r[idx[c]]==null?'':r[idx[c]]).trim();
     const wk=g('Week').toUpperCase(), day=g('Day'), time=g('Time'),
           name=g('Clinic'), type=g('Type').toLowerCase(),
-          courts=g('Courts'), kids=g('Kids'), coachStr=g('Coaches');
+          courts=g('Courts'), kids=g('Kids'), coachStr=g('Coaches'),
+          needs=(idx['Needs']>-1?g('Needs'):'');
 
     if(!weeks[wk==='BASE'?'BASE':wk]) { errors.push(`Row ${line}: Week must be BASE, 1 or 2 (got "${g('Week')}")`); return; }
     if(DAYS_ORDER.indexOf(day)===-1)  { errors.push(`Row ${line}: unknown Day "${day}"`); return; }
@@ -2782,6 +2823,7 @@ function _validateSchedule(rows){
     if(_VALID_TYPES.indexOf(type)===-1){ errors.push(`Row ${line}: Type must be one of ${_VALID_TYPES.join('/')} (got "${type}")`); return; }
     if(courts!=='' && !/^\d+$/.test(courts)){ errors.push(`Row ${line}: Courts must be a number or blank (got "${courts}")`); return; }
     if(kids!==''   && !/^\d+$/.test(kids))  { errors.push(`Row ${line}: Kids must be a number or blank (got "${kids}")`); return; }
+    if(needs!==''  && !/^\d+$/.test(needs)) { errors.push(`Row ${line}: Needs must be a number or blank (got "${needs}")`); return; }
 
     const coaches = coachStr ? coachStr.split(';').map(s=>s.trim()).filter(Boolean) : [];
     const bad = coaches.filter(c=>known.indexOf(c)===-1);
@@ -2790,6 +2832,7 @@ function _validateSchedule(rows){
     const entry = {time, name, type, coaches};
     if(courts!=='') entry.courts = +courts;
     if(kids!=='')   entry.kids   = +kids;
+    if(needs!=='')  entry.needs  = +needs;
     weeks[wk==='BASE'?'BASE':wk][day].push(entry);
   });
 
@@ -2815,6 +2858,16 @@ function _applySchedule(weeks){
   });
 }
 
+function _demoBtn(){
+  if(document.getElementById('demo-btn')) return;
+  const b=document.createElement('button');
+  b.id='demo-btn'; b.type='button';
+  b.textContent = _demoStates ? 'Demo: ON \u2014 turn off' : 'Demo: show open / short / pending';
+  b.onclick=toggleDemoStates;
+  const panel=document.getElementById('tab-schedule');
+  const banner=document.getElementById('src-banner');
+  panel.insertBefore(b, banner ? banner.nextSibling : panel.firstChild);
+}
 function _srcBanner(){
   let el=document.getElementById('src-banner');
   if(!el){
@@ -2883,13 +2936,45 @@ async function loadScheduleFromSheet(){
     _applySchedule(v.weeks);
     LYTE_SRC.state='sheet';
     _reRender();
-    _srcBanner(); _srcPanel();
+    _srcBanner(); _demoBtn(); _srcPanel();
   }catch(err){
     LYTE_SRC.state='fallback';
     LYTE_SRC.errors=['Could not reach the Sheet: '+err.message];
     LYTE_SRC.at = new Date().toLocaleTimeString();
-    _srcBanner(); _srcPanel();
+    _srcBanner(); _demoBtn(); _srcPanel();
   }
+}
+
+
+/* =====================================================================
+   TEST BUILD ONLY — SHIFT STATE (open / short / pending / staffed)
+   `needs` = how many coaches this clinic should have. Without it the app
+   assumes whatever is assigned is correct, which is how it behaves today.
+===================================================================== */
+let _demoStates = /[?&]demo=1\b/.test(location.search);
+function toggleDemoStates(){
+  _demoStates = !_demoStates;
+  const b=document.getElementById('demo-btn');
+  if(b) b.textContent = _demoStates ? 'Demo: ON — turn off' : 'Demo: show open / short / pending';
+  const act=document.querySelector('#sched-day-tabs .dtab.active');
+  renderSchedule(act?act.dataset.day:todayDayName());
+}
+function needsFor(s){ return s.needs!=null ? s.needs : s.coaches.length; }
+function slotState(s){
+  if(s._pending) return 'pending';
+  const need = needsFor(s), have = s.coaches.length;
+  if(have === 0)   return 'open';
+  if(have <  need) return 'short';
+  if(have >  need) return 'over';
+  return 'ok';
+}
+function stateBadge(s, state){
+  const need = needsFor(s), have = s.coaches.length;
+  if(state==='open')    return `<span class="st-badge st-b-open">UNSTAFFED</span>`;
+  if(state==='short')   return `<span class="st-badge st-b-short">${need-have} short</span>`;
+  if(state==='pending') return `<span class="st-badge st-b-pending">Waiting on ${s._pending}</span>`;
+  if(state==='over')    return `<span class="st-badge st-b-over">+${have-need}</span>`;
+  return '';
 }
 
 /* =====================================================================
