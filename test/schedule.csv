@@ -1,0 +1,117 @@
+Week,Day,Time,Clinic,Type,Courts,Kids,Coaches
+BASE,Monday,9:30-11am,Adult 2.5-3.0,adult,,,Laurence P; Lorie; Stevie D; Nick F
+BASE,Monday,12-1pm,Adult Beginner,adult,1,,David S
+BASE,Monday,4-5:30pm,TT Orange 2 Green,tt,1,3,Nick F
+BASE,Monday,4-6pm,TT Comp,comp,7,33,Kris W; Andrew W; Stevie D; Jeremie C; Joe H; Lorie; Anna M; Ahmed A
+BASE,Monday,7-8:30pm,Comp Clinic,comp,6,29,Stevie D; Kein W; Lorie; Kris W; Jeremie C; Anna M; Sean T; Ahmed A
+BASE,Monday,7-8:30pm,Green 2 Orange,tt,2,3,Joe H; Nick F
+BASE,Monday,8:30-10pm,Adult 2.5-3.0,adult,,,Laurence P; Lorie; Anna M; Joe H
+BASE,Tuesday,9:30-11am,Adult 2.5-3.0,adult,1,,Laurence P
+BASE,Tuesday,5-7pm,TT1,tt,8,21,Kris W; Jeremie C; Andrew W; Joe H; Stevie D; Monet W; Lorie; Shevi A; Sanjin K
+BASE,Tuesday,7-8:30pm,Comp Clinic,comp,6,30,Kein W; Stevie D; Kris W; Joe H; Jeremie C; Lorie; Sean T; Anna M
+BASE,Tuesday,7-8:30pm,TT Orange 2 Green,tt,2,7,Shevi A; Nick F
+BASE,Tuesday,8:30-10pm,Adult 3.5+,adult,1,,Joe H; Kris W; Nick F
+BASE,Wednesday,12-1:30pm,Adult Adv Beg,adult,,,Laurence P; David S
+BASE,Wednesday,4-6pm,TT Comp,comp,,40,Jeremie C; Andrew W; Laurence P; Shevi A; Joe H; Ahmed A; Anna M; Lorie; Sean T
+BASE,Wednesday,6-7pm,Munchkins,munch,2,15,Laurence P; Anna M; David S; Ahmed A; Sean T
+BASE,Wednesday,7-9pm,TT1,tt,8,24,Monet W; Joe H; Shevi A; Andrew W; Jeremie C; Ahmed A; Lorie; Anna M
+BASE,Thursday,4-5pm,Munchkins,munch,2,18,Laurence P; Sean T; David S; Scotty S
+BASE,Thursday,5-7pm,TT1,tt,8,21,Andrew W; Jeremie C; Kris W; Monet W; Joe H; Lorie
+BASE,Thursday,7-8:30pm,Comp Clinic,comp,6,29,Laurence P; Kris W; Kein W; Jeremie C; Sean T; Scotty S
+BASE,Thursday,7-8:30pm,Green 2 Yellow,tt,2,9,Andrew W; Joe H
+BASE,Thursday,8:30-10pm,Adult 3.5+,adult,,,Laurence P; Sean T
+BASE,Friday,4-5:30pm,Comp Clinic,comp,6,30,Ahmed A; Stevie D; Shevi A; Kein W; Sean T; Scotty S
+BASE,Friday,4-5:30pm,TT Orange 2 Green,tt,2,4,Nick F; Andrew W; Joe H
+BASE,Friday,5:30-6:30pm,Munchkins,munch,2,16,Laurence P; Sean T; Ahmed A; Shevi A; Scotty S
+BASE,Friday,6:30-8:30pm,TT Comp,comp,,39,Stevie D; Ahmed A; Andrew W; Joe H; Kein W; Nick F; Shevi A; Anna M
+BASE,Friday,8:30-10pm,College Pathway Clinic,other,,,Andrew W; Joe H
+BASE,Saturday,7:30-9am,Team United,other,,,Shevi A
+BASE,Saturday,8:30-10am,Adult 2.5-3.0,adult,1,,Ahmed A
+BASE,Saturday,10-11am,Munchkins,munch,2,19,Sean T; Ahmed A; Anna M; Kein W; Shevi A; Nick F; Scotty S
+BASE,Saturday,11am-12:30pm,Comp Clinic,comp,,43,Kris W; Shevi A; Ahmed A; Anna M; Sean T; Nick F; Kein W; Stevie D; Scotty S
+BASE,Saturday,1:30-3:30pm,TT Comp,comp,,28,Kris W; Ahmed A; Anna M; Nick F; Kein W; Stevie D; Sean T; Scotty S
+BASE,Sunday,7:30-9am,Team United,other,,,Monet W
+BASE,Sunday,8:30-10am,Adult 3.5+,adult,,,Laurence P; Shevi A
+BASE,Sunday,11am-12pm,Munchkins,munch,2,30,Anna M; Laurence P; Shevi A; Sean T; Kein W; Lorie; Scotty S
+BASE,Sunday,12-1:30pm,Comp Clinic,comp,,45,Shevi A; Nick F; Stevie D; Kein W; Anna M; Jeremie C; Sean T; Scotty S
+BASE,Sunday,2:30-4pm,TT Green 2 Y,tt,1,5,Nick F; Sean T
+BASE,Sunday,2:30-4:30pm,TT1,tt,7,18,Shevi A; Stevie D; Jeremie C; Joe H; Lorie
+BASE,Sunday,5:30-7pm,Adult 2.5-3.0,adult,,,Laurence P; Scotty S
+BASE,Sunday,5:30-7pm,Adult Beginner,adult,1,,Kein W; Sean T
+1,Monday,9:30-11am,Adult 2.5-3.0,adult,,,Laurence P; Stevie D; Nick F
+1,Monday,12-1pm,Adult Beginner,adult,1,,David S
+1,Monday,4-5:30pm,TT Orange 2 Green,tt,1,3,Nick F
+1,Monday,4-6pm,TT Comp,comp,7,33,Kris W; Stevie D; Joe H; Anna M; Ahmed A; Kein W; Laurence P
+1,Monday,7-8:30pm,Comp Clinic,comp,6,29,Stevie D; Kein W; Kris W; Anna M; Sean T; Ahmed A
+1,Monday,7-8:30pm,Green 2 Orange,tt,2,3,Joe H; Nick F
+1,Monday,8:30-10pm,Adult 2.5-3.0,adult,,,Laurence P; Anna M; Joe H
+1,Tuesday,9:30-11am,Adult 2.5-3.0,adult,1,,Laurence P
+1,Tuesday,5-7pm,TT1,tt,8,21,Kris W; Joe H; Stevie D; Monet W; Shevi A; Sanjin K
+1,Tuesday,7-8:30pm,Comp Clinic,comp,6,30,Kein W; Stevie D; Kris W; Joe H; Sean T; Anna M
+1,Tuesday,7-8:30pm,TT Orange 2 Green,tt,2,7,Shevi A; Nick F
+1,Tuesday,8:30-10pm,Adult 3.5+,adult,1,,Joe H; Kris W; Nick F
+1,Wednesday,12-1:30pm,Adult Adv Beg,adult,,,Laurence P; David S
+1,Wednesday,4-6pm,TT Comp,comp,,40,Laurence P; Shevi A; Joe H; Ahmed A; Anna M; Sean T; Stevie D; Scotty S
+1,Wednesday,6-7pm,Munchkins,munch,2,15,Laurence P; Anna M; David S; Ahmed A; Sean T
+1,Wednesday,7-9pm,TT1,tt,8,24,Monet W; Joe H; Shevi A; Ahmed A; Anna M; Stevie D; Sanjin K
+1,Thursday,4-5pm,Munchkins,munch,2,18,Laurence P; Sean T; David S; Scotty S
+1,Thursday,5-7pm,TT1,tt,8,21,Kris W; Monet W; Joe H; Sanjin K; Nick F
+1,Thursday,7-8:30pm,Comp Clinic,comp,6,29,Laurence P; Kris W; Kein W; Sean T; Scotty S
+1,Thursday,7-8:30pm,Green 2 Yellow,tt,2,9,Joe H; Nick F
+1,Thursday,8:30-10pm,Adult 3.5+,adult,,,Laurence P; Sean T
+1,Friday,4-5:30pm,Comp Clinic,comp,6,30,Ahmed A; Stevie D; Shevi A; Kein W; Sean T; Scotty S
+1,Friday,4-5:30pm,TT Orange 2 Green,tt,2,4,Nick F; Joe H
+1,Friday,5:30-6:30pm,Munchkins,munch,2,16,Laurence P; Sean T; Ahmed A; Shevi A; Scotty S
+1,Friday,6:30-8:30pm,TT Comp,comp,,39,Stevie D; Ahmed A; Joe H; Kein W; Nick F; Shevi A; Anna M
+1,Saturday,7:30-9am,Team United,other,,,Shevi A
+1,Saturday,8:30-10am,Adult 2.5-3.0,adult,1,,Ahmed A
+1,Saturday,10-11am,Munchkins,munch,2,19,Sean T; Ahmed A; Anna M; Kein W; Shevi A; Nick F; Scotty S
+1,Saturday,11am-12:30pm,Comp Clinic,comp,,43,Kris W; Shevi A; Ahmed A; Anna M; Sean T; Nick F; Kein W; Stevie D; Scotty S
+1,Saturday,1:30-3:30pm,TT Comp,comp,,28,Kris W; Ahmed A; Anna M; Nick F; Kein W; Stevie D; Sean T; Scotty S
+1,Sunday,7:30-9am,Team United,other,,,Monet W
+1,Sunday,8:30-10am,Adult 3.5+,adult,,,Laurence P; Shevi A
+1,Sunday,11am-12pm,Munchkins,munch,2,30,Anna M; Laurence P; Shevi A; Sean T; Kein W; Scotty S
+1,Sunday,12-1:30pm,Comp Clinic,comp,,45,Shevi A; Nick F; Stevie D; Kein W; Anna M; Sean T; Scotty S
+1,Sunday,2:30-4pm,TT Green 2 Y,tt,1,5,Nick F; Sean T
+1,Sunday,2:30-4:30pm,TT1,tt,7,18,Shevi A; Stevie D; Joe H
+1,Sunday,5:30-7pm,Adult 2.5-3.0,adult,,,Laurence P; Scotty S
+1,Sunday,5:30-7pm,Adult Beginner,adult,1,,Kein W; Sean T
+2,Monday,9:30-11am,Adult 2.5-3.0,adult,,,Laurence P; Lorie; Stevie D; Nick F
+2,Monday,12-1pm,Adult Beginner,adult,1,,David S
+2,Monday,4-5:30pm,TT Orange 2 Green,tt,1,3,Nick F
+2,Monday,4-6pm,TT Comp,comp,7,33,Kris W; Andrew W; Stevie D; Jeremie C; Joe H; Lorie; Anna M; Ahmed A
+2,Monday,7-8:30pm,Comp Clinic,comp,6,29,Stevie D; Kein W; Lorie; Kris W; Jeremie C; Anna M; Sean T; Ahmed A
+2,Monday,7-8:30pm,Green 2 Orange,tt,2,3,Joe H; Nick F
+2,Monday,8:30-10pm,Adult 2.5-3.0,adult,,,Laurence P; Lorie; Anna M; Joe H
+2,Tuesday,9:30-11am,Adult 2.5-3.0,adult,1,,Laurence P
+2,Tuesday,5-7pm,TT1,tt,8,21,Kris W; Jeremie C; Andrew W; Joe H; Stevie D; Monet W; Lorie; Shevi A; Sanjin K
+2,Tuesday,7-8:30pm,Comp Clinic,comp,6,30,Kein W; Stevie D; Kris W; Joe H; Jeremie C; Lorie; Sean T; Anna M
+2,Tuesday,7-8:30pm,TT Orange 2 Green,tt,2,7,Shevi A; Nick F
+2,Tuesday,8:30-10pm,Adult 3.5+,adult,1,,Joe H; Kris W; Nick F
+2,Wednesday,12-1:30pm,Adult Adv Beg,adult,,,Laurence P; David S
+2,Wednesday,4-6pm,TT Comp,comp,,40,Jeremie C; Andrew W; Laurence P; Shevi A; Joe H; Ahmed A; Anna M; Lorie; Sean T; Stevie D; Scotty S
+2,Wednesday,6-7pm,Munchkins,munch,2,15,Laurence P; Anna M; David S; Ahmed A; Sean T; Scotty S
+2,Wednesday,7-9pm,TT1,tt,8,24,Monet W; Joe H; Shevi A; Andrew W; Jeremie C; Ahmed A; Lorie; Anna M; Stevie D
+2,Thursday,4-5pm,Munchkins,munch,2,18,Laurence P; Sean T; David S; Scotty S
+2,Thursday,5-7pm,TT1,tt,8,21,Andrew W; Jeremie C; Kris W; Monet W; Joe H; Lorie
+2,Thursday,7-8:30pm,Comp Clinic,comp,6,29,Laurence P; Kris W; Kein W; Jeremie C; Sean T; Scotty S
+2,Thursday,7-8:30pm,Green 2 Yellow,tt,2,9,Andrew W; Joe H
+2,Thursday,8:30-10pm,Adult 3.5+,adult,,,Laurence P; Sean T
+2,Friday,4-5:30pm,Comp Clinic,comp,6,30,Ahmed A; Stevie D; Shevi A; Kein W; Sean T; Scotty S
+2,Friday,4-5:30pm,TT Orange 2 Green,tt,2,4,Nick F; Andrew W; Joe H
+2,Friday,5:30-6:30pm,Munchkins,munch,2,16,Laurence P; Sean T; Ahmed A; Shevi A; Scotty S
+2,Friday,6:30-8:30pm,TT Comp,comp,,39,Stevie D; Ahmed A; Andrew W; Joe H; Kein W; Nick F; Shevi A; Anna M
+2,Friday,8:30-10pm,College Pathway Clinic,other,,,Andrew W; Joe H
+2,Saturday,7:30-9am,Team United,other,,,Shevi A
+2,Saturday,8:30-10am,Adult 2.5-3.0,adult,1,,Ahmed A
+2,Saturday,10-11am,Munchkins,munch,2,19,Sean T; Ahmed A; Anna M; Kein W; Shevi A; Nick F; Scotty S
+2,Saturday,11am-12:30pm,Comp Clinic,comp,,43,Kris W; Shevi A; Ahmed A; Anna M; Sean T; Nick F; Kein W; Stevie D; Scotty S
+2,Saturday,1:30-3:30pm,TT Comp,comp,,28,Kris W; Ahmed A; Anna M; Nick F; Kein W; Stevie D; Sean T; Scotty S
+2,Sunday,7:30-9am,Team United,other,,,Monet W
+2,Sunday,8:30-10am,Adult 3.5+,adult,,,Laurence P; Shevi A
+2,Sunday,11am-12pm,Munchkins,munch,2,30,Anna M; Laurence P; Shevi A; Sean T; Kein W; Lorie; Scotty S
+2,Sunday,12-1:30pm,Comp Clinic,comp,,45,Shevi A; Nick F; Stevie D; Kein W; Anna M; Jeremie C; Sean T; Scotty S
+2,Sunday,2:30-4pm,TT Green 2 Y,tt,1,5,Nick F; Sean T
+2,Sunday,2:30-4:30pm,TT1,tt,7,18,Shevi A; Stevie D; Jeremie C; Joe H; Lorie
+2,Sunday,5:30-7pm,Adult 2.5-3.0,adult,,,Laurence P; Scotty S
+2,Sunday,5:30-7pm,Adult Beginner,adult,1,,Kein W; Sean T
