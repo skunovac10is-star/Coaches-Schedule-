@@ -1730,10 +1730,19 @@ function showAttendanceLog(){
         <td style="padding:5px 0;color:var(--gray-500)">${n.reason||'\u2014'}</td>
       </tr>`).join('')
     : '<tr><td style="padding:6px 0;color:var(--gray-500)">Nothing logged yet.</td></tr>';
-  el.innerHTML = '<div style="font-weight:800;letter-spacing:.6px;text-transform:uppercase;font-size:10px;color:var(--gray-500);margin-bottom:8px">Attendance log \u00b7 scheduled but did not work</div>'
+  el.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+    +   '<div style="font-weight:800;letter-spacing:.6px;text-transform:uppercase;font-size:10px;color:var(--gray-500)">Attendance log \u00b7 scheduled but did not work</div>'
+    +   '<button onclick="showAttendanceLog()" style="background:transparent;border:1px solid var(--gray-200);border-radius:6px;padding:3px 9px;font-size:11px;color:var(--gray-500);cursor:pointer;font-family:inherit">Close</button>'
+    + '</div>'
     + '<table style="width:100%;border-collapse:collapse;font-size:12.5px">'+rows+'</table>'
     + '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--gray-200);font-size:11.5px;color:var(--gray-500)">Running tally: '+tally+'</div>';
-  document.getElementById('tab-schedule').appendChild(el);
+  // Open it directly under the admin bar, not at the bottom of the page,
+  // otherwise on a phone it lands below the whole day and reads as "nothing happened".
+  const panel=document.getElementById('tab-schedule');
+  const bar=document.getElementById('admin-bar');
+  if(bar && bar.parentNode===panel) panel.insertBefore(el, bar.nextSibling);
+  else panel.insertBefore(el, panel.firstChild);
+  el.scrollIntoView({behavior:'smooth', block:'center'});
 }
 
 function exportWeekJSON(){
