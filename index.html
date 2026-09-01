@@ -493,6 +493,13 @@ body{background:var(--lp-bg) !important}
 /* A coach who was scheduled but did not work. Name is kept, not deleted. */
 .chip-noshow{background:#f2f4f6;color:#98a2ac;border-color:#e2e7ea;text-decoration:line-through;text-decoration-thickness:1.5px;font-weight:600;position:relative;padding-left:20px}
 .chip-noshow::before{content:'\2715';position:absolute;left:7px;top:50%;transform:translateY(-50%);color:#c0392b;font-weight:900;font-size:9px;text-decoration:none}
+
+/* Week acknowledgement bar (My Schedule) */
+.ack-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff8e8;border:1px solid #f0dcae;border-radius:10px;padding:12px 14px;margin-bottom:16px}
+.ack-txt{flex:1 1 200px;font-size:13px;color:#6b4e00;line-height:1.45}
+.ack-btn{background:#0b7a4b;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
+.ack-btn:hover{background:#096a41}
+.ack-bar.ack-done{background:#eef7f2;border-color:#c3e2d2;color:#0b5f3c;font-size:12.5px;font-weight:700;display:block}
 </style>
 
 <!-- OneSignal Web Push -->
@@ -2680,6 +2687,45 @@ async function submitForm(){
 // ---- MY SCHEDULE ----
 const MINE_KEY = 'legacy_my_coach';
 
+
+// ---- WEEK ACKNOWLEDGEMENT ----
+// A coach taps "Got it" to confirm they have actually looked at their week.
+// Recorded two places: locally so the button stays confirmed on their phone,
+// and as a OneSignal tag so Sanjin can see who has and hasn't from the
+// OneSignal dashboard. No chasing, no nagging - just a record.
+function _weekKey(){ return _iso(WEEK_START); }
+function ackKey(coachId){ return `ack_${coachId}_${_weekKey()}`; }
+function hasAcked(coachId){ try{ return localStorage.getItem(ackKey(coachId))==='1'; }catch(e){ return false; } }
+async function ackWeek(coachId){
+  try{ localStorage.setItem(ackKey(coachId),'1'); }catch(e){}
+  showMine();
+  try{
+    const os = await waitForOneSignal();
+    const t = {}; t['seen_week_'+_weekKey()] = '1';
+    await os.User.addTags(t);
+  }catch(e){ /* the local record still stands if push is off */ }
+}
+function ackBarHtml(coach){
+  const n = countMyShifts(coach);
+  if(!n) return '';
+  if(hasAcked(coach.id)){
+    return `<div class="ack-bar ack-done">\u2713 You confirmed your week on this device. Thanks.</div>`;
+  }
+  return `<div class="ack-bar">
+      <div class="ack-txt"><b>${n} shift${n===1?'':'s'} this week.</b> Tap once so we know you have seen it.</div>
+      <button class="ack-btn" onclick="ackWeek('${coach.id}')">Got it</button>
+    </div>`;
+}
+function countMyShifts(coach){
+  let n=0;
+  DAYS_ORDER.forEach(day=>{
+    (ACTIVE_SCHEDULE[day]||[]).forEach(s=>{
+      if(s.coaches.some(c=>c===coach.abbr || c.startsWith(coach.abbr+' ('))) n++;
+    });
+  });
+  return n;
+}
+
 function renderMinePicker(){
   const list=document.getElementById('mine-picker-list');
   list.innerHTML='';
@@ -2731,7 +2777,7 @@ function showMine(){
   view.style.display='block';
   document.getElementById('mine-name').innerHTML=`${coach.name} <span class="count">${coverageFor(coach)}</span>`;
   const list=document.getElementById('mine-list');
-  list.innerHTML='';
+  list.innerHTML=ackBarHtml(coach);
   let totalSessions=0;
   DAYS_ORDER.forEach(day=>{
     const sessions=(ACTIVE_SCHEDULE[day]||[]).filter(s=>s.coaches.some(c=>c===coach.abbr || c.startsWith(coach.abbr+' (')));
