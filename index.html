@@ -1449,6 +1449,12 @@ FALL_WK1.Thursday.forEach(x=>{ if((x.name==='TT1'||x.name==='Green 2 Yellow') &&
 // Week 1: no College Pathway Clinic this week
 FALL_WK1.Friday = FALL_WK1.Friday.filter(x=>x.name.indexOf('College Pathway')===-1);
 
+// Anna M off Tuesdays going forward — still on the Sep 1 board, crossed out via NO_SHOWS.
+// Removed from FALL_BASE so Week 2 clone (below) and all later weeks drop her.
+FALL_BASE.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic') x.coaches = x.coaches.filter(c=>c!=='Anna M'); });
+// Week 1 (Tue Sep 1) only: Laurence P covers Anna M's spot in Comp Clinic
+FALL_WK1.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Laurence P')) x.coaches.push('Laurence P'); });
+
 // FALL WEEK 2 (Sep 7) — starts from the base, then week-2 specifics
 const FALL_WK2 = JSON.parse(JSON.stringify(FALL_BASE));
 // Week 2: Stevie D on Wednesday TT Comp + TT1 (second of the two weeks)
@@ -2104,6 +2110,7 @@ function wireNewsTabs(){
 const NO_SHOWS = [
   {date:'2026-08-31', clinic:'TT Comp',     coach:'Laurence P', reason:'Double-booked a private'},
   {date:'2026-08-31', clinic:'Comp Clinic', coach:'Sean T',     reason:'Did not know he was scheduled'},
+  {date:'2026-09-01', clinic:'Comp Clinic', coach:'Anna M',     reason:'Off Tuesdays going forward — Laurence P covering tonight'},
 ];
 function _iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function absentFor(dateISO, clinic){
@@ -2120,6 +2127,7 @@ function workedCount(s){
 const TEAM_NOTES = [
   {who:'Center closed', what:'Labor Day — LEGACY is closed Monday September 7. No clinics that day.', start:'2026-09-07', end:'2026-09-07'},
   {who:'Andrew W',      what:'out until Monday September 7', start:'2026-08-30', end:'2026-09-07'},
+  {who:'Tuesday Comp Clinic', what:'need a pro — Anna M is off Tuesdays going forward', start:'2026-09-01', end:'2026-12-31'},
 ];
 // Every team note is mirrored into What's New as an Alert so nothing gets lost.
 (function(){
