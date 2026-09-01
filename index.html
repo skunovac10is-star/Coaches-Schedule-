@@ -489,6 +489,10 @@ body{background:var(--lp-bg) !important}
 
 /* Summer section headers: stronger */
 .summer-section-head .ss-title{color:#16151A !important}
+
+/* A coach who was scheduled but did not work. Name is kept, not deleted. */
+.chip-noshow{background:#f2f4f6;color:#98a2ac;border-color:#e2e7ea;text-decoration:line-through;text-decoration-thickness:1.5px;font-weight:600;position:relative;padding-left:20px}
+.chip-noshow::before{content:'\2715';position:absolute;left:7px;top:50%;transform:translateY(-50%);color:#c0392b;font-weight:900;font-size:9px;text-decoration:none}
 </style>
 
 <!-- OneSignal Web Push -->
@@ -679,6 +683,7 @@ body{background:var(--lp-bg) !important}
 <div class="panel active" id="tab-schedule">
   <div class="admin-bar" id="admin-bar" style="display:none">
     <div class="ab-label">Admin tools</div>
+    <button class="ab-btn" onclick="showAttendanceLog()">📋 Attendance log</button>
     <button class="ab-btn" onclick="exportWeekJSON()">📥 Save snapshot (JSON)</button>
     <button class="ab-btn" onclick="printWeek()">🖨️ Print / Save PDF</button>
     <button class="ab-btn" onclick="showResetHelp()">♻️ Reset to template</button>
@@ -1702,6 +1707,35 @@ function exitAdmin(){
   const bar=document.getElementById('admin-bar');
   if(bar) bar.style.display='none';
 }
+
+// Admin-only: the running record of scheduled-but-did-not-work.
+function showAttendanceLog(){
+  let el=document.getElementById('att-log');
+  if(el){ el.remove(); return; }
+  el=document.createElement('div');
+  el.id='att-log';
+  el.style.cssText='margin:14px 0 0;padding:13px 15px;border:1px solid var(--gray-200);border-radius:10px;background:#fafbfc';
+  const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fmt=d=>{const x=new Date(d+'T12:00:00');return `${MS[x.getMonth()]} ${x.getDate()}`;};
+  const sorted=NO_SHOWS.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  const byCoach={};
+  sorted.forEach(n=>{ byCoach[n.coach]=(byCoach[n.coach]||0)+1; });
+  const tally=Object.keys(byCoach).sort((a,b)=>byCoach[b]-byCoach[a])
+    .map(c=>`${c} (${byCoach[c]})`).join(' \u00b7 ') || 'none';
+  const rows = sorted.length
+    ? sorted.map(n=>`<tr>
+        <td style="padding:5px 10px 5px 0;white-space:nowrap;color:var(--gray-500)">${fmt(n.date)}</td>
+        <td style="padding:5px 10px 5px 0;font-weight:700">${n.coach}</td>
+        <td style="padding:5px 10px 5px 0">${n.clinic}</td>
+        <td style="padding:5px 0;color:var(--gray-500)">${n.reason||'\u2014'}</td>
+      </tr>`).join('')
+    : '<tr><td style="padding:6px 0;color:var(--gray-500)">Nothing logged yet.</td></tr>';
+  el.innerHTML = '<div style="font-weight:800;letter-spacing:.6px;text-transform:uppercase;font-size:10px;color:var(--gray-500);margin-bottom:8px">Attendance log \u00b7 scheduled but did not work</div>'
+    + '<table style="width:100%;border-collapse:collapse;font-size:12.5px">'+rows+'</table>'
+    + '<div style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--gray-200);font-size:11.5px;color:var(--gray-500)">Running tally: '+tally+'</div>';
+  document.getElementById('tab-schedule').appendChild(el);
+}
+
 function exportWeekJSON(){
   const data={
     session:_meta.label, week:WEEK_NUM,
@@ -1769,7 +1803,7 @@ const DEFAULT_COURTS = {comp:8, tt:4, adult:2, munch:4, other:1};
 function courtsFor(s){ return (s.courts!=null) ? s.courts : (DEFAULT_COURTS[s.type]||1); }
 function metaHtml(s){
   const ct = courtsFor(s);
-  const cn = s.coaches.length;
+  const cn = workedCount(s);
   const diff = cn - ct; // negative = short, 0 = perfect, positive = over
   const short = diff < 0;
   let cnCls = '';
@@ -1810,10 +1844,15 @@ function renderSchedule(day){
     return;
   }
   // Default school-year timeline layout
+  // Stamp each slot with who did not work that specific date (see NO_SHOWS).
+  const _dayISO = _iso(dateForDay(Math.max(0, DAYS_ORDER.indexOf(day))));
+  slots.forEach(s=>{ s._absent = absentFor(_dayISO, s.name||s.program||''); });
   slots.forEach(s=>{
     const row=document.createElement('div');
     row.className='t-row';
-    const chips=s.coaches.map(c=>`<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+    const chips=s.coaches.map(c=> (s._absent||[]).indexOf(c)>-1
+      ? `<span class="chip chip-noshow" title="Did not work this shift">${c}</span>`
+      : `<span class="chip ${chipCls(c)}">${c}</span>`).join('');
     row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
     tl.appendChild(row);
   });
@@ -2037,6 +2076,26 @@ function wireNewsTabs(){
       renderNews();
     });
   });
+}
+
+
+// ---- ATTENDANCE LOG ---- (append-only: never delete a coach from the schedule)
+// When a coach is on the schedule but does not end up working the shift, add a
+// line here instead of removing their name. Their chip stays visible with a
+// strike-through and an X, the coach count drops to who actually worked, and
+// the record is still here months later.
+// entry: { date:'YYYY-MM-DD', clinic:'TT Comp', coach:'Laurence P', reason:'' }
+const NO_SHOWS = [
+  {date:'2026-08-31', clinic:'TT Comp',     coach:'Laurence P', reason:''},
+  {date:'2026-08-31', clinic:'Comp Clinic', coach:'Sean T',     reason:''},
+];
+function _iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function absentFor(dateISO, clinic){
+  return NO_SHOWS.filter(n=>n.date===dateISO && n.clinic===clinic).map(n=>n.coach);
+}
+function workedCount(s){
+  const absent = s._absent || [];
+  return s.coaches.filter(c=>absent.indexOf(c)===-1).length;
 }
 
 // ---- TEAM NOTES ---- (edit this list to update the banner)
@@ -2668,6 +2727,8 @@ function showMine(){
   DAYS_ORDER.forEach(day=>{
     const sessions=(ACTIVE_SCHEDULE[day]||[]).filter(s=>s.coaches.some(c=>c===coach.abbr || c.startsWith(coach.abbr+' (')));
     if(!sessions.length) return;
+    const _dISO=_iso(dateForDay(DAYS_ORDER.indexOf(day)));
+    sessions.forEach(s=>{ s._absent = absentFor(_dISO, s.name||s.program||''); });
     totalSessions+=sessions.length;
     const wrap=document.createElement('div');
     wrap.className='day-avail';
@@ -2681,9 +2742,12 @@ function showMine(){
       const noteMatch=myChip&&myChip.match(/\((.+)\)/);
       const note=noteMatch?` <span style="font-size:11px;color:var(--red);font-weight:500">· ${noteMatch[1]}</span>`:'';
       // include the viewing coach so the chips match the coach count; highlight them in green
-      const others=s.coaches.map(c=> c===myChip
-        ? `<span class="chip chip-mine">${c}</span>`
-        : `<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+      const _abs=s._absent||[];
+      const others=s.coaches.map(c=> _abs.indexOf(c)>-1
+        ? `<span class="chip chip-noshow" title="Did not work this shift">${c}</span>`
+        : (c===myChip
+          ? `<span class="chip chip-mine">${c}</span>`
+          : `<span class="chip ${chipCls(c)}">${c}</span>`)).join('');
       row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}${note}</div>${metaHtml(s)}<div class="t-chips">${others||'<span style="font-size:11px;color:var(--gray-500)">solo</span>'}</div></div>`;
       tl.appendChild(row);
     });
