@@ -2086,8 +2086,8 @@ function wireNewsTabs(){
 // the record is still here months later.
 // entry: { date:'YYYY-MM-DD', clinic:'TT Comp', coach:'Laurence P', reason:'' }
 const NO_SHOWS = [
-  {date:'2026-08-31', clinic:'TT Comp',     coach:'Laurence P', reason:''},
-  {date:'2026-08-31', clinic:'Comp Clinic', coach:'Sean T',     reason:''},
+  {date:'2026-08-31', clinic:'TT Comp',     coach:'Laurence P', reason:'Double-booked a private'},
+  {date:'2026-08-31', clinic:'Comp Clinic', coach:'Sean T',     reason:'Did not know he was scheduled'},
 ];
 function _iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function absentFor(dateISO, clinic){
