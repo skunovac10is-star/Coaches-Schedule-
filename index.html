@@ -1458,6 +1458,9 @@ FALL_WK1.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('
 const FALL_WK2 = JSON.parse(JSON.stringify(FALL_BASE));
 // Week 2: Stevie D on Wednesday TT Comp + TT1 (second of the two weeks)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
+// Week 2: Joe H out Tue Sep 8 through Fri Sep 11 (US Open trip). Back Sat Sep 12.
+['Tuesday','Wednesday','Thursday','Friday'].forEach(d=>{
+  FALL_WK2[d].forEach(s=>{ s.coaches = s.coaches.filter(c=>c!=='Joe H'); }); });
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
 
