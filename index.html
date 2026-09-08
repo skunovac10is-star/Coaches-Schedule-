@@ -894,7 +894,6 @@ body{background:var(--lp-bg) !important}
 const DAYS_ORDER = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
 const ALL_COACHES = [
-  {id:'jeremie',name:'Jeremie Casabon',abbr:'Jeremie C',phone:'267-606-8262',email:'Jcasabon123@gmail.com',type:'pro',level:'Full coverage'},
   {id:'stevie',name:'Stevie Dandridge',abbr:'Stevie D',phone:'267-975-1954',email:'sdandridge@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'nick',name:'Nick Fulcher',abbr:'Nick F',phone:'210-925-2935',email:'nfulcher@legacyyte.org',type:'pro',level:'Full coverage'},
   {id:'laurence',name:'Laurence Primus',abbr:'Laurence P',phone:'646-852-2283',email:'lprimus@legacyyte.org',type:'pro',level:'Full coverage'},
@@ -924,12 +923,12 @@ const _SUMMER_DAY = [
 
   // MORNING — 9:00–11:30am
   {session:'morning',   program:'LTC Indoor',                time:'9–11:30am',   courts:'Courts 1-8',                  campers:22, type:'comp',  coaches:['Kein W','Brady C','Mia S','Laurence P','Sean T','Nick F','Scotty S']},
-  {session:'morning',   program:'LTC Elite — Group 1',       time:'9–11:30am',   courts:'Courts 9-12 · at LEGACY',     campers:12, type:'comp',  coaches:['Jeremie C','Gabe K','Flynn H','Monet W','Joe H']},
+  {session:'morning',   program:'LTC Elite — Group 1',       time:'9–11:30am',   courts:'Courts 9-12 · at LEGACY',     campers:12, type:'comp',  coaches:['Gabe K','Flynn H','Monet W','Joe H']},
   {session:'morning',   program:'LTC Elite — Group 2',       time:'9–11:30am',   courts:'Courts 13-16 · at LEGACY',    campers:12, type:'comp',  coaches:['Andrew W','Kris W','Shevi A','Stevie D','Anna M']},
 
   // AFTERNOON — 12:30–3:00pm
   {session:'afternoon', program:'LTC Indoor',                time:'12:30–3pm',   courts:'All 8 indoor courts',         campers:22, type:'comp',  coaches:['Kein W','Mia S','Laurence P','Sean T','Nick F','Scotty S']},
-  {session:'afternoon', program:'LTC Elite — Group 1',       time:'12:30–3pm',   courts:'Courts 9-12 · at LEGACY',     campers:12, type:'comp',  coaches:['Jeremie C','Gabe K','Flynn H','Joe H']},
+  {session:'afternoon', program:'LTC Elite — Group 1',       time:'12:30–3pm',   courts:'Courts 9-12 · at LEGACY',     campers:12, type:'comp',  coaches:['Gabe K','Flynn H','Joe H']},
   {session:'afternoon', program:'LTC Elite — Group 2',       time:'12:30–3pm',   courts:'Courts 13-16 · at LEGACY',    campers:12, type:'comp',  coaches:['Andrew W','Kris W','Stevie D','Anna M']},
 ];
 // Helper: clone the daily template, optionally removing specific coaches that day
@@ -974,9 +973,8 @@ function _edit(day, session, programIncludes, opts){
 // MONDAY: base template (Kein W + Mia S off) + per-clinic tweaks
 const _monday = _summerDay(['Mia S']);  // Kein back on LTC camp Mon (Tue–Fri already have him)
 _edit(_monday, 'morning',   'LTC Indoor',      {add:['Bella N']});       // Bella N to morning LTC only
-// Mon Jun 8: Jeremie C off all camp; Joe H off morning Elite (added to evening adult below)
-_edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Jeremie C','Joe H']});
-_edit(_monday, 'afternoon', 'LTC Elite — Group 1', {remove:['Jeremie C']});
+// Mon Jun 8: Joe H off morning Elite (added to evening adult below)
+_edit(_monday, 'morning',   'LTC Elite — Group 1', {remove:['Joe H']});
 // THURSDAY (Jun 11): Kamryn B starts at 10am
 const _thursday = _summerDay();
 _edit(_thursday, 'allday', 'Munchkins', {remove:['Kamryn B'], add:['Kamryn B (from 10am)']});
@@ -994,7 +992,7 @@ const SUMMER_SCHEDULE = {
 // Starts as a clean copy of the standard weekly lineup (no this-week daily exceptions).
 // Change for Wk2: LTC Elite Group 1 → Jefferson (6 courts); Group 2 → at center, Courts 12-16.
 function _summerWeek2(){
-  const adult=d=>(_ADULT[d]||[]).map(s=>({...s, coaches:[...s.coaches]}));
+  const adult=d=>(_ADULT[d]||[]).map(s=>({...s, coaches:[]}));
   const wk={
     Monday:    [..._summerDay(), ...adult('Monday')],
     Tuesday:   [..._summerDay(), ...adult('Tuesday')],
@@ -1193,8 +1191,6 @@ Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
   else if(s.program.indexOf('Jefferson')>-1) s.campers=16;
   else if(s.program.indexOf('Center')>-1)    s.campers=21;
 }));
-// Aug 10: Jeremie C out the whole week
-Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C'); }));
 // Aug 10: Andrew W → LTC E Jefferson (off Center Base)
 Object.values(SUMMER_AUG10).forEach(day=>day.forEach(s=>{
   if(s.program.indexOf('Center')>-1) s.coaches=s.coaches.filter(c=>c!=='Andrew W');
@@ -1225,8 +1221,8 @@ SUMMER_AUG10.Friday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Namir S'); }
   if(s.program.indexOf('Center')>-1 && !s.coaches.includes('Shevi A')) s.coaches.push('Shevi A');
 }); });
 
-// Tue Jul 21: Jeremie C + Julian C out all day
-SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Jeremie C' && c!=='Julian C'); });
+// Tue Jul 21: Julian C out all day
+SUMMER_STD2.Tuesday.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!=='Julian C'); });
 // Next week: Kamryn B → Munchkins (off LTC Indoor, both all-day)
 Object.values(SUMMER_STD).forEach(day=>day.forEach(s=>{
   if(s.program==='LTC Indoor') s.coaches=s.coaches.filter(c=>c!=='Kamryn B');
@@ -1278,7 +1274,7 @@ Object.values(SUMMER_AUG17).forEach(day=>day.forEach(s=>{
 // ===== AUG 24-28 (SUMMER_AUG24) — its own week. Clone of Aug 17 + this week's availability. =====
 const SUMMER_AUG24 = JSON.parse(JSON.stringify(SUMMER_AUG17));
 // Off roster / unavailable for this week
-['Jeremie C','Brady C','Samir M','Kamryn B','Flynn H','Bella N','Namir S','Kieran','Gabe K','Julian C','Zszuzi P','Eita M','Leya','Kacey','Quill','Nathalie P','Talia C','Betsy A','Gulia S','Mia S','Scotty S2']
+['Brady C','Samir M','Kamryn B','Flynn H','Bella N','Namir S','Kieran','Gabe K','Julian C','Zszuzi P','Eita M','Leya','Kacey','Quill','Nathalie P','Talia C','Betsy A','Gulia S','Mia S','Scotty S2']
   .forEach(name=>{ Object.values(SUMMER_AUG24).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); })); });
 // --- Rebuild camp staffing from the confirmed availability list ---
 const _A24_DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday'];
@@ -1345,28 +1341,28 @@ const FALL_BASE = {
     {time:'9:30-11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Lorie','Stevie D','Nick F']},
     {time:'12-1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
     {time:'4-5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Nick F']},
-    {time:'4-6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Stevie D','Jeremie C','Joe H','Lorie','Anna M']},
-    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Lorie','Kris W','Jeremie C','Anna M','Sean T']},
+    {time:'4-6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Stevie D','Joe H','Lorie','Anna M']},
+    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Lorie','Kris W','Anna M','Sean T']},
     {time:'7-8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Joe H','Nick F']},
     {time:'8:30-10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Lorie','Anna M','Joe H']},
   ],
   Tuesday:[
     {time:'9:30-11am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Laurence P']},
-    {time:'5-7pm',name:'TT1',type:'tt',courts:8,coaches:['Kris W','Jeremie C','Andrew W','Joe H','Stevie D','Monet W','Lorie','Shevi A','Sanjin K','Nick F']},
-    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Joe H','Jeremie C','Lorie','Sean T','Anna M']},
+    {time:'5-7pm',name:'TT1',type:'tt',courts:8,coaches:['Kris W','Andrew W','Joe H','Stevie D','Monet W','Lorie','Shevi A','Sanjin K','Nick F']},
+    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Joe H','Lorie','Sean T','Anna M']},
     {time:'7-8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Shevi A','Nick F']},
     {time:'8:30-10pm',name:'Adult 3.5+',type:'adult',courts:1,coaches:['Joe H','Kris W','Nick F']},
   ],
   Wednesday:[
     {time:'12-1:30pm',name:'Adult Adv Beg',type:'adult',coaches:['Laurence P','David S']},
-    {time:'4-6pm',name:'TT Comp',type:'comp',coaches:['Jeremie C','Andrew W','Laurence P','Shevi A','Joe H','Ahmed A','Anna M','Lorie']},
+    {time:'4-6pm',name:'TT Comp',type:'comp',coaches:['Andrew W','Laurence P','Shevi A','Joe H','Ahmed A','Anna M','Lorie']},
     {time:'6-7pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Anna M','David S','Ahmed A','Sean T']},
-    {time:'7-9pm',name:'TT1',type:'tt',courts:8,coaches:['Monet W','Joe H','Shevi A','Andrew W','Jeremie C','Ahmed A','Lorie','Anna M']},
+    {time:'7-9pm',name:'TT1',type:'tt',courts:8,coaches:['Monet W','Joe H','Shevi A','Andrew W','Ahmed A','Lorie','Anna M']},
   ],
   Thursday:[
     {time:'4-5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','David S']},
-    {time:'5-7pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Jeremie C','Kris W','Monet W','Joe H','Lorie']},
-    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Laurence P','Kris W','Kein W','Jeremie C','Sean T']},
+    {time:'5-7pm',name:'TT1',type:'tt',courts:8,coaches:['Andrew W','Kris W','Monet W','Joe H','Lorie']},
+    {time:'7-8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Laurence P','Kris W','Kein W','Sean T']},
     {time:'7-8:30pm',name:'Green 2 Yellow',type:'tt',courts:2,coaches:['Andrew W','Joe H']},
     {time:'8:30-10pm',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Sean T']},
   ],
@@ -1389,9 +1385,9 @@ const FALL_BASE = {
     {time:'7:30-9am',name:'Team United',type:'other',coaches:['Monet W']},
     {time:'8:30-10am',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Shevi A']},
     {time:'11am-12pm',name:'Munchkins',type:'munch',courts:2,coaches:['Anna M','Laurence P','Shevi A','Jinay S','Sean T','Kein W','Lorie']},
-    {time:'12-1:30pm',name:'Comp Clinic',type:'comp',coaches:['Shevi A','Nick F','Stevie D','Kein W','Anna M','Jeremie C','Sean T']},
+    {time:'12-1:30pm',name:'Comp Clinic',type:'comp',coaches:['Shevi A','Nick F','Stevie D','Kein W','Anna M','Sean T']},
     {time:'2:30-4pm',name:'TT Green 2 Y',type:'tt',courts:1,coaches:['Nick F','Sean T']},
-    {time:'2:30-4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Shevi A','Stevie D','Jeremie C','Joe H','Lorie']},
+    {time:'2:30-4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Shevi A','Stevie D','Joe H','Lorie']},
     {time:'5:30-7pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Jinay S']},
     {time:'5:30-7pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['Kein W','Sean T']},
   ]
@@ -1421,7 +1417,7 @@ Object.entries(FALL_ENROLLMENT).forEach(([day,map])=>{
 
 // Fall base: Ahmed A on Monday Comp Clinic
 FALL_BASE.Monday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Ahmed A')) x.coaches.push('Ahmed A'); });
-// (Sanjin K covers Wed/Thu TT1 in Week 1 only - see FALL_WK1. Permanent pair is Jeremie C + Andrew W.)
+// (Sanjin K covered Wed/Thu TT1 in Week 1 only - see FALL_WK1.)
 // Fall base: Friday — move Joe H from Comp Clinic to TT Orange 2 Green
 FALL_BASE.Friday.forEach(x=>{
   if(x.name==='Comp Clinic') x.coaches=x.coaches.filter(c=>c!=='Joe H');
@@ -1430,16 +1426,16 @@ FALL_BASE.Friday.forEach(x=>{
 // Fall base: drop the Saturday Board Members court reservation from the schedule
 FALL_BASE.Saturday = FALL_BASE.Saturday.filter(x=>x.name.indexOf('Board Members')===-1);
 
-// FALL WEEK 1 (Aug 31) — Andrew W and Jeremie C are out this week only
+// FALL WEEK 1 (Aug 31) — Andrew W is out this week only
 const FALL_WK1 = JSON.parse(JSON.stringify(FALL_BASE));
-['Andrew W','Jeremie C','Lorie'].forEach(name=>{
+['Andrew W','Lorie'].forEach(name=>{
   Object.values(FALL_WK1).forEach(day=>day.forEach(s=>{ s.coaches=s.coaches.filter(c=>c!==name); }));
 });
 // Week 1: add Ahmed A, Kein W and Laurence P to Monday TT Comp (4-6pm)
 FALL_WK1.Monday.forEach(s=>{ if(s.name==='TT Comp'){ ['Ahmed A','Kein W','Laurence P'].forEach(c=>{ if(!s.coaches.includes(c)) s.coaches.push(c); }); } });
 // Week 1: Stevie D on Wednesday TT Comp + TT1
 FALL_WK1.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='TT1') && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
-// Week 1 only: Sanjin K covers Wed + Thu TT1 (Jeremie C and Andrew W are out)
+// Week 1 only: Sanjin K covers Wed + Thu TT1 (Andrew W is out)
 ['Wednesday','Thursday'].forEach(d=>{ FALL_WK1[d].forEach(x=>{
   if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); }); });
 // Week 1: Scotty S can now work Wednesday TT Comp 4-6pm
@@ -1470,28 +1466,28 @@ const SCHOOL_SCHEDULE = {
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
     {time:'12–1pm',name:'Adult Beginner',type:'adult',courts:1,coaches:['David S']},
     {time:'4–5:30pm',name:'TT Orange 2 Green',type:'tt',courts:1,coaches:['Laurence P']},
-    {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Gabe K','Stevie D','Jeremie C','Kein W','Flynn H']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',courts:7,coaches:['Kris W','Andrew W','Gabe K','Stevie D','Kein W','Flynn H']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Stevie D','Kein W','Shevi A','Kris W','Sean T','Gabe K','Flynn H']},
-    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Jeremie C']},
+    {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:[]},
     {time:'8:30–10pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Shevi A','Gabe K']},
     {time:'8:30–10pm',name:'Adult Adv Beginner',type:'adult',courts:1,coaches:['Laurence P']},
   ],
   Tuesday:[
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',courts:1,coaches:['Laurence P']},
-    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Anna M','Flynn H','Kris W','Jeremie C','Stevie D','Gabe K','Andrew W']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Anna M','Flynn H','Kris W','Stevie D','Gabe K','Andrew W']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Kein W','Stevie D','Kris W','Anna M','Laurence P','Gabe K','Sean T']},
-    {time:'7–8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Jeremie C','Flynn H']},
+    {time:'7–8:30pm',name:'TT Orange 2 Green',type:'tt',courts:2,coaches:['Flynn H']},
     {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',courts:1,coaches:['Gabe K','Kris W']},
   ],
   Wednesday:[
     {time:'12–1:30pm',name:'Adult Adv Beginner',type:'adult',coaches:['Laurence P','David S']},
-    {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Jeremie C','Andrew W','Laurence P','Flynn H','Gabe K']},
+    {time:'4–6pm',name:'TT Comp',type:'comp',coaches:['Stevie D','Andrew W','Laurence P','Flynn H','Gabe K']},
     {time:'6–7pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Anna M','David S','Amy G','Shevi A','Bella N']},
-    {time:'7–9pm',name:'TT1',type:'tt',courts:8,coaches:['Sanjin K','Gabe K','Stevie D','Shevi A','Andrew W','Jeremie C','Anna M','Flynn H']},
+    {time:'7–9pm',name:'TT1',type:'tt',courts:8,coaches:['Sanjin K','Gabe K','Stevie D','Shevi A','Andrew W','Anna M','Flynn H']},
   ],
   Thursday:[
     {time:'4–5pm',name:'Munchkins',type:'munch',courts:2,coaches:['Laurence P','Sean T','David S','Flynn H']},
-    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Stevie D','Jeremie C','Gabe K','Kris W','Flynn H','Andrew W']},
+    {time:'5–7pm',name:'TT1',type:'tt',courts:8,coaches:['Stevie D','Gabe K','Kris W','Flynn H','Andrew W']},
     {time:'7–8:30pm',name:'Comp Clinic',type:'comp',courts:6,coaches:['Laurence P','Anna M','Kris W','Flynn H','Bella N','Sean T']},
     {time:'7–8:30pm',name:'Green 2 Orange',type:'tt',courts:2,coaches:['Stevie D','Andrew W']},
     {time:'8:30–10pm',name:'Adult 3.5+',type:'adult',coaches:['Laurence P']},
