@@ -500,6 +500,12 @@ body{background:var(--lp-bg) !important}
 .ack-btn{background:#0b7a4b;color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit}
 .ack-btn:hover{background:#096a41}
 .ack-bar.ack-done{background:#eef7f2;border-color:#c3e2d2;color:#0b5f3c;font-size:12.5px;font-weight:700;display:block}
+
+/* A clinic that is on the board but has not started running yet. */
+.t-block.t-notrunning{background:#f7f8f9;border-color:#e4e9ec;opacity:.72}
+.t-block.t-notrunning .t-name{color:#8b96a0}
+.nr-name{text-decoration:line-through;text-decoration-thickness:1.5px}
+.nr-badge{display:inline-block;margin-left:8px;background:#e9edf0;color:#6b7680;font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:3px 7px;border-radius:4px;text-decoration:none;vertical-align:middle}
 </style>
 
 <!-- OneSignal Web Push -->
@@ -1874,10 +1880,15 @@ function renderSchedule(day){
   slots.forEach(s=>{
     const row=document.createElement('div');
     row.className='t-row';
-    const chips=s.coaches.map(c=> (s._absent||[]).indexOf(c)>-1
-      ? `<span class="chip chip-noshow" title="Did not work this shift">${c}</span>`
-      : `<span class="chip ${chipCls(c)}">${c}</span>`).join('');
-    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}"><div class="t-name">${s.name||s.program||""}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
+    const nr = notRunning(s.name||s.program||'');
+    const chips = nr
+      ? s.coaches.map(c=>`<span class="chip chip-noshow">${c}</span>`).join('')
+      : s.coaches.map(c=> (s._absent||[]).indexOf(c)>-1
+          ? `<span class="chip chip-noshow" title="Did not work this shift">${c}</span>`
+          : `<span class="chip ${chipCls(c)}">${c}</span>`).join('');
+    const nrBadge = nr ? `<span class="nr-badge">${nr.note}</span>` : '';
+    const nameTxt = nr ? `<span class="nr-name">${s.name||s.program||""}</span>` : (s.name||s.program||"");
+    row.innerHTML=`<div class="t-time">${s.time}</div><div class="t-block ${s.type}${nr?' t-notrunning':''}"><div class="t-name">${nameTxt}${nrBadge}</div>${metaHtml(s)}<div class="t-chips">${chips}</div></div>`;
     tl.appendChild(row);
   });
 }
@@ -2103,6 +2114,16 @@ function wireNewsTabs(){
 }
 
 
+
+// ---- CLINICS NOT RUNNING YET ----
+// A clinic that is on the schedule but has not started. It stays visible so
+// coaches know it is coming, but the whole row is crossed out and its coaches
+// are not counted. Remove the name from this list the week it actually starts.
+const NOT_RUNNING = [
+  {clinic:'College Pathway Clinic', note:'Not started yet'},
+];
+function notRunning(name){ return NOT_RUNNING.find(n=>n.clinic===name) || null; }
+
 // ---- ATTENDANCE LOG ---- (append-only: never delete a coach from the schedule)
 // When a coach is on the schedule but does not end up working the shift, add a
 // line here instead of removing their name. Their chip stays visible with a
@@ -2120,6 +2141,7 @@ function absentFor(dateISO, clinic){
   return NO_SHOWS.filter(n=>n.date===dateISO && n.clinic===clinic).map(n=>n.coach);
 }
 function workedCount(s){
+  if(notRunning(s.name||s.program||'')) return 0;
   const absent = s._absent || [];
   return s.coaches.filter(c=>absent.indexOf(c)===-1).length;
 }
