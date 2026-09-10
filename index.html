@@ -1476,10 +1476,6 @@ FALL_WK2.Thursday.forEach(x=>{
 FALL_WK2.Thursday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
-// Week 2: Thursday Sep 10 — Nick F covers TT1 (5-7pm) + Comp Clinic (7-8:30pm); Sanjin K on TT1
-FALL_WK2.Thursday.forEach(x=>{
-  if((x.name==='TT1'||x.name==='Comp Clinic') && !x.coaches.includes('Nick F')) x.coaches.push('Nick F');
-  if(x.name==='TT1' && !x.coaches.includes('Sanjin K')) x.coaches.push('Sanjin K'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
