@@ -1472,6 +1472,8 @@ FALL_WK2.Thursday.forEach(x=>{
   if(x.name==='TT1') ['Sanjin K','Nick F'].forEach(c=>{ if(!x.coaches.includes(c)) x.coaches.push(c); });
   if(x.name==='Green 2 Yellow' && !x.coaches.includes('Nick F')) x.coaches.push('Nick F');
 });
+// Week 2 only (Thu Sep 10): Stevie D covers Kein W on Comp Clinic 7-8:30pm
+FALL_WK2.Thursday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
 // Week 2: Thursday Sep 10 — Nick F covers TT1 (5-7pm) + Comp Clinic (7-8:30pm); Sanjin K on TT1
@@ -2145,6 +2147,7 @@ const NO_SHOWS = [
   {date:'2026-09-01', clinic:'Comp Clinic', coach:'Anna M',     reason:'Off Tuesdays going forward \u2014 Laurence P covering tonight'},
   {date:'2026-09-03', clinic:'TT1',         coach:'Monet W',    reason:'At the US Open, has a pass'},
   {date:'2026-09-09', clinic:'TT Comp',     coach:'Laurence P', reason:''},
+  {date:'2026-09-10', clinic:'Comp Clinic', coach:'Kein W',     reason:'Stevie D covering'},
 ];
 function _iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function absentFor(dateISO, clinic){
