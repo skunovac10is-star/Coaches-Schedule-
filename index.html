@@ -1475,6 +1475,14 @@ FALL_WK2.Thursday.forEach(x=>{
 });
 // Week 2 only (Thu Sep 10): Stevie D covers Kein W on Comp Clinic 7-8:30pm
 FALL_WK2.Thursday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Stevie D')) x.coaches.push('Stevie D'); });
+// Week 2 only: Kein W out Thu Sep 10 - Sun Sep 13. Fri: Kris W on Comp Clinic, Sean T on TT Comp. Sat: David S on all three.
+FALL_WK2.Friday.forEach(x=>{
+  if(x.name==='Comp Clinic' && !x.coaches.includes('Kris W')) x.coaches.push('Kris W');
+  if(x.name==='TT Comp' && !x.coaches.includes('Sean T')) x.coaches.push('Sean T');
+});
+FALL_WK2.Saturday.forEach(x=>{
+  if(['Munchkins','Comp Clinic','TT Comp'].includes(x.name) && !x.coaches.includes('David S')) x.coaches.push('David S');
+});
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
 
@@ -2145,6 +2153,14 @@ const NO_SHOWS = [
   {date:'2026-09-03', clinic:'TT1',         coach:'Monet W',    reason:'At the US Open, has a pass'},
   {date:'2026-09-09', clinic:'TT Comp',     coach:'Laurence P', reason:''},
   {date:'2026-09-10', clinic:'Comp Clinic', coach:'Kein W',     reason:'Stevie D covering'},
+  {date:'2026-09-11', clinic:'Comp Clinic', coach:'Kein W',     reason:'Kris W covering'},
+  {date:'2026-09-11', clinic:'TT Comp',     coach:'Kein W',     reason:'Sean T covering'},
+  {date:'2026-09-12', clinic:'Munchkins',   coach:'Kein W',     reason:'David S covering'},
+  {date:'2026-09-12', clinic:'Comp Clinic', coach:'Kein W',     reason:'David S covering'},
+  {date:'2026-09-12', clinic:'TT Comp',     coach:'Kein W',     reason:'David S covering'},
+  {date:'2026-09-13', clinic:'Munchkins',   coach:'Kein W',     reason:'Coach T covering'},
+  {date:'2026-09-13', clinic:'Comp Clinic', coach:'Kein W',     reason:'Coach T covering'},
+  {date:'2026-09-13', clinic:'Adult Beginner', coach:'Kein W',  reason:'Coach T covering'},
 ];
 function _iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function absentFor(dateISO, clinic){
