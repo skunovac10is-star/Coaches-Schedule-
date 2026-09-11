@@ -918,7 +918,6 @@ const ALL_COACHES = [
   {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'pt',level:'Part-time'},
   {id:'lorie',name:'Lorie Lemongo',abbr:'Lorie',phone:'267-968-7260',email:'',type:'pro',level:'Full coverage'},
   {id:'sanjin',name:'Sanjin Kunovac',abbr:'Sanjin K',phone:'',email:'skunovac@legacyyte.org',type:'pro',level:'VP of Tennis'},
-  {id:'tauheed',name:'Tauheed B',abbr:'Coach T',phone:'',email:'',type:'pt',level:'Any clinic'},
 ];
 
 // ===== SUMMER CAMP SCHEDULE — Week 1 (Jun 9–13) =====
@@ -1484,10 +1483,10 @@ FALL_WK2.Friday.forEach(x=>{
 FALL_WK2.Saturday.forEach(x=>{
   if(['Munchkins','Comp Clinic','TT Comp'].includes(x.name) && !x.coaches.includes('David S')) x.coaches.push('David S');
 });
+// Week 2 only (Sun Sep 13): Lorie on Comp Clinic 12-1:30pm
+FALL_WK2.Sunday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Lorie')) x.coaches.push('Lorie'); });
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
-// Week 2 only (Sun Sep 13): Coach T on Munchkins + Comp Clinic
-FALL_WK2.Sunday.forEach(x=>{ if((x.name==='Munchkins'||x.name==='Comp Clinic') && !x.coaches.includes('Coach T')) x.coaches.push('Coach T'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
