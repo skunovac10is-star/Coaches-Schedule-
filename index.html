@@ -1391,8 +1391,8 @@ const FALL_BASE = {
   Sunday:[
     {time:'7:30-9am',name:'Team United',type:'other',coaches:['Monet W']},
     {time:'8:30-10am',name:'Adult 3.5+',type:'adult',coaches:['Laurence P','Shevi A']},
-    {time:'11am-12pm',name:'Munchkins',type:'munch',courts:2,coaches:['Anna M','Laurence P','Shevi A','Jinay S','Sean T','Kein W','Lorie','Coach T']},
-    {time:'12-1:30pm',name:'Comp Clinic',type:'comp',coaches:['Shevi A','Nick F','Stevie D','Kein W','Anna M','Sean T','Coach T']},
+    {time:'11am-12pm',name:'Munchkins',type:'munch',courts:2,coaches:['Anna M','Laurence P','Shevi A','Jinay S','Sean T','Kein W','Lorie']},
+    {time:'12-1:30pm',name:'Comp Clinic',type:'comp',coaches:['Shevi A','Nick F','Stevie D','Kein W','Anna M','Sean T']},
     {time:'2:30-4pm',name:'TT Green 2 Y',type:'tt',courts:1,coaches:['Nick F','Sean T']},
     {time:'2:30-4:30pm',name:'TT1',type:'tt',courts:7,coaches:['Shevi A','Stevie D','Joe H','Lorie']},
     {time:'5:30-7pm',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Jinay S']},
@@ -1486,6 +1486,8 @@ FALL_WK2.Saturday.forEach(x=>{
 });
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
+// Week 2 only (Sun Sep 13): Coach T on Munchkins + Comp Clinic
+FALL_WK2.Sunday.forEach(x=>{ if((x.name==='Munchkins'||x.name==='Comp Clinic') && !x.coaches.includes('Coach T')) x.coaches.push('Coach T'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
