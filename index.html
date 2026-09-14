@@ -1491,6 +1491,9 @@ FALL_WK2.Sunday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('L
 // Week 2: Scotty S works Wednesday 4-7pm (TT Comp 4-6 + Munchkins 6-7)
 FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S'); });
 
+// Ahmed A off all clinics starting Mon Sep 14 — strip from FALL_BASE only (past Weeks 1 & 2 keep him for the record).
+Object.values(FALL_BASE).forEach(day=>day.forEach(s=>{ s.coaches = s.coaches.filter(c=>c!=='Ahmed A'); }));
+
 const SCHOOL_SCHEDULE = {
   Monday:[
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
