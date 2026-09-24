@@ -918,6 +918,7 @@ const ALL_COACHES = [
   {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'pt',level:'Part-time'},
   {id:'lorie',name:'Lorie Lemongo',abbr:'Lorie',phone:'267-968-7260',email:'',type:'pro',level:'Full coverage'},
   {id:'tauheed',name:'Tauheed B',abbr:'Coach T',phone:'',email:'',type:'pt',level:'Any clinic'},
+  {id:'matthew',name:'Matthew Victor Cizmarik',abbr:'Matthew C',phone:'',email:'',type:'pt',level:'Part-time'},
   {id:'sanjin',name:'Sanjin Kunovac',abbr:'Sanjin K',phone:'',email:'skunovac@legacyyte.org',type:'pro',level:'VP of Tennis'},
 ];
 
@@ -1461,6 +1462,14 @@ FALL_BASE.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic') x.coaches = x.coaches.
 // Week 1 (Tue Sep 1) only: Laurence P covers Anna M's spot in Comp Clinic
 FALL_WK1.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Laurence P')) x.coaches.push('Laurence P'); });
 
+// Sanjin 9/23: standing change, Laurence P added to Tuesday Comp Clinic to cover
+// the ongoing pro gap (Anna M off Tuesdays). Lorie no longer needed there going
+// forward -- Sanjin is telling her directly.
+FALL_BASE.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic'){
+  if(!x.coaches.includes('Laurence P')) x.coaches.push('Laurence P');
+  x.coaches = x.coaches.filter(c=>c!=='Lorie');
+} });
+
 // FALL WEEK 2 (Sep 7) — starts from the base, then week-2 specifics
 const FALL_WK2 = JSON.parse(JSON.stringify(FALL_BASE));
 // Week 2: Stevie D on Wednesday TT Comp + TT1 (second of the two weeks)
@@ -1493,6 +1502,13 @@ FALL_WK2.Wednesday.forEach(x=>{ if((x.name==='TT Comp'||x.name==='Munchkins') &&
 
 // Ahmed A off Mondays going forward — strip from FALL_BASE Monday only.
 FALL_BASE.Monday.forEach(s=>{ s.coaches = s.coaches.filter(c=>c!=='Ahmed A'); });
+
+// FALL WEEK 4 (Sep 21) — Matthew C's first week
+const FALL_WK4 = JSON.parse(JSON.stringify(FALL_BASE));
+// Wed Sep 23: Matthew C on TT1 7-9pm
+FALL_WK4.Wednesday.forEach(x=>{ if(x.name==='TT1' && !x.coaches.includes('Matthew C')) x.coaches.push('Matthew C'); });
+// Thu Sep 24: Matthew C on TT1 5-7pm + Comp Clinic 7-8:30pm
+FALL_WK4.Thursday.forEach(x=>{ if((x.name==='TT1'||x.name==='Comp Clinic') && !x.coaches.includes('Matthew C')) x.coaches.push('Matthew C'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -2241,7 +2257,9 @@ const WEEK_START_BASE = _thisMonday();
 function weekMeta(ws){
   if(ws.getTime() >= FALL_START.getTime()){
     const fnum = 1 + Math.round((ws - FALL_START)/(7*864e5));
-    return {schedule: (fnum===1 ? FALL_WK1 : fnum===2 ? FALL_WK2 : FALL_BASE), label:'Fall', num: fnum, summer:false};
+    // Week-specific tiers. Any fall week not listed here uses FALL_BASE.
+    const FALL_TIERS = {1: FALL_WK1, 2: FALL_WK2, 4: FALL_WK4};
+    return {schedule: FALL_TIERS[fnum] || FALL_BASE, label:'Fall', num: fnum, summer:false};
   }
   if(ws.getTime() >= SUMMER_START.getTime()){
     const num = 1 + Math.round((ws - SUMMER_START)/(7*864e5));
