@@ -1512,6 +1512,11 @@ FALL_WK4.Wednesday.forEach(x=>{ if(x.name==='TT1' && !x.coaches.includes('Matthe
 // Thu Sep 24: Matthew C on TT1 5-7pm + Comp Clinic 7-8:30pm
 FALL_WK4.Thursday.forEach(x=>{ if((x.name==='TT1'||x.name==='Comp Clinic') && !x.coaches.includes('Matthew C')) x.coaches.push('Matthew C'); });
 
+// FALL WEEK 5 (Sep 28)
+const FALL_WK5 = JSON.parse(JSON.stringify(FALL_BASE));
+// Mon Sep 28: Laurence P on TT Comp 4-6pm
+FALL_WK5.Monday.forEach(x=>{ if(x.name==='TT Comp' && !x.coaches.includes('Laurence P')) x.coaches.push('Laurence P'); });
+
 const SCHOOL_SCHEDULE = {
   Monday:[
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
@@ -2260,7 +2265,7 @@ function weekMeta(ws){
   if(ws.getTime() >= FALL_START.getTime()){
     const fnum = 1 + Math.round((ws - FALL_START)/(7*864e5));
     // Week-specific tiers. Any fall week not listed here uses FALL_BASE.
-    const FALL_TIERS = {1: FALL_WK1, 2: FALL_WK2, 4: FALL_WK4};
+    const FALL_TIERS = {1: FALL_WK1, 2: FALL_WK2, 4: FALL_WK4, 5: FALL_WK5};
     return {schedule: FALL_TIERS[fnum] || FALL_BASE, label:'Fall', num: fnum, summer:false};
   }
   if(ws.getTime() >= SUMMER_START.getTime()){
