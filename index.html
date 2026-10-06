@@ -1519,8 +1519,8 @@ FALL_WK5.Monday.forEach(x=>{ if(x.name==='TT Comp' && !x.coaches.includes('Laure
 
 // FALL WEEK 6 (Oct 5)
 const FALL_WK6 = JSON.parse(JSON.stringify(FALL_BASE));
-// Tue Oct 6: Matthew C covers Sean T on Comp Clinic 7-8:30pm
-FALL_WK6.Tuesday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Matthew C')) x.coaches.push('Matthew C'); });
+// Mon Oct 5: Matthew C covered Sean T on Comp Clinic 7-8:30pm (logged late on Oct 6, date corrected)
+FALL_WK6.Monday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('Matthew C')) x.coaches.push('Matthew C'); });
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -2197,7 +2197,7 @@ const NO_SHOWS = [
   {date:'2026-09-13', clinic:'Munchkins',   coach:'Kein W',     reason:'Coach T covering'},
   {date:'2026-09-13', clinic:'Comp Clinic', coach:'Kein W',     reason:'Coach T covering'},
   {date:'2026-09-13', clinic:'Adult Beginner', coach:'Kein W',  reason:'Coach T covering'},
-  {date:'2026-10-06', clinic:'Comp Clinic', coach:'Sean T',     reason:'Matthew C covering'},
+  {date:'2026-10-05', clinic:'Comp Clinic', coach:'Sean T',     reason:'Matthew C covering'},
 ];
 function _iso(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function absentFor(dateISO, clinic){
