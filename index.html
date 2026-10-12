@@ -912,14 +912,14 @@ const ALL_COACHES = [
   {id:'shevi',name:'Shevita Aulana',abbr:'Shevi A',phone:'',email:'',type:'pro',level:'Level 1 Staff Pro'},
   {id:'anna',name:'Anna Mamalat',abbr:'Anna M',phone:'',email:'',type:'pro',level:'Level 2 Staff Pro'},
   {id:'ahmed',name:'Ahmed Aboseada',abbr:'Ahmed A',phone:'',email:'',type:'pt',level:'Any clinic'},
-  {id:'monet',name:'Monet Stuckey-Willis',abbr:'Monet W',phone:'',email:'',type:'pro',level:'Level 2 Staff Pro'},
+  {id:'monet',name:'Monet Stuckey-Willis',abbr:'Monet W',phone:'',email:'',type:'pro',level:'Level 2 Staff Pro',coverage:'All clinics'},
   {id:'joe',name:'Joe Heckley',abbr:'Joe H',phone:'',email:'',type:'pro',level:'Level 2 Staff Pro'},
   {id:'zszuzi',name:'Zszuzi P',abbr:'Zszuzi P',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'sean',name:'Sean T',abbr:'Sean T',phone:'',email:'',type:'pt',level:'Summer camp'},
   {id:'namir',name:'Namir Smith',abbr:'Namir S',phone:'',email:'',type:'jr',level:'Summer camp'},
   {id:'scotty',name:'Scotty Stuart',abbr:'Scotty S',phone:'',email:'',type:'pt',level:'Part-time'},
   {id:'lorie',name:'Lorie Lemongo',abbr:'Lorie',phone:'',email:'',type:'pro',level:'Full coverage'},
-  {id:'tauheed',name:'Tauheed B',abbr:'Coach T',phone:'',email:'',type:'pt',level:'Any clinic'},
+  {id:'tauheed',name:'Tauheed B',abbr:'Coach T',phone:'',email:'',type:'pt',level:'Any clinic',coverage:'All clinics except TT1'},
   {id:'matthew',name:'Matthew Victor Cizmarik',abbr:'Matthew C',phone:'',email:'',type:'pt',level:'Part-time'},
   {id:'sanjin',name:'Sanjin Kunovac',abbr:'Sanjin K',phone:'',email:'',type:'pro',level:'VP of Tennis'},
 ];
@@ -2529,7 +2529,7 @@ function updateDayPanel(n,dateStr){
     list.forEach(c=>{
       const hp=c.phone&&c.phone.trim();
       const he=c.email&&c.email.trim();
-      h+=`<div class="amp-row"><div><div class="amp-name">${c.name}</div><div class="amp-meta">${c.phone||'No phone on file'} · ${c.level}</div></div><div class="amp-btns">${hp?`<a href="tel:${c.phone}" class="amp-btn amp-call">Call</a>`:''} ${he?`<a href="mailto:${c.email}" class="amp-btn amp-email">Email</a>`:''}</div></div>`;
+      h+=`<div class="amp-row"><div><div class="amp-name">${c.name}</div><div class="amp-meta">${coverageFor(c)}</div></div><div class="amp-btns">${hp?`<a href="tel:${c.phone}" class="amp-btn amp-call">Call</a>`:''} ${he?`<a href="mailto:${c.email}" class="amp-btn amp-email">Email</a>`:''}</div></div>`;
     });
   }
   grp(pros,'Pro coaches');
