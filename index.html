@@ -2411,7 +2411,7 @@ function buildAvailability(){
         const flyId=`fly-${day.toLowerCase()}-${c.id}`;
         const card=document.createElement('div');
         card.className=`coach-tap ${cardClass}`;
-        card.innerHTML=`<div class="tap-indicator">+</div><div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${c.level}</div>`;
+        card.innerHTML=`<div class="tap-indicator">+</div><div class="coach-tap-name">${c.name}</div><div class="coach-tap-level">${coverageFor(c)}</div>`;
         card.onclick=()=>toggleFlyout(flyId,c,card);
         grid.appendChild(card);
 
@@ -2421,7 +2421,7 @@ function buildAvailability(){
         const hasPhone=c.phone&&c.phone.trim();
         const hasEmail=c.email&&c.email.trim();
         fly.innerHTML=`<div class="cf-name">${c.name}</div>
-          <div class="cf-level">${c.level}</div>
+          <div class="cf-level">${coverageFor(c)}</div>
           <div class="cf-actions">
             ${hasPhone?`<a href="tel:${c.phone}" class="cf-btn cf-call">Call ${c.phone}</a>`:''}
             ${hasPhone?`<a href="sms:${c.phone}" class="cf-btn cf-text">Text</a>`:''}
