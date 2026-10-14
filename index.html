@@ -1526,6 +1526,10 @@ FALL_WK6.Monday.forEach(x=>{ if(x.name==='Comp Clinic' && !x.coaches.includes('M
 const FALL_WK7 = JSON.parse(JSON.stringify(FALL_BASE));
 // Wed Oct 14: Lorie out, off TT Comp (4-6pm) and TT1 (7-9pm)
 FALL_WK7.Wednesday.forEach(x=>{ if(x.name==='TT Comp'||x.name==='TT1') x.coaches = x.coaches.filter(c=>c!=='Lorie'); });
+// Wed Oct 14: Scotty S covering for Lorie on TT Comp, and working Munchkins
+FALL_WK7.Wednesday.forEach(x=>{
+  if((x.name==='TT Comp'||x.name==='Munchkins') && !x.coaches.includes('Scotty S')) x.coaches.push('Scotty S');
+});
 // Mon Oct 12: Andrew W out, Shevi A covers TT Comp. Nick F out: Scotty S covers TT Orange 2 Green (4-5:30pm),
 // Coach Matt (Matthew C) covers the 7-8:30pm clinic.
 FALL_WK7.Monday.forEach(x=>{
@@ -2232,6 +2236,7 @@ const TEAM_NOTES = [
   {who:'Center closed', what:'Labor Day — LEGACY is closed Monday September 7. No clinics that day.', start:'2026-09-07', end:'2026-09-07'},
   {who:'Andrew W',      what:'out until Monday September 7', start:'2026-08-30', end:'2026-09-07'},
   {who:'Tuesday Comp Clinic', what:'need a pro \u2014 Anna M is off Tuesdays going forward', start:'2026-09-01', end:'2026-12-31'},
+  {who:'Scotty S',      what:'covering for Lorie today, Wednesday October 14 \u2014 TT Comp 4-6pm and Munchkins 6-7pm', start:'2026-10-14', end:'2026-10-14'},
 ];
 // Every team note is mirrored into What's New as an Alert so nothing gets lost.
 (function(){
