@@ -1541,10 +1541,18 @@ FALL_WK7.Monday.forEach(x=>{
 // FALL WEEK 8 (Oct 19) — Gala closure Thu Oct 22 to Sun Oct 25.
 // These clinics are CANCELLED no matter the weather, so they are removed from the board.
 // Everything still listed that week is running OUTDOORS and is weather dependent.
+// Thu Oct 22 to Sun Oct 25 only these clinics run, outdoors and weather dependent.
+// Everything else those four days is off for the Gala, confirmed by Sanjin Oct 16.
 const FALL_WK8 = JSON.parse(JSON.stringify(FALL_BASE));
-FALL_WK8.Thursday = FALL_WK8.Thursday.filter(x=>!['TT1','Comp Clinic'].includes(x.name));
-FALL_WK8.Friday   = FALL_WK8.Friday.filter(x=>!['Munchkins','TT Comp'].includes(x.name));
-FALL_WK8.Saturday = FALL_WK8.Saturday.filter(x=>x.name!=='TT Comp');
+const _WK8_RUNNING = {
+  Thursday: ['Munchkins'],
+  Friday:   ['Comp Clinic','TT Orange 2 Green'],
+  Saturday: ['Munchkins','Comp Clinic'],
+  Sunday:   ['Munchkins','Comp Clinic','TT1','TT Green 2 Y'],
+};
+Object.entries(_WK8_RUNNING).forEach(([day,keep])=>{
+  FALL_WK8[day] = FALL_WK8[day].filter(x=>keep.includes(x.name));
+});
 
 const SCHOOL_SCHEDULE = {
   Monday:[
@@ -2245,8 +2253,8 @@ const TEAM_NOTES = [
   {who:'Andrew W',      what:'out until Monday September 7', start:'2026-08-30', end:'2026-09-07'},
   {who:'Tuesday Comp Clinic', what:'need a pro \u2014 Anna M is off Tuesdays going forward', start:'2026-09-01', end:'2026-12-31'},
   {who:'Scotty S',      what:'covering for Lorie today, Wednesday October 14 \u2014 TT Comp 4-6pm and Munchkins 6-7pm', start:'2026-10-14', end:'2026-10-14'},
-  {who:'GALA CLOSURE \u2014 cancelled', what:'Thu Oct 22: TT1 and Comp Clinic. Fri Oct 23: Munchkins and TT Comp. Sat Oct 24: TT Comp. Cancelled no matter the weather and already off the board. Normal programming resumes Monday Oct 26. Families use the standard make-up form and select "Gala Closure".', start:'2026-10-16', end:'2026-10-25'},
-  {who:'GALA WEEK \u2014 outdoors, weather dependent', what:'Thu Oct 22: Munchkins. Fri Oct 23: Comp Clinic and TT Orange 2 Green. Sat Oct 24: Munchkins and Comp Clinic. Sun Oct 25: Munchkins, Comp Clinic, TT1 and TT Green 2 Y. These still run but move outdoors, so check the weather before you travel.', start:'2026-10-16', end:'2026-10-25'},
+  {who:'GALA CLOSURE \u2014 Thu Oct 22 to Sun Oct 25', what:'Everything is off those four days EXCEPT the outdoor clinics listed below. That includes TT1 and Comp Clinic Thursday, Munchkins and TT Comp Friday, TT Comp Saturday, plus Team United and all adult clinics Thursday through Sunday. The board already shows only what is running. Normal programming resumes Monday Oct 26. Families use the standard make-up form and select Gala Closure.', start:'2026-10-16', end:'2026-10-25'},
+  {who:'GALA WEEK \u2014 outdoors, weather dependent', what:'Thu Oct 22: Munchkins. Fri Oct 23: Comp Clinic and TT Orange 2 Green. Sat Oct 24: Munchkins and Comp Clinic. Sun Oct 25: Munchkins, Comp Clinic, TT1 and TT Green 2 Y. These are the only clinics running those four days. They move outdoors, so check the weather before you travel.', start:'2026-10-16', end:'2026-10-25'},
 ];
 // Every team note is mirrored into What's New as an Alert so nothing gets lost.
 (function(){
