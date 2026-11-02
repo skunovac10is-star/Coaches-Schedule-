@@ -1562,9 +1562,10 @@ FALL_WK9.Tuesday.forEach(x=>{ if(x.name==='TT1') x.coaches = x.coaches.filter(c=
 // FALL WEEK 10 (Nov 2)
 const FALL_WK10 = JSON.parse(JSON.stringify(FALL_BASE));
 // Sat Nov 7: College Showcase 1:30-3:30pm INDOORS, same slot as TT Comp which moves OUTSIDE.
-// Ahmed A, Anna M, Kris W and Scotty S come off TT Comp to run the showcase.
+// Ahmed A, Anna M, Scotty S, Joe H and Nick F run the showcase and come off TT Comp.
+// Kris W stays on TT Comp (swapped with Nick F).
 // Shevi A and Lorie are added to TT Comp.
-const _WK10_SHOWCASE = ['Ahmed A','Anna M','Kris W','Scotty S','Joe H'];
+const _WK10_SHOWCASE = ['Ahmed A','Anna M','Scotty S','Joe H','Nick F'];
 FALL_WK10.Saturday.forEach(x=>{
   if(x.name==='TT Comp'){
     x.coaches = x.coaches.filter(c=>!_WK10_SHOWCASE.includes(c));
@@ -2273,7 +2274,7 @@ const TEAM_NOTES = [
   {who:'Tuesday Comp Clinic', what:'need a pro \u2014 Anna M is off Tuesdays going forward', start:'2026-09-01', end:'2026-12-31'},
   {who:'Scotty S',      what:'covering for Lorie today, Wednesday October 14 \u2014 TT Comp 4-6pm and Munchkins 6-7pm', start:'2026-10-14', end:'2026-10-14'},
   {who:'GALA CLOSURE \u2014 Thu Oct 22 to Sun Oct 25', what:'Everything is off those four days EXCEPT the outdoor clinics listed below. That includes TT1 and Comp Clinic Thursday, Munchkins and TT Comp Friday, TT Comp Saturday, plus Team United and all adult clinics Thursday through Sunday. The board already shows only what is running. Normal programming resumes Monday Oct 26. Families use the standard make-up form and select Gala Closure.', start:'2026-10-16', end:'2026-10-25'},
-  {who:'COLLEGE SHOWCASE \u2014 Sat Nov 7, 1:30-3:30pm', what:'The showcase runs INDOORS. TT Comp runs at the same time and moves OUTSIDE. Showcase coaches: Ahmed A, Anna M, Kris W, Scotty S and Joe H. TT Comp: Nick F, Kein W, Stevie D, Sean T, Shevi A and Lorie.', start:'2026-11-02', end:'2026-11-07'},
+  {who:'COLLEGE SHOWCASE \u2014 Sat Nov 7, 1:30-3:30pm', what:'The showcase runs INDOORS. TT Comp runs at the same time and moves OUTSIDE. Showcase coaches: Ahmed A, Anna M, Scotty S, Joe H and Nick F. TT Comp: Kris W, Kein W, Stevie D, Sean T, Shevi A and Lorie.', start:'2026-11-02', end:'2026-11-07'},
   {who:'GALA WEEK \u2014 outdoors, weather dependent', what:'Thu Oct 22: Munchkins. Fri Oct 23: Comp Clinic and TT Orange 2 Green. Sat Oct 24: Munchkins and Comp Clinic. Sun Oct 25: Munchkins, Comp Clinic, TT1 and TT Green 2 Y. These are the only clinics running those four days. They move outdoors, so check the weather before you travel.', start:'2026-10-16', end:'2026-10-25'},
 ];
 // Every team note is mirrored into What's New as an Alert so nothing gets lost.
