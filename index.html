@@ -1559,6 +1559,20 @@ const FALL_WK9 = JSON.parse(JSON.stringify(FALL_BASE));
 // Tue Oct 27: Nick F off TT1 (5-7pm). He stays on TT Orange 2 Green and Adult 3.5+.
 FALL_WK9.Tuesday.forEach(x=>{ if(x.name==='TT1') x.coaches = x.coaches.filter(c=>c!=='Nick F'); });
 
+// FALL WEEK 10 (Nov 2)
+const FALL_WK10 = JSON.parse(JSON.stringify(FALL_BASE));
+// Sat Nov 7: College Showcase 1:30-3:30pm INDOORS, same slot as TT Comp which moves OUTSIDE.
+// Ahmed A, Anna M, Kris W and Scotty S come off TT Comp to run the showcase.
+// Shevi A and Lorie are added to TT Comp.
+const _WK10_SHOWCASE = ['Ahmed A','Anna M','Kris W','Scotty S'];
+FALL_WK10.Saturday.forEach(x=>{
+  if(x.name==='TT Comp'){
+    x.coaches = x.coaches.filter(c=>!_WK10_SHOWCASE.includes(c));
+    ['Shevi A','Lorie'].forEach(c=>{ if(!x.coaches.includes(c)) x.coaches.push(c); });
+  }
+});
+FALL_WK10.Saturday.push({time:'1:30-3:30pm',name:'College Showcase',type:'other',coaches:_WK10_SHOWCASE.slice()});
+
 const SCHOOL_SCHEDULE = {
   Monday:[
     {time:'9:30–11am',name:'Adult 2.5-3.0',type:'adult',coaches:['Laurence P','Shevi A']},
@@ -2259,6 +2273,7 @@ const TEAM_NOTES = [
   {who:'Tuesday Comp Clinic', what:'need a pro \u2014 Anna M is off Tuesdays going forward', start:'2026-09-01', end:'2026-12-31'},
   {who:'Scotty S',      what:'covering for Lorie today, Wednesday October 14 \u2014 TT Comp 4-6pm and Munchkins 6-7pm', start:'2026-10-14', end:'2026-10-14'},
   {who:'GALA CLOSURE \u2014 Thu Oct 22 to Sun Oct 25', what:'Everything is off those four days EXCEPT the outdoor clinics listed below. That includes TT1 and Comp Clinic Thursday, Munchkins and TT Comp Friday, TT Comp Saturday, plus Team United and all adult clinics Thursday through Sunday. The board already shows only what is running. Normal programming resumes Monday Oct 26. Families use the standard make-up form and select Gala Closure.', start:'2026-10-16', end:'2026-10-25'},
+  {who:'COLLEGE SHOWCASE \u2014 Sat Nov 7, 1:30-3:30pm', what:'The showcase runs INDOORS. TT Comp runs at the same time and moves OUTSIDE. Showcase coaches: Ahmed A, Anna M, Kris W and Scotty S. TT Comp: Nick F, Kein W, Stevie D, Sean T, Shevi A and Lorie.', start:'2026-11-02', end:'2026-11-07'},
   {who:'GALA WEEK \u2014 outdoors, weather dependent', what:'Thu Oct 22: Munchkins. Fri Oct 23: Comp Clinic and TT Orange 2 Green. Sat Oct 24: Munchkins and Comp Clinic. Sun Oct 25: Munchkins, Comp Clinic, TT1 and TT Green 2 Y. These are the only clinics running those four days. They move outdoors, so check the weather before you travel.', start:'2026-10-16', end:'2026-10-25'},
 ];
 // Every team note is mirrored into What's New as an Alert so nothing gets lost.
@@ -2315,7 +2330,7 @@ function weekMeta(ws){
   if(ws.getTime() >= FALL_START.getTime()){
     const fnum = 1 + Math.round((ws - FALL_START)/(7*864e5));
     // Week-specific tiers. Any fall week not listed here uses FALL_BASE.
-    const FALL_TIERS = {1: FALL_WK1, 2: FALL_WK2, 4: FALL_WK4, 5: FALL_WK5, 6: FALL_WK6, 7: FALL_WK7, 8: FALL_WK8, 9: FALL_WK9};
+    const FALL_TIERS = {1: FALL_WK1, 2: FALL_WK2, 4: FALL_WK4, 5: FALL_WK5, 6: FALL_WK6, 7: FALL_WK7, 8: FALL_WK8, 9: FALL_WK9, 10: FALL_WK10};
     return {schedule: FALL_TIERS[fnum] || FALL_BASE, label:'Fall', num: fnum, summer:false};
   }
   if(ws.getTime() >= SUMMER_START.getTime()){
